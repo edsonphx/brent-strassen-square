@@ -1,8 +1,8 @@
-name: Publish v1.1.0
+name: Publish v1.1.1
 
 on:
   push:
-    tags: [v1.1.0]
+    tags: [v1.1.1]
 
 jobs:
   release:
@@ -28,4 +28,4 @@ jobs:
             -o "$archive" "$GITHUB_SHA"
           gh release create "$GITHUB_REF_NAME" paper.pdf "$archive" --verify-tag \
             --repo "$GITHUB_REPOSITORY" --title "Strassen-square certificate $GITHUB_REF_NAME" \
-            --notes 'Expanded preprint with full recursive parametrizations, detailed local and characteristic-zero proofs, a finite-certificate appendix, and explicit smooth deformations. The archive includes the exact verifier and AlphaTensor catalogue comparison.'
+            --notes 'Editorial revision dated 22 November 2026. It adds the human–AI collaboration disclosure, expands the account of related work and the tangent-space proof, and makes the repository URL visible in the PDF. The archive includes the exact verifier and AlphaTensor catalogue comparison.'

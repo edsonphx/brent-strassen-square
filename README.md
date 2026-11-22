@@ -23,7 +23,7 @@ The two displayed smooth formal branches each have dimension 197 and their
 formal intersection has dimension 143. These statements concern the geometry
 of a fixed decomposition.
 
-Version 1.1.0 derives the orbit and branch tangent dimensions by hand,
+The preprint derives the orbit and branch tangent dimensions by hand,
 details the formal dimension argument, and specifies the finite checks
 in an appendix. It also gives two explicit smooth deformations and compares
 the families with the 14,236 integral AlphaTensor decompositions. The rank
@@ -82,18 +82,16 @@ python3 alphatensor_rank_profiles.py alphatensor-catalog.npz
 
 Edson Soares. *Exact Local Dimension of the Brent Variety V(4,4,4 | 49)
 at the Recursive Strassen-Square Point via Quadratic Obstructions*.
-Preprint and verification package, version 1.1.0, 2026.
-[DOI 10.5281/zenodo.24450467](https://doi.org/10.5281/zenodo.24450467).
-[GitHub release](https://github.com/edsonphx/brent-strassen-square/releases/tag/v1.1.0).
-
-The default branch carries a dated editorial revision of the manuscript.
-Use its commit permalink to cite that text or the version DOI to cite
-the archived release.
+Preprint and verification package, version 1.1.1, 2026.
+[GitHub release](https://github.com/edsonphx/brent-strassen-square/releases/tag/v1.1.1).
+This version contains the dated editorial revision and human–AI
+collaboration disclosure.
 
 The [Zenodo concept DOI](https://doi.org/10.5281/zenodo.24449375)
 resolves to the latest archived version. To cite specific files, use the
-DOI shown on that version's record. The original five-page version,
-version 1.0.0, has [DOI 10.5281/zenodo.24449376](https://doi.org/10.5281/zenodo.24449376).
+DOI shown on that version's record. Earlier archives are
+[version 1.1.0](https://doi.org/10.5281/zenodo.24450467) and the
+[original five-page version](https://doi.org/10.5281/zenodo.24449376).
 
 ## Licenses
 
