@@ -82,15 +82,15 @@ python3 alphatensor_rank_profiles.py alphatensor-catalog.npz
 
 Edson Soares. *Exact Local Dimension of the Brent Variety V(4,4,4 | 49)
 at the Recursive Strassen-Square Point via Quadratic Obstructions*.
-Preprint and verification package, version 1.1.1, 2026.
-[DOI 10.5281/zenodo.24450996](https://doi.org/10.5281/zenodo.24450996).
-[GitHub release](https://github.com/edsonphx/brent-strassen-square/releases/tag/v1.1.1).
-This version contains the dated editorial revision and human–AI
-collaboration disclosure.
+Preprint and verification package, version 1.1.2, 2026.
+[GitHub release](https://github.com/edsonphx/brent-strassen-square/releases/tag/v1.1.2).
+This version contains the submission copy with the explicit Hilbert
+calculation and the human–AI collaboration disclosure.
 
 The [Zenodo concept DOI](https://doi.org/10.5281/zenodo.24449375)
 resolves to the latest archived version. To cite specific files, use the
 DOI shown on that version's record. Earlier archives are
+[version 1.1.1](https://doi.org/10.5281/zenodo.24450996),
 [version 1.1.0](https://doi.org/10.5281/zenodo.24450467) and the
 [original five-page version](https://doi.org/10.5281/zenodo.24449376).
 

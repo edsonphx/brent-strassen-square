@@ -5,8 +5,8 @@
       "name": "Soares, Edson"
     }
   ],
-  "description": "<p>We prove that the ordered recursive Strassen-square point of the 49-summand Brent scheme for 4 by 4 matrix multiplication has local dimension 197 in characteristics three and zero and tangent dimension 251. Two exact recursive deformation families give the lower bound, and 54 quadratic initial forms with coprime leading monomials give the upper bound. The preprint exhibits explicit smooth deformations and compares the recursive families with 14,236 integral AlphaTensor schemes.</p><p>Version 1.1.1 archives the editorial revision dated 22 November 2026, with expanded related work and tangent-space proof, a human–AI collaboration disclosure, and the repository address printed in the PDF. The archive includes the preprint, source, exact verifier, certificate data, and catalogue comparison.</p>",
-  "version": "1.1.1",
+  "description": "<p>We prove that the ordered recursive Strassen-square point of the 49-summand Brent scheme for 4 by 4 matrix multiplication has local dimension 197 in characteristics three and zero and tangent dimension 251. Two exact recursive deformation families give the lower bound, and 54 quadratic initial forms with coprime leading monomials give the upper bound. The preprint exhibits explicit smooth deformations and compares the recursive families with 14,236 integral AlphaTensor schemes.</p><p>Version 1.1.2 archives the submission copy with clarified quadratic notation and the explicit degree-two Hilbert calculation. The archive includes the preprint with its human–AI collaboration disclosure, the source, the exact verifier, certificate data, and the catalogue comparison.</p>",
+  "version": "1.1.2",
   "access_right": "open",
   "upload_type": "software",
   "license": "cc-by-4.0",

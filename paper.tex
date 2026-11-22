@@ -368,14 +368,13 @@ distinct tangent images $T_0+X$ and $T_0+Y$.
 \section{The quadratic certificate in characteristic three}\label{sec:quadratics}
 
 In the expansion of $\Phi(p+v)$, let $Q_2(v)$ denote the degree-two
-part in $v$. For a single summand with variation $(a,b,c)$ its
-contribution is
+part in $v$. At summand $s$, a variation $(a,b,c)$ contributes
 \[
- a\otimes b\otimes w + a\otimes v_s\otimes c
-  +u\otimes b\otimes c .
+ a\otimes b\otimes w_s + a\otimes v_s\otimes c
+  +u_s\otimes b\otimes c .
 \]
-Substitute $p+tv+t^2b$ into the Brent map and work modulo $t^3$.
-The coefficients of $t$ and $t^2$ are $Jv$ and $Jb+Q_2(v)$.
+Substitute $p+tv+t^2h$ into the Brent map and work modulo $t^3$.
+The coefficients of $t$ and $t^2$ are $Jv$ and $Jh+Q_2(v)$.
 Thus $v\in\ker J$ lifts to order two precisely when $Q_2(v)$ maps to
 zero in $\operatorname{coker}J$. Every $\lambda J=0$ provides a
 scalar equation that a liftable tangent vector must satisfy.
@@ -435,7 +434,7 @@ tangent coordinates preserves this argument.
 Let $A=k[[z_1,\ldots,z_N]]$ with maximal ideal $\mathfrak m$, and let
 $I\subseteq A$. For a nonzero $f\in A$, write $f^*$ for its lowest
 nonzero homogeneous part. If $I$ contains $f_1,\ldots,f_s$ with
-$f_1^*,\ldots,f_s^*$ a regular sequence, then $\dim A/I\le N-s$.
+$f_1^*,\ldots,f_s^*$ a regular sequence, then $\dim(A/I)\le N-s$.
 For $I=(f_1,\ldots,f_s)$ the associated graded ring is
 $k[z_1,\ldots,z_N]/(f_1^*,\ldots,f_s^*)$.
 \end{lemma}
@@ -449,7 +448,7 @@ an element of $I\cap\mathfrak m^d$ modulo $\mathfrak m^{d+1}$.
 Taking the quotient by the $s$ specified initial forms therefore
 gives a graded surjection onto $\operatorname{gr}_{\mathfrak m}(A/I)$.
 The source has dimension $N-s$. The Hilbert--Samuel dimension
-theorem gives $\dim\operatorname{gr}_{\mathfrak m}(A/I)=\dim A/I$.
+theorem gives $\dim\operatorname{gr}_{\mathfrak m}(A/I)=\dim(A/I)$.
 
 For the equality of graded rings in the stated special case, proceed
 one series at a time. In the quotient by the preceding series,
@@ -582,8 +581,11 @@ coefficients in their multiples contribute in degree two.
 The rank of this map is the dimension spanned by the columns
 of $M$ modulo $\im J$, which is $2749-2101=648$ by the exact
 rank calculation for $[J\mid M]$. The polynomial ring in 251
-tangent variables has $\binom{252}{2}$ quadratic monomials. Its
-quotient in degree two has dimension $30978$.
+tangent variables has $\binom{252}{2}$ quadratic monomials, so the
+degree-two quotient has dimension
+\[
+ \binom{252}{2}-648=31626-648=30978.
+\]
 The reduced union of the two displayed subgerms would impose all
 $54^2=2916$ mixed monomials, with degree-two Hilbert value $28710$.
 The measured value $30978$ thus gives a dichotomy in characteristic
@@ -722,7 +724,7 @@ Run \texttt{bash verify.sh} with Python and NumPy to check the tensor
 identity, tangent equations, Jacobian and augmented ranks, and
 the 54 functionals and matching positions. The verifier derives
 the mixed columns by signed polarization of integer contractions.
-Pass \texttt{--full} to check all 28,710 non-mixed monomials per
+Pass \verb|--full| to check all 28,710 non-mixed monomials per
 certified form, the two explicit smooth witnesses, and 40
 additional exact family points. A separate script runs the
 catalogue census. The appendix specifies the finite input and
@@ -809,7 +811,7 @@ i\text{ in range} & \multicolumn{9}{c}{\pi(i)\text{ in order}}\\ \hline
 \]
 The sparse functional CSV records triples $(i,e,\lambda_{ie})$
 and the sparse polynomial CSV records quadruples
-$(i,a,b,[x_a y_b]q_i)$. Missing entries are zero. For example,
+$(i,a,b,[x_a y_b]\,q_i)$. Missing entries are zero. For example,
 the integer column $M_{0,19}$ has exactly one nonzero entry on
 the support of $\lambda_0$, at equation index 2225. That entry
 is $-1$, and $\lambda_{0,2225}=2$. The resulting coefficient is
