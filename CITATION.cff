@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "Cite this preprint and the version of the verification package you used."
+type: software
+title: "Exact Local Dimension of the Brent Variety V(4,4,4 | 49) at the Recursive Strassen-Square Point via Quadratic Obstructions"
+version: 1.0.0
+abstract: "We prove that the ordered recursive Strassen-square point of the 49-summand Brent scheme for 4 by 4 matrix multiplication has local dimension 197 in characteristics three and zero and tangent dimension 251. Two exact recursive deformation families give the lower bound, and 54 quadratic initial forms with coprime leading monomials give the upper bound. The package includes the preprint, signed input arrays, frozen tangent bases, numerical witnesses, and an exact NumPy verifier."
+authors:
+  - family-names: Soares
+    given-names: Edson
+repository-code: "https://github.com/edsonphx/brent-strassen-square"
+license:
+  - CC-BY-4.0
+  - MIT
+keywords:
+  - Brent equations
+  - fast matrix multiplication
+  - local dimension
+  - quadratic obstructions
+  - computational algebraic geometry

@@ -1,0 +1,31 @@
+name: Publish v1.0.0
+
+on:
+  push:
+    tags: [v1.0.0]
+
+jobs:
+  release:
+    if: github.repository == 'edsonphx/brent-strassen-square'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Verify the certificate
+        run: |
+          python3 -m venv "$RUNNER_TEMP/brent"
+          "$RUNNER_TEMP/brent/bin/pip" install numpy
+          PYTHON="$RUNNER_TEMP/brent/bin/python" bash verify.sh
+      - name: Publish the checked preprint and archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          archive="brent-strassen-square-${GITHUB_REF_NAME}.zip"
+          git archive --format=zip --prefix="brent-strassen-square-${GITHUB_REF_NAME}/" \
+            -o "$archive" "$GITHUB_SHA"
+          gh release create "$GITHUB_REF_NAME" paper.pdf "$archive" --verify-tag \
+            --repo "$GITHUB_REPOSITORY" --title "Strassen-square certificate $GITHUB_REF_NAME" \
+            --notes 'Preprint, signed data, and exact verifier for local dimension 197 at the ordered recursive Strassen-square point.'

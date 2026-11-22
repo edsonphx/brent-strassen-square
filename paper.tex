@@ -1,0 +1,317 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Exact Local Dimension of the Brent Variety V(4,4,4 | 49) at the Recursive Strassen-Square Point via Quadratic Obstructions},pdfauthor={Edson Soares}}
+\addtolength{\textwidth}{18pt}
+\addtolength{\oddsidemargin}{-9pt}
+\addtolength{\evensidemargin}{-9pt}
+\addtolength{\textheight}{20pt}
+\raggedbottom
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Br}{\mathcal B}
+\newcommand{\rk}{\operatorname{rank}}
+\newcommand{\im}{\operatorname{im}}
+\title[Local dimension at the Strassen square]{Exact Local Dimension of the Brent Variety
+\texorpdfstring{$V(4,4,4\mid49)$}{V(4,4,4 | 49)} at the Recursive
+Strassen-Square Point via Quadratic Obstructions}
+\author{Edson Soares}
+\date{22 November 2026}
+\subjclass[2020]{14D15, 14Q20, 68Q17, 13P10}
+\keywords{Brent equations, fast matrix multiplication, local dimension,
+quadratic obstructions, computational algebraic geometry}
+\begin{document}
+\begin{abstract}
+We determine the local Krull dimension at the ordered recursive
+Strassen-square point of the Brent scheme of 49-summand decompositions
+of the $4\times4$ matrix multiplication tensor. The local dimension is
+197 over $\overline{\F}_3$ and in characteristic zero, and the Zariski
+tangent space has dimension 251. Two exact recursive deformation
+families give the lower bound. For the upper bound, an exact
+finite-field certificate produces 54 quadratic initial forms with
+pairwise coprime leading monomials, selected by bipartite matching.
+A saturated Jacobian over $\Z_{(3)}$ lifts the regular sequence to
+characteristic zero. The computation also certifies two smooth formal
+branches of dimension 197 with intersection dimension 143, and the
+characteristic-three local Hilbert function begins $(1,251,30978)$.
+\end{abstract}
+\maketitle
+
+\section{The point and the local claim}
+
+For a field $k$, let $M_n\in(k^{n^2})^{\otimes3}$ have entries
+$(M_n)_{(i,h),(h,j),(i,j)}=1$ for $0\le i,h,j<n$, with all other
+entries zero. Ordered factor triples are written $(u_s,v_s,w_s)$,
+where the coordinates of the first two factors specify input linear
+forms and those of the third specify the output matrix. For $n=4$
+and $r=49$ the Brent map has $2352=3\cdot49\cdot16$ variables and
+$4096=16^3$ equations
+\begin{equation}\label{eq:brent}
+ \Phi_{abc}=\sum_{s=1}^{49}u_{sa}v_{sb}w_{sc}-(M_4)_{abc}=0.
+\end{equation}
+Write $\Br_k$ for the affine scheme defined by these equations and
+$V_k(4,4,4\mid49)=(\Br_k)_{\mathrm{red}}$. Their local Krull dimensions
+agree. We use the scheme local ring for the Hilbert function and
+initially for the tangent computation.
+
+Here is the particular integral point used throughout. The rows
+of the three arrays are the seven Strassen summands in row-major
+coordinates \cite{strassen}.
+\[
+ U=\begin{pmatrix}
+ 1&0&0&1\\0&0&1&1\\1&0&0&0\\0&0&0&1\\1&1&0&0\\-1&0&1&0\\0&1&0&-1
+ \end{pmatrix}\;
+ V=\begin{pmatrix}
+ 1&0&0&1\\1&0&0&0\\0&1&0&-1\\-1&0&1&0\\0&0&0&1\\1&1&0&0\\0&0&1&1
+ \end{pmatrix}\;
+ W=\begin{pmatrix}
+ 1&0&0&1\\0&0&1&-1\\0&1&0&1\\1&0&1&0\\-1&1&0&0\\0&0&0&1\\1&0&0&0
+ \end{pmatrix}.
+\]
+For each of the three arrays, regard each row as a $2\times2$ matrix.
+The $49$ rows of the corresponding array at $p$ are the row-major
+vectorizations of the Kronecker products of row matrices, ordered
+lexicographically by their pair of summand indices. Explicitly,
+coordinate $((2i+i'),(2j+j'))$ of such a product is the product of
+coordinates $(i,j)$ and $(i',j')$. Squaring the seven-summand tensor
+identity and using this shuffle gives $p\in\Br(\Z)$. The verifier
+rechecks the full identity over the integers.
+
+\begin{theorem}\label{thm:main}
+Let $k=\overline{\F}_3$ or let $k$ have characteristic zero. At the
+recursive point $p$,
+\[
+ \rk D\Phi_p=2101,\qquad
+ \dim T_p\Br_k=251,\qquad
+ \dim_p V_k(4,4,4\mid49)=197.
+\]
+The continuous isotropy and term-rescaling orbit has dimension 143
+at $p$. There are at least two distinct smooth 197-dimensional
+formal branches through $p$, with scheme-theoretic formal
+intersection of dimension 143. Over $\overline{\F}_3$ the local
+Hilbert function of $\Br_k$ starts with $(1,251,30978)$.
+\end{theorem}
+
+Li, Bao and Zhang study local dimensions via Jacobian and orbit bounds
+\cite{lbz}. Li, Zhang and Ke use deflation to treat singular Brent
+solutions \cite{lzk}. Li, Wang and Hu report Jacobian nullity 197
+and numerical evidence of smoothness for selected 49-summand
+AlphaTensor points \cite[Section~5.2.2]{lwh}. Here 197 is the exact
+local dimension at the recursive point, where the nullity is 251.
+The theorem concerns the local geometry of a displayed
+decomposition. The minimum length of a decomposition of $M_4$ is a
+separate question.
+
+\section{Two exact families and the tangent split}
+
+Put $J=D\Phi_p$. Write $A_s,B_s,C_s$ for the factor matrices at a
+summand, with $C_s$ in output order. The continuous group $G$ consists
+of $\mathrm{GL}_4^3$ and two independent scalings per summand. For
+$P,Q,R$ in the three general linear groups the factor maps are
+\[
+ A_s\longmapsto P^t A_s Q^{-t},\quad
+ B_s\longmapsto Q^t B_s R^{-t},\quad
+ C_s\longmapsto P^{-1} C_s R .
+\]
+These maps evaluate the original scheme on $(PXQ^{-1},QYR^{-1})$
+and undo the corresponding output change. The term scalings
+multiply the three factors by scalars with product~1.
+Scalar $P,Q,R$ can be compensated by the term scalings, giving a
+three-dimensional kernel in the $146$-dimensional parameter group.
+
+The first recursive family applies a separate $\mathrm{GL}_2^3$
+change of basis of the inner Strassen scheme for each fixed outer
+summand. Each altered block still represents the fixed outer
+rank-one tensor times $M_2$. The second family exchanges the roles
+of the tensor-product indices. Compose both constructions
+separately with the same global group action. This gives two
+morphisms from open subsets of smooth parameter spaces to the
+Brent scheme, both passing through $p$.
+
+The exact computation over $\F_3$ gives
+\begin{equation}\label{eq:split}
+ \ker J=T_0\oplus X\oplus Y,
+ \qquad (\dim T_0,\dim X,\dim Y)=(143,54,54).
+\end{equation}
+Here $T_0$ is generated by the global group derivatives and term
+scalings, $X$ comes from the first recursive family, and $Y$ comes
+from the second. The inputs are 146 global derivatives and 84
+local derivatives from each family. The verifier checks all 314
+integer derivatives, obtains rank 2101 for $J$ modulo~3, and
+selects the independent columns in this order. It also checks
+that the second family adds exactly 54 dimensions modulo $T_0$
+on its own. The orbit dimension is bounded above by 143 from the
+central kernel, and the differential attains that bound.
+
+Select 143 independent group parameters and then 54 independent
+recursive parameters in each family. Their common restriction when
+the recursive parameters are zero is the same group
+parameterization. In each case 197 ambient coordinate functions
+have invertible derivative with respect to these 197 parameters.
+The formal inverse function theorem gives surjections from the
+completed Brent local ring onto two power series rings in 197
+variables. This proves the lower bound of 197 and gives embedded
+smooth formal subgerms with distinct tangent images $T_0+X$ and
+$T_0+Y$.
+
+\section{The quadratic certificate in characteristic three}
+
+In the expansion of $\Phi(p+v)$, let $Q_2(v)$ denote the degree-two
+part in $v$. For a single summand with variation $(a,b,c)$ its
+contribution is
+\[
+ a\otimes b\otimes w + a\otimes v_s\otimes c
+  +u\otimes b\otimes c .
+\]
+For $\lambda J=0$ the restriction of $\lambda Q_2$ to $\ker J$
+vanishes on $T_0+X$ and on $T_0+Y$. Indeed every direction in either
+space lifts to a formal arc in the corresponding exact family, so
+the order-two contribution lies in $\im J$. Thus the restriction
+contains only the mixed monomials $x_i y_j$ in the two complements.
+
+In the frozen bases, $M$ is the $4096\times2916$ matrix whose
+$(i,j)$-column is
+$Q_2(X_i+Y_j)-Q_2(X_i)-Q_2(Y_j)$.
+The certificate gives 54 explicit rows $\lambda_i$ over $\F_3$ with
+$\lambda_iJ=0$. The verifier reconstructs all tensor columns and
+checks every coefficient of the 54 forms $q_i=\lambda_iM(x\otimes y)$.
+In a common lexicographic order, with $x_0>\cdots>x_{53}$ followed
+by $y_0>\cdots>y_{53}$, the monic leading terms are
+\begin{equation}\label{eq:leading}
+  \operatorname{LM}(q_i)=x_i y_{\pi(i)},\qquad 0\le i<54
+\end{equation}
+for a permutation $\pi$. In particular, these terms form a perfect
+matching of the two variable sets. The rows can be found by
+scanning the mixed monomial columns in order modulo $\im J$.
+An independent column admits a functional annihilating the
+earlier columns and $J$. Bipartite matching selects 54 such
+positions. The supplied certificate is checked directly and
+does not require trusting the selection algorithm.
+
+By Buchberger's product criterion the $q_i$ form a Gr\"obner
+basis of their homogeneous ideal. Its initial ideal is generated
+by the 54 pairwise coprime monomials in \eqref{eq:leading}. Those
+monomials generate a complete intersection of height 54. Hence
+the homogeneous ideal has height 54 and its 54 generators form
+a regular sequence in the polynomial ring, which is
+Cohen--Macaulay. This holds also with the 143 common tangent
+coordinates adjoined.
+
+\begin{lemma}\label{lem:initial}
+In a power series ring over a field, if the lowest nonzero
+homogeneous parts of $f_1,\ldots,f_s$ form a regular sequence, then
+the associated graded ring of the quotient by the $f_i$ is the
+polynomial ring modulo these homogeneous parts.
+\end{lemma}
+\begin{proof}
+In the quotient by the preceding series, a nonzerodivisor initial
+form implies that multiplication by the next series adds
+filtration degrees. Thus the initial ideal of the principal ideal
+it generates is generated by its initial form. Induction gives
+the asserted associated graded quotient.
+\end{proof}
+
+Choose 2101 equations and normal coordinates using an invertible
+Jacobian minor. Take the remaining coordinates $z=(c,x,y)$ in
+$\ker J$. Formal elimination expresses the normals as series
+$n(z)$ of order at least two, leaving a residual ideal $I$
+in $k[[z]]$. In particular $I$ contains
+$\lambda_i\Phi(p+z+n(z))$. Its lowest homogeneous term is $q_i$,
+since $\lambda_i Jn(z)=0$. Lemma~\ref{lem:initial} now gives an
+upper bound of $251-54=197$ on the dimension of $k[[z]]/I$.
+Together with the lower bound this proves the characteristic-three
+dimension claim.
+
+\section{Transfer to characteristic zero}
+
+Let $R_0=\Z_{(3)}$. The Jacobian has a rank-2101 minor that is a
+unit over $R_0$. The 251 independent integral tangent generators
+in \eqref{eq:split} remain independent over $\Q$ and annihilate
+$J$ integrally, so the rank over $\Q$ is also 2101. Invertible
+row and column operations over $R_0$ therefore split $J$ as an
+identity block and a zero block: the remaining Schur complement
+vanishes over $\Q$, hence over $R_0$. Both Jacobian kernels are
+free direct summands and reduce onto the corresponding kernels
+modulo~3. The integral tangent generators selected in
+\eqref{eq:split} give a basis over $R_0$ by reduction.
+
+Lift the 54 rows $\lambda_i$ into the left kernel over $R_0$.
+The normal elimination uses the same unit minor and works
+formally over $R_0$. The quadratic parts $\widetilde q_i$ of the
+lifted residual equations reduce to $q_i$. In the local polynomial
+ring $R_0[z]_{(3,z)}$, the sequence $3,\widetilde q_1,\ldots,
+\widetilde q_{54}$ is regular by the regularity of its reduction
+after the first element. Permute the sequence to put $3$ last
+\cite[Section~10.68]{stacks}. Localizing at $(z)$ gives
+$\Q[z]_{(z)}$, where the 54 quadrics remain a regular sequence
+and generate a proper ideal. Flat completion gives the same
+property in $\Q[[z]]$. Thus Lemma~\ref{lem:initial} gives the
+same upper bound in characteristic zero. The integral family
+minors give the lower bound in characteristic zero, including
+over $\mathbb C$.
+
+\section{Formal branches and Hilbert function}
+
+Each smooth formal subgerm constructed above gives a prime of
+dimension 197 in the completed local ring. These primes are
+minimal by the dimension bound. Their distinct tangent images
+make the primes distinct. The intersection contains the shared
+143-dimensional smooth orbit subgerm and its tangent space is
+the intersection of the displayed tangent images, of dimension
+143. This also proves the asserted intersection dimension.
+The two smooth subgerms factor through the reduction, and their
+tangents span a 251-dimensional space. Thus the tangent space
+of the reduced variety also has dimension 251 and the reduced
+variety is singular at $p$.
+
+In characteristic three the reconstructed matrices give
+$\rk[J\mid M]=2749$. After eliminating the normal coordinates,
+the degree-two initial part of the full residual ideal is the
+image of the mixed forms from the entire left kernel of $J$.
+It has dimension $2749-2101=648$. Products by positive-degree
+multipliers do not contribute in degree two, so the local
+Hilbert value there is $\binom{252}{2}-648=30978$.
+The number 648 measures the space of quadratic conditions. The dimension
+argument uses the regular sequence of length 54. The full
+Hilbert series and the number of all formal branches remain open.
+
+\section{Reproducibility}
+
+The accompanying release contains the signed Strassen-square
+factor arrays, frozen integral tangent bases, sparse functionals
+and quadratic forms, the modular certificate, and SHA-256
+checksums. Run \texttt{bash verify.sh} from an extracted copy.
+The Python and NumPy verifier checks the tensor identity, all integral
+tangent equations, the Jacobian and augmented ranks, the 54
+functionals and all matching positions. It derives the mixed
+columns by signed polarization of integer tensor contractions.
+The proof above supplies the algebraic consequences of those
+finite checks. The release version for this manuscript is
+\texttt{v1.0.0}, with citation metadata in \texttt{CITATION.cff}.
+The project is prepared for
+\href{https://github.com/edsonphx/brent-strassen-square}{\texttt{edsonphx/brent-strassen-square}}.
+
+\begin{thebibliography}{9}
+\bibitem{lbz} X. Li, Y. Bao and L. Zhang,
+On the local dimensions of solutions of Brent equations,
+\emph{Linear Algebra Appl.} 708 (2025), 489--512.
+\href{https://doi.org/10.1016/j.laa.2024.12.011}{doi:10.1016/j.laa.2024.12.011}.
+\bibitem{lzk} X. Li, L. Zhang and Y. Ke,
+Deflation conjecture and local dimensions of Brent equations,
+\emph{Exp. Math.} 34 (2025), 488--501.
+\href{https://arxiv.org/abs/2310.11686}{arXiv:2310.11686}.
+\bibitem{lwh} X. Li, Y. Wang and S. Hu,
+Substitution and quotient of the isotropy group action,
+\href{https://arxiv.org/abs/2607.15069v2}{arXiv:2607.15069v2} (2026).
+\bibitem{stacks} The Stacks Project Authors,
+\emph{The Stacks Project}, Section~10.68,
+\href{https://stacks.math.columbia.edu/tag/0AUH}{Tag 0AUH}.
+\bibitem{strassen} V. Strassen,
+Gaussian elimination is not optimal,
+\emph{Numer. Math.} 13 (1969), 354--356.
+\href{https://doi.org/10.1007/BF02165411}{doi:10.1007/BF02165411}.
+\end{thebibliography}
+\end{document}
