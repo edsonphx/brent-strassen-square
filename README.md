@@ -23,6 +23,12 @@ The two displayed smooth formal branches each have dimension 197 and their
 formal intersection has dimension 143. These statements concern the geometry
 of a fixed decomposition.
 
+The current preprint derives the orbit and branch tangent dimensions by hand.
+It also gives explicit smooth points on both recursive families and compares
+the families with the 14,236 integral AlphaTensor decompositions. The rank
+filters exclude 89 catalogue entries from the closures of the two displayed
+families over both fields. The membership of the other entries is unresolved.
+
 ## Verify
 
 Use Python 3.9 or newer with NumPy installed. From the repository root run
@@ -38,14 +44,19 @@ recomputes the mixed coefficients of the 54 certified quadrics. It prints
 `VERIFIED: local_dim = 197` when all finite checks pass. The algebraic
 implications of these checks appear in the preprint.
 
+`bash verify.sh --full` also checks all 28,710 non-mixed monomials in
+each of the 54 quadratic forms, reconstructs 40 integer points on the
+two families, and checks a rank-2155 Jacobian witness on each family.
+
 | File | Contents |
 | --- | --- |
 | [paper.pdf](paper.pdf), [paper.tex](paper.tex) | Preprint and standalone LaTeX source |
 | [verify_certificate.py](verify_certificate.py) | Exact integer contractions and packed GF(3) elimination |
 | [data/strassen_square_factors.npz](data/strassen_square_factors.npz) | Signed integer arrays `U`, `V`, `W`, each of shape `49 x 16` |
 | [data/tangent_bases.npz](data/tangent_bases.npz) | Integral arrays `G`, `X`, `Y` with 143, 54, and 54 basis directions |
-| [data/cycle81_54_regular_sequence_certificate.npz](data/cycle81_54_regular_sequence_certificate.npz) | 54 left-kernel functionals, quadrics, and the leading-monomial matching |
+| [data/regular_sequence_certificate.npz](data/regular_sequence_certificate.npz) | 54 left-kernel functionals, quadrics, and the leading-monomial matching |
 | [data/54_functionals_sparse.csv](data/54_functionals_sparse.csv), [data/54_polynomials_sparse.csv](data/54_polynomials_sparse.csv) | Human-readable copies of the modular witnesses |
+| [alphatensor_rank_profiles.py](alphatensor_rank_profiles.py), [alphatensor_rank_profiles.json](alphatensor_rank_profiles.json) | Exact catalogue filters and excluded indices |
 | [SHA256SUMS.txt](SHA256SUMS.txt) | Integrity manifest |
 
 The arrays use zero-based row-major coordinates and summand-major parameter
@@ -57,14 +68,25 @@ ordering from the base factors and exact group derivatives.
 Compile the source with `tectonic paper.tex` or two runs of `pdflatex paper.tex`.
 No BibTeX database is required.
 
+To rerun the catalogue filters, download the pinned public archive and pass
+it to the census script. The main verifier works offline independently of
+this experiment.
+
+```sh
+curl -fLsS https://raw.githubusercontent.com/google-deepmind/alphatensor/1949163da3bef7e3eb268a3ac015fd1c2dbfc767/nonequivalence/alphatensor_14236_factorizations.npz -o alphatensor-catalog.npz
+python3 alphatensor_rank_profiles.py alphatensor-catalog.npz
+```
+
 ## Citation
 
 Edson Soares. *Exact Local Dimension of the Brent Variety V(4,4,4 | 49)
 at the Recursive Strassen-Square Point via Quadratic Obstructions*.
 Preprint and verification package, version 1.0.0, 2026.
+[doi:10.5281/zenodo.24449376](https://doi.org/10.5281/zenodo.24449376).
 
-[CITATION.cff](CITATION.cff) contains machine-readable citation metadata.
-When the release is archived, use its version-specific Zenodo DOI.
+[CITATION.cff](CITATION.cff) describes the current working revision. Its
+preferred citation identifies the archived original. To cite analysis added
+after the release, use the commit permalink for the revision you consulted.
 
 ## Licenses
 

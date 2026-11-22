@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Exact verifier for the ordered recursive Strassen square. Requires NumPy."""
+import argparse
 from hashlib import sha256
 from itertools import product
 from pathlib import Path
@@ -154,7 +155,82 @@ def check_csv(path, shape, mixed=False):
     return out
 
 
-def verify():
+def verify_full_quadrics(terms, basis, functionals, quadrics):
+    # Accumulate each ordered pair of tangent directions before polarization.
+    count = len(basis)
+    ordered = np.zeros((54, count, count), dtype=np.int32)
+    tensors = functionals.reshape(54, 16, 16, 16)
+    for s, term in enumerate(terms):
+        for a, b, c in ((0, 1, 2), (0, 2, 1), (1, 2, 0)):
+            va, vb = basis[:, s, a], basis[:, s, b]
+            ia, ib = np.flatnonzero(va.any(axis=1)), np.flatnonzero(vb.any(axis=1))
+            permuted = tensors.transpose(0, a+1, b+1, c+1)
+            core = np.einsum("qijk,k->qij", permuted, term[c])
+            contribution = va[ia] @ core @ vb[ib].T
+            ordered[:, ia[:, None], ib] += contribution
+    i, j = np.triu_indices(count, k=1)
+    off_diagonal = (ordered[:, i, j]+ordered[:, j, i]) % 3
+    in_mixed_block = (143 <= i) & (i < 197) & (197 <= j)
+    require(np.array_equal(off_diagonal[:,in_mixed_block], quadrics), "full mixed block mismatch")
+    require(not np.any(off_diagonal[:,~in_mixed_block]) and
+            not np.any(np.diagonal(ordered, axis1=1, axis2=2) % 3), "unexpected pure/common coefficient")
+    checked = count*(count+1)//2 - int(in_mixed_block.sum())
+    require(checked == 28710, "wrong non-mixed monomial count")
+    print(f"Full quadratic check: {checked} non-mixed monomials vanish in all 54 forms")
+
+
+def unimodular_pair(n, rng):
+    matrix, inverse = np.eye(n, dtype=np.int64), np.eye(n, dtype=np.int64)
+    for _ in range(7):
+        i, j = rng.choice(n, size=2, replace=False)
+        sign = int(rng.choice([-1, 1]))
+        matrix[i] += sign*matrix[j]
+        inverse[:, j] -= sign*inverse[:, i]
+    require(np.array_equal(matrix @ inverse, np.eye(n, dtype=np.int64)), "bad inverse")
+    return matrix, inverse
+
+
+def finite_move(terms, rng):
+    n = int(terms.shape[2]**0.5)
+    (p, pi), (q, qi), (r, ri) = [unimodular_pair(n, rng) for _ in range(3)]
+    a, b, c = terms.transpose(1, 0, 2).reshape(3, len(terms), n, n)
+    moved = np.stack((p.T @ a @ qi.T, q.T @ b @ ri.T, pi @ c @ r), axis=1)
+    return moved.reshape(terms.shape)
+
+
+def verify_families():
+    rng = np.random.default_rng(8101)
+    smooth_witnesses = []
+    for side in (0, 1):
+        first_smooth = None
+        for sample in range(20):
+            grid = np.zeros((7, 7, 3, 16), dtype=np.int64)
+            for index in range(7):
+                changed = finite_move(BASE, rng)
+                if side == 0:
+                    grid[index] = shuffled_product(BASE, changed).reshape(grid.shape)[index]
+                else:
+                    grid[:, index] = shuffled_product(changed, BASE).reshape(grid.shape)[:, index]
+            moved = finite_move(grid.reshape(49, 3, 16), rng)
+            bound = 49
+            for a in range(3):
+                bound *= int(np.max(np.abs(moved[:, a])))
+            require(bound < np.iinfo(np.int64).max, "integer contraction could overflow")
+            actual = np.einsum("ri,rj,rk->ijk", *moved.transpose(1, 0, 2), dtype=np.int64)
+            require(np.array_equal(actual, target(4)), "unimodular family point fails the Brent identity")
+            if first_smooth is None:
+                rank = Rank()
+                rank.extend(jacobian_rows((moved % 3).astype(np.int32)))
+                require(len(rank) <= 2155, "family tangent dimension below 197")
+                if len(rank) == 2155:
+                    first_smooth = sample
+        smooth_witnesses.append(first_smooth)
+    print("40 exact integer deformations checked across both recursive families")
+    print(f"Rank-2155 witnesses by orientation (zero-based samples): {smooth_witnesses}")
+    return smooth_witnesses
+
+
+def verify(full=False):
     verify_hashes()
     with np.load(DATA / "strassen_square_factors.npz", allow_pickle=False) as source:
         terms = np.stack([source[k] for k in ("U", "V", "W")], axis=1).astype(np.int32)
@@ -186,7 +262,7 @@ def verify():
     rank.extend(mixed)
     require(len(rank) == 2749, "wrong augmented rank")
 
-    with np.load(DATA / "cycle81_54_regular_sequence_certificate.npz", allow_pickle=False) as cert:
+    with np.load(DATA / "regular_sequence_certificate.npz", allow_pickle=False) as cert:
         functionals = cert["lambda_mod3"].astype(np.int32)
         quadrics = cert["quadrics_mod3"].astype(np.int32)
         pairs = cert["monomial_matching"].astype(np.int32)
@@ -208,8 +284,13 @@ def verify():
         require(actual[pivot] == 1 and not np.any(actual[:pivot]), "invalid leading monomial")
     require(251*252//2 - (len(rank)-2101) == 30978, "Hilbert coefficient mismatch")
     print("54 literal functionals and coprime leading monomials checked; mixed rank: 648")
+    if full:
+        verify_full_quadrics(terms, np.concatenate((gauge, left, right)), functionals, quadrics)
+        require(all(x is not None for x in verify_families()), "missing rank-2155 family witness")
     print("VERIFIED: local_dim = 197")
 
 
 if __name__ == "__main__":
-    verify()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--full", action="store_true", help="also check all quadratic coefficients and finite family samples")
+    verify(parser.parse_args().full)

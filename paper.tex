@@ -19,7 +19,7 @@
 \texorpdfstring{$V(4,4,4\mid49)$}{V(4,4,4 | 49)} at the Recursive
 Strassen-Square Point via Quadratic Obstructions}
 \author{Edson Soares}
-\date{22 November 2026}
+\date{Expanded preprint}
 \subjclass[2020]{14D15, 14Q20, 68Q17, 13P10}
 \keywords{Brent equations, fast matrix multiplication, local dimension,
 quadratic obstructions, computational algebraic geometry}
@@ -95,15 +95,37 @@ intersection of dimension 143. Over $\overline{\F}_3$ the local
 Hilbert function of $\Br_k$ starts with $(1,251,30978)$.
 \end{theorem}
 
+The recursive square and the AlphaTensor catalogue give markedly
+different constructions at the same length, $49=7^2$. A rational
+48-term decomposition is already known \cite{dps}. Our question is
+what the geometry at the classical recursive point says about how
+49-term decompositions vary.
+
+At a singular point, the Jacobian can leave directions that do not
+integrate to deformations. For example, at the origin of $xy=0$ the
+tangent space is two-dimensional, but the two coordinate axes are
+the only branches and the local dimension is one. The recursive
+construction makes this
+failure concrete: two distinct ways of varying its two levels already
+span the full tangent space. This raises a sharper question than the
+rank of the Jacobian: how many parameters can coexist in an actual
+family? The exact dimension and the intersection of the two families
+answer part of that question.
+
 Li, Bao and Zhang study local dimensions via Jacobian and orbit bounds
 \cite{lbz}. Li, Zhang and Ke use deflation to treat singular Brent
 solutions \cite{lzk}. Li, Wang and Hu report Jacobian nullity 197
 and numerical evidence of smoothness for selected 49-summand
-AlphaTensor points \cite[Section~5.2.2]{lwh}. Here 197 is the exact
+AlphaTensor points \cite[Section~5.2.2]{lwh}. Their selected example
+has orbit tangent dimension 143, leaving 54 directions modulo the
+orbit. Here 197 is the exact
 local dimension at the recursive point, where the nullity is 251.
-The theorem concerns the local geometry of a displayed
-decomposition. The minimum length of a decomposition of $M_4$ is a
-separate question.
+We compare the displayed families with the AlphaTensor catalogue in
+Section~\ref{sec:alphatensor}.
+Brysiewicz and Sinn \cite{bs} give general upper-bound tests from
+quadratic obstructions. Our upper bound uses a certificate adapted to
+the mixed structure of this particular point. Combining that bound
+with the exact block motions yields equality.
 
 \section{Two exact families and the tangent split}
 
@@ -124,27 +146,105 @@ three-dimensional kernel in the $146$-dimensional parameter group.
 
 The first recursive family applies a separate $\mathrm{GL}_2^3$
 change of basis of the inner Strassen scheme for each fixed outer
-summand. Each altered block still represents the fixed outer
-rank-one tensor times $M_2$. The second family exchanges the roles
+summand. Each altered block still represents the tensor product of
+that outer summand with $M_2$, with the same coordinate shuffle
+used to define $p$. The second family exchanges the roles
 of the tensor-product indices. Compose both constructions
 separately with the same global group action. This gives two
 morphisms from open subsets of smooth parameter spaces to the
 Brent scheme, both passing through $p$.
 
-The exact computation over $\F_3$ gives
+We now derive the dimensions of these families by hand. Work in
+characteristic different from two. Transpose the output factor, writing
+$D_i=C_i^t$, so the three infinitesimal actions on the base scheme
+have the cyclic form
+\[
+ \delta A_i = aA_i-A_i b,\qquad
+ \delta B_i = bB_i-B_i c,\qquad
+ \delta D_i = cD_i-D_i a.
+\]
+Here the three matrices $a,b,c$ are arbitrary $2\times2$ matrices.
+Let $H=\mathfrak{sl}_2(k)$, the space of trace-zero matrices, so
+$\operatorname{Mat}_2(k)=kI\oplus H$.
+
+\begin{lemma}\label{lem:base}
+The three copies of $H$ act injectively on the seven ordered triples
+of factor lines of Strassen's decomposition, at the infinitesimal level.
+\end{lemma}
+\begin{proof}
+Suppose each factor derivative is a multiple of that factor in every
+summand. The first summand has all three factors $I$, so $a-b$,
+$b-c$ and $c-a$ are scalar. Their traces are zero, giving $a=b=c=h$.
+The first-mode factors include $E_{11}$ and $E_{11}+E_{12}$.
+If $[h,E_{11}]$ is a multiple of $E_{11}$, the two off-diagonal
+entries of $h$ vanish. Write $h=\operatorname{diag}(t,-t)$.
+Then $[h,E_{11}+E_{12}]=2t E_{12}$ is a multiple of
+$E_{11}+E_{12}$ only for $t=0$.
+\end{proof}
+
+Let $S$ be the term-rescaling tangent space, of dimension $2\cdot49=98$.
+Let $L$ and $R'$ be the images of seven independent triples in $H^3$,
+applied in the inner and outer positions, respectively. Consider any
+one mode with factors $F_i\otimes F_j$ at grid position $(i,j)$. Modulo
+that factor line, a derivative from $L$ lies in
+$kF_i\otimes\operatorname{Mat}_2$ and one from $R'$ lies in
+$\operatorname{Mat}_2\otimes kF_j$. Their only possible common
+direction before taking the quotient is the factor line itself.
+A relation among $S,L,R'$ therefore makes every individual block
+motion trivial on the factor lines. Lemma~\ref{lem:base} kills each
+block parameter. Thus $S+L+R'$ is a direct sum of dimensions
+$98,63,63$.
+
+For the global action use the decomposition
+\[
+ \operatorname{Mat}_4
+   =(kI\otimes kI)\oplus (H\otimes kI)
+     \oplus(kI\otimes H)\oplus(H\otimes H).
+\]
+The scalar part lands in $S$. The two single-factor parts give a
+uniform block motion in each of $L$ and $R'$, of dimension nine each.
+We claim that the three copies of $H\otimes H$ give 27 independent
+directions modulo $S+L+R'$. To see this, project each factor derivative
+at $(i,j)$ to
+\[
+ (\operatorname{Mat}_2/kF_i)\otimes
+ (\operatorname{Mat}_2/kF_j).
+\]
+This projection annihilates $S+L+R'$. At the identity position
+$(0,0)$, where all factor matrices are $I\otimes I$, vanishing in
+all three modes forces the three mixed global generators to be
+equal, since $H$ maps isomorphically to $\operatorname{Mat}_2/kI$.
+Denote that common generator by $K\in H\otimes H$. At $(i,0)$ in
+the first mode, the projected derivative is the projection of
+$[K,A_i\otimes I]$. Write $K=\sum_\nu h_\nu\otimes e_\nu$ for
+a basis $e_\nu$ of $H$. Its image vanishes only if each
+$[h_\nu,A_i]$ is a multiple of $A_i$ for all $i$. The two
+first-mode factors in Lemma~\ref{lem:base} then give $h_\nu=0$.
+This proves the claim.
+
+The global and branch tangent dimensions now follow:
+\[
+\begin{array}{c|c|c}
+\text{Space} & \text{Dimension calculation} & \text{Dimension}\\ \hline
+T_0 & 98+9+9+27 & 143\\
+T_0+L,\ T_0+R' & 143+(63-9) & 197\\
+T_0+L+R' & 98+63+63+27 & 251 .
+\end{array}
+\]
+The two branch tangent spaces intersect precisely in $T_0$.
+The global orbit has dimension 143, by the central kernel bound and
+the differential rank just proved. The finite rank computation is
+needed to show that these analytic tangent directions exhaust the
+kernel: a rank-2101 minor modulo~3 gives the matching upper bound on
+the tangent dimension in characteristic three and in characteristic zero.
+Choosing complements $X$ and $Y$ from $L$ and $R'$ gives
 \begin{equation}\label{eq:split}
  \ker J=T_0\oplus X\oplus Y,
  \qquad (\dim T_0,\dim X,\dim Y)=(143,54,54).
 \end{equation}
-Here $T_0$ is generated by the global group derivatives and term
-scalings, $X$ comes from the first recursive family, and $Y$ comes
-from the second. The inputs are 146 global derivatives and 84
-local derivatives from each family. The verifier checks all 314
-integer derivatives, obtains rank 2101 for $J$ modulo~3, and
-selects the independent columns in this order. It also checks
-that the second family adds exactly 54 dimensions modulo $T_0$
-on its own. The orbit dimension is bounded above by 143 from the
-central kernel, and the differential attains that bound.
+The verifier uses integral generators in this order to select a particular
+basis for the quadrics. The dimension argument is independent of that
+basis selection.
 
 Select 143 independent group parameters and then 54 independent
 recursive parameters in each family. Their common restriction when
@@ -201,27 +301,52 @@ Cohen--Macaulay. This holds also with the 143 common tangent
 coordinates adjoined.
 
 \begin{lemma}\label{lem:initial}
-In a power series ring over a field, if the lowest nonzero
-homogeneous parts of $f_1,\ldots,f_s$ form a regular sequence, then
-the associated graded ring of the quotient by the $f_i$ is the
-polynomial ring modulo these homogeneous parts.
+Let $A=k[[z_1,\ldots,z_N]]$ with maximal ideal $\mathfrak m$, and let
+$I\subseteq A$. For a nonzero $f\in A$, write $f^*$ for its lowest
+nonzero homogeneous part. If $I$ contains $f_1,\ldots,f_s$ with
+$f_1^*,\ldots,f_s^*$ a regular sequence, then $\dim A/I\le N-s$.
+For $I=(f_1,\ldots,f_s)$ the associated graded ring is
+$k[z_1,\ldots,z_N]/(f_1^*,\ldots,f_s^*)$.
 \end{lemma}
 \begin{proof}
-In the quotient by the preceding series, a nonzerodivisor initial
-form implies that multiplication by the next series adds
-filtration degrees. Thus the initial ideal of the principal ideal
-it generates is generated by its initial form. Induction gives
-the asserted associated graded quotient.
+For any $I$, the graded map $\operatorname{gr}_{\mathfrak m}A\to
+\operatorname{gr}_{\mathfrak m}(A/I)$ has kernel generated by the
+initial forms of elements of $I$. Indeed, a class of degree $d$
+in its kernel has a representative in
+$\mathfrak m^d\cap(I+\mathfrak m^{d+1})$ and hence agrees with
+an element of $I\cap\mathfrak m^d$ modulo $\mathfrak m^{d+1}$.
+Taking the quotient by the $s$ specified initial forms therefore
+gives a graded surjection onto $\operatorname{gr}_{\mathfrak m}(A/I)$.
+The source has dimension $N-s$. The Hilbert--Samuel dimension
+theorem gives $\dim\operatorname{gr}_{\mathfrak m}(A/I)=\dim A/I$.
+
+For the equality of graded rings in the stated special case, proceed
+one series at a time. In the quotient by the preceding series,
+the next $f_i^*$ is a nonzerodivisor in the graded ring by induction.
+For every nonzero element $g$ of that quotient, the product of the
+two initial forms is nonzero, so $(gf_i)^*=g^*f_i^*$. Thus the initial
+ideal of $(f_i)$ in this quotient is precisely $(f_i^*)$. Induction
+gives the asserted presentation.
 \end{proof}
 
-Choose 2101 equations and normal coordinates using an invertible
-Jacobian minor. Take the remaining coordinates $z=(c,x,y)$ in
-$\ker J$. Formal elimination expresses the normals as series
-$n(z)$ of order at least two, leaving a residual ideal $I$
-in $k[[z]]$. In particular $I$ contains
-$\lambda_i\Phi(p+z+n(z))$. Its lowest homogeneous term is $q_i$,
-since $\lambda_i Jn(z)=0$. Lemma~\ref{lem:initial} now gives an
-upper bound of $251-54=197$ on the dimension of $k[[z]]/I$.
+Split the ambient coordinate space into $\ker J$, with coordinates
+$z=(c,x,y)$, and a normal complement, with coordinates $n$.
+Choose 2101 equations $F$ whose derivative in $n$ is an invertible
+matrix $D$. Then $F(z,n)=Dn+O((z,n)^2)$. The formal map
+$(z,n)\mapsto(z,F(z,n))$ has linear part $\operatorname{diag}(1,D)$
+and has a formal inverse: solving for each successive homogeneous
+part of that inverse requires only multiplication by $D^{-1}$
+in the normal coordinates. Setting $F=0$ gives the unique normal
+series $n(z)$ of order at least two. The completed Brent local
+ring is $k[[z]]/I$, where $I$ is generated by the original
+equations after substituting $n(z)$.
+
+In particular $I$ contains $f_i(z)=\lambda_i\Phi(p+z+n(z))$.
+The linear contribution dies under $\lambda_i$ because $\lambda_i J=0$.
+Since $n(z)$ starts in degree two, it contributes only in degree
+three and higher to the quadratic and cubic parts of the expansion.
+Thus $f_i^*=q_i$. The dimension inequality in
+Lemma~\ref{lem:initial} gives $\dim k[[z]]/I\le251-54=197$.
 Together with the lower bound this proves the characteristic-three
 dimension claim.
 
@@ -261,7 +386,12 @@ minimal by the dimension bound. Their distinct tangent images
 make the primes distinct. The intersection contains the shared
 143-dimensional smooth orbit subgerm and its tangent space is
 the intersection of the displayed tangent images, of dimension
-143. This also proves the asserted intersection dimension.
+143. This proves that the intersection itself is regular of dimension
+143. In the 251-variable formal ambient space one can straighten the
+two subgerms simultaneously. Indeed, if their parameterizations are
+$f_L(c,x)$ and $f_R(c,y)$ with common restriction $f_0(c)$, the sum
+$f_L(c,x)+f_R(c,y)-f_0(c)$ has invertible derivative. In the resulting
+coordinates the two subgerms are $x=0$ and $y=0$.
 The two smooth subgerms factor through the reduction, and their
 tangents span a 251-dimensional space. Thus the tangent space
 of the reduced variety also has dimension 251 and the reduced
@@ -274,25 +404,104 @@ image of the mixed forms from the entire left kernel of $J$.
 It has dimension $2749-2101=648$. Products by positive-degree
 multipliers do not contribute in degree two, so the local
 Hilbert value there is $\binom{252}{2}-648=30978$.
-The number 648 measures the space of quadratic conditions. The dimension
-argument uses the regular sequence of length 54. The full
-Hilbert series and the number of all formal branches remain open.
+The reduced union of the two displayed subgerms would impose all
+$54^2=2916$ mixed monomials, with degree-two Hilbert value $28710$.
+The measured value $30978$ thus gives a dichotomy in characteristic
+three: the completed local ring is nonreduced, or there is an
+additional minimal prime. The full Hilbert series and branch count
+remain open.
+
+\section{Relation to the AlphaTensor schemes}\label{sec:alphatensor}
+
+The common dimension 197 has a concrete explanation on the recursive
+families. The closure of either family image has dimension 197:
+its differential has rank 197 at $p$, and its dimension is bounded
+above by the local dimension of the Brent scheme at $p$. Each closure
+is an irreducible component of the reduced variety through $p$.
+This argument allows the two global closures to coincide, as can
+happen for branches at a singular point.
+
+We exhibit smooth points of the full Brent scheme on both displayed
+families. In each orientation the accompanying verifier constructs
+a point using integer unimodular changes of basis, checks all 4096
+integer equations and finds Jacobian rank 2155 modulo three.
+Because each point lies on a 197-dimensional component, its tangent
+dimension is at least 197. The calculation gives the reverse inequality,
+both in characteristic three and in characteristic zero. Equality of
+embedding and local dimension proves smoothness at these points.
+This shows how a singular 49-term scheme with tangent dimension 251
+can be connected by explicit deformations to smooth schemes with tangent
+dimension 197, the same dimension reported for many AlphaTensor
+examples \cite[Section~5.2.2]{lwh}. Identifying which catalogue points
+are on which component would require additional information.
+
+We can nevertheless rule out membership for some catalogue points.
+Throughout either displayed family, the multiset of triples of ordinary
+matrix ranks is
+\[
+ 36(1,1,1),\qquad 12(2,2,2),\qquad 1(4,4,4).
+\]
+The base algorithm has six triples of rank one and a single triple
+of rank two. Tensor products multiply these ranks, and the permitted
+changes are left and right multiplication by invertible matrices.
+In the closures, ranks can only decrease at each labeled summand.
+Consequently, even allowing summand and mode permutations, at most 13
+summands can have any mode rank above one, and at most one summand
+can have any mode rank above two.
+
+A second necessary condition applies to catalogue points with the
+same rank profile. At each of the six rank-one outer summands, the
+group of seven terms contains a unique rank-two term, obtained by
+taking the inner identity summand. In each mode, its row and column
+spaces contain the row and column spaces of all six other terms in
+that group. This follows from the inclusion of the column and row
+spaces in a fixed one-dimensional space tensored with $k^2$.
+Left and right changes preserve the inclusions. They persist at
+closure points with the same profile because the relevant minors of
+the stacked matrices vanish. Indeed, equality of the total rank sum
+in the two profiles forces equality at every label, since each rank
+is individually bounded above by its original value. In particular
+each anchor stays of rank two.
+The other recursive orientation gives the same condition with the
+index roles exchanged. The filter checks that at least six rank-two
+terms can each accommodate six rank-one terms, and that each rank-one
+term has at least one such candidate anchor. This test is necessary
+for an actual partition.
+
+We applied these tests to the 14,236 public integral factorizations
+of Fawzi et al.\ \cite{alpha}, using exact row reduction. In both
+characteristics the rank bounds exclude 87 points from the closures
+of the two displayed families, and the row- and column-space test
+excludes two further points with the same profile. The remaining
+14,147 pass these necessary tests. The supplementary script records
+the exact input revision, checks its SHA-256 hash, and uses a prime
+larger than the Hadamard bound for every relevant minor when testing
+characteristic zero. These exclusions concern the closures of the
+displayed families. A catalogue point outside these closures could
+still be on another component through $p$.
+
+The open parameterizations preserve every nonzero factor and retain
+all 49 summands. Thus they give deformations of a fixed length.
+A shorter decomposition would require a suitably degenerate limit
+or another construction. The existence of a length-reducing limit
+remains open here.
 
 \section{Reproducibility}
 
-The accompanying release contains the signed Strassen-square
-factor arrays, frozen integral tangent bases, sparse functionals
-and quadratic forms, the modular certificate, and SHA-256
-checksums. Run \texttt{bash verify.sh} from an extracted copy.
-The Python and NumPy verifier checks the tensor identity, all integral
-tangent equations, the Jacobian and augmented ranks, the 54
-functionals and all matching positions. It derives the mixed
-columns by signed polarization of integer tensor contractions.
-The proof above supplies the algebraic consequences of those
-finite checks. The release version for this manuscript is
-\texttt{v1.0.0}, with citation metadata in \texttt{CITATION.cff}.
-The project is prepared for
-\href{https://github.com/edsonphx/brent-strassen-square}{\texttt{edsonphx/brent-strassen-square}}.
+The \href{https://github.com/edsonphx/brent-strassen-square}{public
+repository} includes the signed factor arrays, integral tangent
+bases, sparse functionals, quadratic forms and SHA-256 manifest.
+Run \texttt{bash verify.sh} with Python and NumPy to check the tensor
+identity, tangent equations, Jacobian and augmented ranks, and
+the 54 functionals and matching positions. The verifier derives
+the mixed columns by signed polarization of integer contractions.
+Pass \texttt{--full} to check all 28,710 non-mixed monomials per
+certified form and verify 40 exact family points, including the
+two smooth witnesses. A separate script runs the catalogue census.
+
+The original five-page version and its verifier are archived as
+\href{https://github.com/edsonphx/brent-strassen-square/releases/tag/v1.0.0}{GitHub release \texttt{v1.0.0}}
+and at \href{https://doi.org/10.5281/zenodo.24449376}{DOI 10.5281/zenodo.24449376}.
 
 \begin{thebibliography}{9}
 \bibitem{lbz} X. Li, Y. Bao and L. Zhang,
@@ -306,6 +515,17 @@ Deflation conjecture and local dimensions of Brent equations,
 \bibitem{lwh} X. Li, Y. Wang and S. Hu,
 Substitution and quotient of the isotropy group action,
 \href{https://arxiv.org/abs/2607.15069v2}{arXiv:2607.15069v2} (2026).
+\bibitem{dps} J.-G. Dumas, C. Pernet and A. Sedoglavic,
+A non-commutative algorithm for multiplying $4\times4$ matrices using
+48 non-complex multiplications,
+\href{https://arxiv.org/abs/2506.13242}{arXiv:2506.13242} (2025).
+\bibitem{bs} T. Brysiewicz and R. Sinn,
+\href{https://arxiv.org/abs/2609.02818}{Local dimension testing via
+quadratic obstructions} (2026).
+\bibitem{alpha} A. Fawzi et al.,
+\href{https://doi.org/10.1038/s41586-022-05172-4}{Discovering faster
+matrix multiplication algorithms with reinforcement learning},
+\emph{Nature} 610 (2022), 47--53.
 \bibitem{stacks} The Stacks Project Authors,
 \emph{The Stacks Project}, Section~10.68,
 \href{https://stacks.math.columbia.edu/tag/0AUH}{Tag 0AUH}.
