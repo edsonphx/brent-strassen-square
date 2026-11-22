@@ -23,8 +23,9 @@ The two displayed smooth formal branches each have dimension 197 and their
 formal intersection has dimension 143. These statements concern the geometry
 of a fixed decomposition.
 
-The current preprint derives the orbit and branch tangent dimensions by hand.
-It also gives explicit smooth points on both recursive families and compares
+Version 1.1.0 derives the orbit and branch tangent dimensions by hand,
+details the formal dimension argument, and specifies the finite checks
+in an appendix. It also gives two explicit smooth deformations and compares
 the families with the 14,236 integral AlphaTensor decompositions. The rank
 filters exclude 89 catalogue entries from the closures of the two displayed
 families over both fields. The membership of the other entries is unresolved.
@@ -45,8 +46,8 @@ recomputes the mixed coefficients of the 54 certified quadrics. It prints
 implications of these checks appear in the preprint.
 
 `bash verify.sh --full` also checks all 28,710 non-mixed monomials in
-each of the 54 quadratic forms, reconstructs 40 integer points on the
-two families, and checks a rank-2155 Jacobian witness on each family.
+each of the 54 quadratic forms, certifies the two explicit rank-2155
+deformation endpoints, and verifies 40 additional integer points.
 
 | File | Contents |
 | --- | --- |
@@ -81,12 +82,13 @@ python3 alphatensor_rank_profiles.py alphatensor-catalog.npz
 
 Edson Soares. *Exact Local Dimension of the Brent Variety V(4,4,4 | 49)
 at the Recursive Strassen-Square Point via Quadratic Obstructions*.
-Preprint and verification package, version 1.0.0, 2026.
-[doi:10.5281/zenodo.24449376](https://doi.org/10.5281/zenodo.24449376).
+Preprint and verification package, version 1.1.0, 2026.
+[GitHub release](https://github.com/edsonphx/brent-strassen-square/releases/tag/v1.1.0).
 
-[CITATION.cff](CITATION.cff) describes the current working revision. Its
-preferred citation identifies the archived original. To cite analysis added
-after the release, use the commit permalink for the revision you consulted.
+The [Zenodo concept DOI](https://doi.org/10.5281/zenodo.24449375)
+resolves to the latest archived version. To cite specific files, use the
+DOI shown on that version's record. The original five-page version,
+version 1.0.0, has [DOI 10.5281/zenodo.24449376](https://doi.org/10.5281/zenodo.24449376).
 
 ## Licenses
 

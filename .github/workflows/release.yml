@@ -1,8 +1,8 @@
-name: Publish v1.0.0
+name: Publish v1.1.0
 
 on:
   push:
-    tags: [v1.0.0]
+    tags: [v1.1.0]
 
 jobs:
   release:
@@ -18,7 +18,7 @@ jobs:
         run: |
           python3 -m venv "$RUNNER_TEMP/brent"
           "$RUNNER_TEMP/brent/bin/pip" install numpy
-          PYTHON="$RUNNER_TEMP/brent/bin/python" bash verify.sh
+          PYTHON="$RUNNER_TEMP/brent/bin/python" bash verify.sh --full
       - name: Publish the checked preprint and archive
         env:
           GH_TOKEN: ${{ github.token }}
@@ -28,4 +28,4 @@ jobs:
             -o "$archive" "$GITHUB_SHA"
           gh release create "$GITHUB_REF_NAME" paper.pdf "$archive" --verify-tag \
             --repo "$GITHUB_REPOSITORY" --title "Strassen-square certificate $GITHUB_REF_NAME" \
-            --notes 'Preprint, signed data, and exact verifier for local dimension 197 at the ordered recursive Strassen-square point.'
+            --notes 'Expanded preprint with full recursive parametrizations, detailed local and characteristic-zero proofs, a finite-certificate appendix, and explicit smooth deformations. The archive includes the exact verifier and AlphaTensor catalogue comparison.'

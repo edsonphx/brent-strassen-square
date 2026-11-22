@@ -192,42 +192,59 @@ def unimodular_pair(n, rng):
 
 def finite_move(terms, rng):
     n = int(terms.shape[2]**0.5)
-    (p, pi), (q, qi), (r, ri) = [unimodular_pair(n, rng) for _ in range(3)]
+    return change_basis(terms, *(unimodular_pair(n, rng) for _ in range(3)))
+
+
+def change_basis(terms, p_pair, q_pair, r_pair):
+    n = int(terms.shape[2]**0.5)
+    p, pi = p_pair
+    q, qi = q_pair
+    r, ri = r_pair
     a, b, c = terms.transpose(1, 0, 2).reshape(3, len(terms), n, n)
     moved = np.stack((p.T @ a @ qi.T, q.T @ b @ ri.T, pi @ c @ r), axis=1)
     return moved.reshape(terms.shape)
 
 
+def recursive_move(blocks, side):
+    grid = np.empty((7, 7, 3, 16), dtype=np.int64)
+    for index, changed in enumerate(blocks):
+        if side == 0:
+            grid[index] = shuffled_product(BASE, changed).reshape(grid.shape)[index]
+        else:
+            grid[:, index] = shuffled_product(changed, BASE).reshape(grid.shape)[:, index]
+    return grid.reshape(49, 3, 16)
+
+
+def check_integer_point(terms):
+    bound = 49
+    for mode in range(3):
+        bound *= int(np.max(np.abs(terms[:, mode])))
+    require(bound < np.iinfo(np.int64).max, "integer contraction could overflow")
+    actual = np.einsum("ri,rj,rk->ijk", *terms.transpose(1, 0, 2), dtype=np.int64)
+    require(np.array_equal(actual, target(4)), "unimodular family point fails the Brent identity")
+
+
 def verify_families():
     rng = np.random.default_rng(8101)
-    smooth_witnesses = []
+    identity = np.eye(2, dtype=np.int64)
+    e12 = np.array([[0, 1], [0, 0]], dtype=np.int64)
+    unchanged = (identity, identity)
+    upper = (identity + e12, identity - e12)
+    lower = (identity + e12.T, identity - e12.T)
+    blocks = [BASE] * 7
+    blocks[4] = change_basis(BASE, upper, unchanged, lower)
+    blocks[5] = change_basis(BASE, lower, unchanged, upper)
     for side in (0, 1):
-        first_smooth = None
-        for sample in range(20):
-            grid = np.zeros((7, 7, 3, 16), dtype=np.int64)
-            for index in range(7):
-                changed = finite_move(BASE, rng)
-                if side == 0:
-                    grid[index] = shuffled_product(BASE, changed).reshape(grid.shape)[index]
-                else:
-                    grid[:, index] = shuffled_product(changed, BASE).reshape(grid.shape)[:, index]
-            moved = finite_move(grid.reshape(49, 3, 16), rng)
-            bound = 49
-            for a in range(3):
-                bound *= int(np.max(np.abs(moved[:, a])))
-            require(bound < np.iinfo(np.int64).max, "integer contraction could overflow")
-            actual = np.einsum("ri,rj,rk->ijk", *moved.transpose(1, 0, 2), dtype=np.int64)
-            require(np.array_equal(actual, target(4)), "unimodular family point fails the Brent identity")
-            if first_smooth is None:
-                rank = Rank()
-                rank.extend(jacobian_rows((moved % 3).astype(np.int32)))
-                require(len(rank) <= 2155, "family tangent dimension below 197")
-                if len(rank) == 2155:
-                    first_smooth = sample
-        smooth_witnesses.append(first_smooth)
-    print("40 exact integer deformations checked across both recursive families")
-    print(f"Rank-2155 witnesses by orientation (zero-based samples): {smooth_witnesses}")
-    return smooth_witnesses
+        witness = recursive_move(blocks, side)
+        check_integer_point(witness)
+        rank = Rank()
+        rank.extend(jacobian_rows((witness % 3).astype(np.int32)))
+        require(len(rank) == 2155, "explicit shear witness has wrong Jacobian rank")
+        for _ in range(20):
+            sample = recursive_move([finite_move(BASE, rng) for _ in range(7)], side)
+            check_integer_point(finite_move(sample, rng))
+    print("Two explicit shear witnesses: integer identities and Jacobian ranks 2155")
+    print("40 additional exact integer deformations across both recursive families")
 
 
 def verify(full=False):
@@ -286,7 +303,7 @@ def verify(full=False):
     print("54 literal functionals and coprime leading monomials checked; mixed rank: 648")
     if full:
         verify_full_quadrics(terms, np.concatenate((gauge, left, right)), functionals, quadrics)
-        require(all(x is not None for x in verify_families()), "missing rank-2155 family witness")
+        verify_families()
     print("VERIFIED: local_dim = 197")
 
 
