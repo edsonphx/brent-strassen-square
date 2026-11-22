@@ -86,6 +86,10 @@ Preprint and verification package, version 1.1.0, 2026.
 [DOI 10.5281/zenodo.24450467](https://doi.org/10.5281/zenodo.24450467).
 [GitHub release](https://github.com/edsonphx/brent-strassen-square/releases/tag/v1.1.0).
 
+The default branch carries a dated editorial revision of the manuscript.
+Use its commit permalink to cite that text or the version DOI to cite
+the archived release.
+
 The [Zenodo concept DOI](https://doi.org/10.5281/zenodo.24449375)
 resolves to the latest archived version. To cite specific files, use the
 DOI shown on that version's record. The original five-page version,

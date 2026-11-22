@@ -7,6 +7,7 @@
 \addtolength{\evensidemargin}{-9pt}
 \addtolength{\textheight}{20pt}
 \raggedbottom
+\pagestyle{plain}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
 \newcommand{\F}{\mathbb F}
@@ -19,7 +20,8 @@
 \texorpdfstring{$V(4,4,4\mid49)$}{V(4,4,4 | 49)} at the Recursive
 Strassen-Square Point via Quadratic Obstructions}
 \author{Edson Soares}
-\date{Version 1.1.0}
+\date{22 November 2026}
+\thanks{Repository \url{https://github.com/edsonphx/brent-strassen-square}.}
 \subjclass[2020]{14D15, 14Q20, 68Q17, 13P10}
 \keywords{Brent equations, fast matrix multiplication, local dimension,
 quadratic obstructions, computational algebraic geometry}
@@ -65,26 +67,41 @@ known \cite{dps}. The question here is how length-49 decompositions
 vary near the classical recursive point and how far its explicit
 recursive families reach into the AlphaTensor catalogue.
 
-Li, Bao and Zhang use Jacobian and orbit bounds for local dimensions
-\cite{lbz}. Li, Zhang and Ke use deflation to study singular Brent
-solutions \cite{lzk}. Li, Wang and Hu report Jacobian nullity 197
-and numerical evidence of smoothness for selected AlphaTensor points
-\cite[Section~5.2.2]{lwh}. Their selected example has orbit tangent
-dimension 143 and thus 54 tangent directions modulo the orbit.
-At the recursive point the orbit also has dimension 143, but the
-tangent quotient has dimension 108. We account for this difference
-by exhibiting two families through the recursive point. Each gives
-54 independent directions modulo the orbit, and their sum generates
-the whole tangent quotient. Quadratic equations constrain which
-directions in the sum can occur together.
+\subsection{Related work}
 
-Brysiewicz and Sinn give general local dimension tests using
-quadratic obstructions \cite{bs}. Here the recursive families force
-the obstruction map to have only mixed terms between two tangent
-subspaces. That structure lets a bipartite matching certify a
-regular sequence of 54 initial forms. The proof below gives the
-dimension argument and the passage to characteristic zero separately
-from the finite calculation of the matching and ranks.
+Li, Bao and Zhang use Jacobian and orbit bounds for local dimensions
+\cite{lbz}. Li, Zhang and Ke study the same length-49 Brent scheme
+by deflation. For 13,530 of the 14,236 AlphaTensor solutions, they
+report first and second nullities equal to 197. In a sample of 100
+from those 13,530, the next two nullities also equal 197
+\cite[Section~5.3]{lzk}. These computations provide numerical
+evidence about the local geometry of those catalogue points.
+Li, Wang and Hu study substitution modulo isotropy in this scheme,
+including a singular AlphaTensor example \cite[Sections~5.2.2
+and~5.3]{lwh}. Their selected example with Jacobian nullity 197 has
+orbit tangent dimension 143, leaving 54 tangent directions modulo
+the orbit.
+
+At the recursive point the orbit also has dimension 143 and the
+tangent quotient has dimension 108. We account for the 108 directions
+by exhibiting two families through this point. Each gives 54
+independent directions modulo the orbit, and together they generate
+the tangent quotient. The upper bound proves that the local
+dimension at this singular recursive point is exactly 197.
+
+Brysiewicz and Sinn give general local dimension tests based on
+second-order obstructions, with an exact application to the
+symmetric 24-cell \cite[Sections~2--3 and~5]{bs}. Their test uses
+the quadratic term on the kernel of the sliced Jacobian, projected
+to its cokernel, to certify isolation on a slice. The same
+kernel-to-cokernel obstruction appears here. The two exact
+recursive families force its quadratic forms to have only mixed
+terms between two tangent subspaces. A bipartite matching then
+certifies a regular sequence of 54 initial forms over $\F_3$.
+Together with the recursive deformations and a lift through
+$\Z_{(3)}$, this gives the exact local dimension at the specified
+Strassen-square point in characteristic three and in characteristic
+zero.
 
 \section{The Brent scheme and the recursive point}
 
@@ -236,21 +253,32 @@ $E_{11}+E_{12}$ only for $t=0$.
 
 Let $S$ be the term-rescaling tangent space, of dimension $2\cdot49=98$.
 Let $L$ and $R'$ be the images of seven independent triples in $H^3$,
-applied in the inner and outer positions, respectively. Consider any
-one mode with factors $F_i\otimes F_j$ at grid position $(i,j)$. Modulo
-that factor line, a derivative from $L$ lies in
-$kF_i\otimes\operatorname{Mat}_2$ and one from $R'$ lies in
-$\operatorname{Mat}_2\otimes kF_j$. Their only possible common
-direction before taking the quotient is the factor line itself.
-A relation among $S,L,R'$ therefore makes every individual block
-motion trivial on the factor lines. Lemma~\ref{lem:base} kills each
-block parameter. Thus $S+L+R'$ is a direct sum of dimensions
-$98,63,63$.
+applied in the inner and outer positions, respectively. Suppose a
+sum of a rescaling derivative and the two block derivatives is zero.
+In any one mode, write $F_i\otimes F_j$ for the factor at $(i,j)$.
+The equation in that factor space is
+\[
+ d_{ij} F_i\otimes F_j + F_i\otimes U_{ij} + V_{ij}\otimes F_j=0,
+\]
+where $d_{ij}$ is the scalar from the rescaling, $U_{ij}$ is the
+variation of $F_j$ from the block with fixed $i$, and $V_{ij}$ is
+the variation of $F_i$ from the block with fixed $j$.
+Projecting the second tensor factor to
+$\operatorname{Mat}_2/kF_j$ gives $F_i\otimes\overline U_{ij}=0$,
+so $U_{ij}\in kF_j$ because $F_i\ne0$. Projecting the first factor
+to $\operatorname{Mat}_2/kF_i$ gives $V_{ij}\in kF_i$ in the
+same way.
 
-In particular, each block has nine independent derivatives even
-after forgetting all term scalings. This is why seven blocks
-contribute 63 dimensions before removing the global motions. The
-same count applies when the other tensor-product index is fixed.
+Fix $i$ and apply this to all three modes and all seven values of
+$j$. The block with fixed $i$ has derivatives in the individual
+factor lines at every summand of the base Strassen scheme.
+Lemma~\ref{lem:base} therefore makes its parameter triple in $H^3$
+zero. Fixing $j$ instead gives the same conclusion for every block
+of the other orientation. With both block derivatives zero, the
+rescaling derivative is zero as well. Thus the map from the
+rescaling space and the two lists of block parameters to the
+tangent space is injective. Each list contributes $7\cdot9=63$
+dimensions, giving the direct sum of dimensions $98,63,63$.
 
 For the global action use the decomposition
 \[
@@ -683,9 +711,13 @@ remains open here.
 
 \section{Reproducibility}
 
-The \href{https://github.com/edsonphx/brent-strassen-square}{public
-repository} includes the signed factor arrays, integral tangent
-bases, sparse functionals, quadratic forms and SHA-256 manifest.
+The signed factor arrays, integral tangent bases, sparse functionals,
+quadratic forms and SHA-256 manifest are available in the GitHub
+repository below.
+\begin{center}
+\href{https://github.com/edsonphx/brent-strassen-square}{\texttt{edsonphx/brent-strassen-square}}
+\end{center}
+
 Run \texttt{bash verify.sh} with Python and NumPy to check the tensor
 identity, tangent equations, Jacobian and augmented ranks, and
 the 54 functionals and matching positions. The verifier derives
@@ -696,12 +728,23 @@ additional exact family points. A separate script runs the
 catalogue census. The appendix specifies the finite input and
 output of the rank and polynomial tests.
 
-This preprint and its matching verifier are available from
-\href{https://github.com/edsonphx/brent-strassen-square/releases/tag/v1.1.0}{GitHub release \texttt{v1.1.0}}.
+Version 1.1.0 of the preprint and its verifier are archived at
+\href{https://doi.org/10.5281/zenodo.24450467}{DOI 10.5281/zenodo.24450467}.
+The repository also carries the dated editorial revision.
 The Zenodo record family is at
 \href{https://doi.org/10.5281/zenodo.24449375}{DOI 10.5281/zenodo.24449375}.
 The original five-page preprint has version DOI
 \href{https://doi.org/10.5281/zenodo.24449376}{10.5281/zenodo.24449376}.
+
+\section*{Human--AI collaboration}
+
+The author directed the research and used OpenAI's ChatGPT and
+Codex to explore mathematical approaches, develop the certificate
+and verifier, review related work, and draft and revise the
+manuscript. The author is responsible for the final claims and
+presentation. The proofs are given in the text, and the archived
+data and exact verifier allow readers to reproduce the finite
+computations independently.
 
 \appendix
 \section{Finite certificate specification}\label{sec:certificate}
@@ -813,8 +856,8 @@ A non-commutative algorithm for multiplying $4\times4$ matrices using
 48 non-complex multiplications,
 \href{https://arxiv.org/abs/2506.13242}{arXiv:2506.13242} (2025).
 \bibitem{bs} T. Brysiewicz and R. Sinn,
-\href{https://arxiv.org/abs/2609.02818}{Local dimension testing via
-quadratic obstructions} (2026).
+\emph{Local dimension testing via quadratic obstructions}, preprint
+(2026), \href{https://arxiv.org/abs/2609.02818}{arXiv:2609.02818}.
 \bibitem{alpha} A. Fawzi et al.,
 \href{https://doi.org/10.1038/s41586-022-05172-4}{Discovering faster
 matrix multiplication algorithms with reinforcement learning},
