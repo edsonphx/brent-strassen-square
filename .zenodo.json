@@ -6,6 +6,7 @@
     }
   ],
   "description": "<p>The ordered recursive Strassen-square point of the 49-summand Brent scheme for 4 by 4 matrix multiplication has local dimension 197 and tangent dimension 251 in characteristic three and in characteristic zero. Two exact recursive deformation families give the lower bound, and 54 quadratic initial forms with pairwise coprime leading monomials give the upper bound. The local Hilbert function begins (1, 251, 30978) in both characteristics. The preprint compares the two recursive families with 14,236 integral AlphaTensor schemes. The package provides the source, exact verifier, certificate data, and catalogue comparison.</p>",
+  "version": "1.1.3",
   "access_right": "open",
   "upload_type": "software",
   "license": "cc-by-4.0",

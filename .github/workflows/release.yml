@@ -1,8 +1,8 @@
-name: Publish v1.1.2
+name: Publish v1.1.3
 
 on:
   push:
-    tags: [v1.1.2]
+    tags: [v1.1.3]
 
 jobs:
   release:
@@ -28,4 +28,4 @@ jobs:
             -o "$archive" "$GITHUB_SHA"
           gh release create "$GITHUB_REF_NAME" paper.pdf "$archive" --verify-tag \
             --repo "$GITHUB_REPOSITORY" --title "Strassen-square certificate $GITHUB_REF_NAME" \
-            --notes 'Submission copy with clarified quadratic notation, the explicit degree-two Hilbert calculation, and a copyable verification flag. The human–AI collaboration disclosure and the exact verifier are included.'
+            --notes 'Revision by Edson Soares de Souza with exact rational verification of the augmented rank, the characteristic-zero Hilbert prefix, and the full AlphaTensor rank-profile counts. The PDF includes the revised AI disclosure.'
