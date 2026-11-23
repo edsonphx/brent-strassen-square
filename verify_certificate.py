@@ -126,6 +126,27 @@ class Rank:
         return len(self.pivots)
 
 
+def extend_unit_echelon(rows, pivots):
+    """Reduce integer rows by row additions and sign changes only."""
+    for vector in rows:
+        row = {int(i): int(vector[i]) for i in np.flatnonzero(vector)}
+        while row:
+            leading = min(row)
+            coefficient = row[leading]
+            pivot = pivots.get(leading)
+            if pivot is None:
+                require(abs(coefficient) == 1, "nonunit pivot in exact rank check")
+                pivots[leading] = {i: coefficient * value for i, value in row.items()}
+                break
+            for i, value in pivot.items():
+                updated = row.get(i, 0) - coefficient * value
+                if updated:
+                    row[i] = updated
+                else:
+                    row.pop(i, None)
+    return len(pivots)
+
+
 def select_bases(families):
     rank = Rank()
     return [family[rank.extend(family.reshape(len(family), -1))] for family in families]
@@ -277,7 +298,13 @@ def verify(full=False):
 
     mixed = np.array([mixed_row(terms, u, v) for u in left for v in right], dtype=np.int16)
     rank.extend(mixed)
-    require(len(rank) == 2749, "wrong augmented rank")
+    require(len(rank) == 2749, "wrong augmented rank modulo three")
+    integer_pivots = {}
+    rational_jacobian_rank = extend_unit_echelon(jacobian, integer_pivots)
+    rational_augmented_rank = extend_unit_echelon(mixed, integer_pivots)
+    require(rational_jacobian_rank == 2101, "wrong exact Jacobian rank")
+    require(rational_augmented_rank == 2749, "wrong exact augmented rank")
+    print("Augmented rank: 2749 over Q and GF(3); exact elimination uses only unit pivots")
 
     with np.load(DATA / "regular_sequence_certificate.npz", allow_pickle=False) as cert:
         functionals = cert["lambda_mod3"].astype(np.int32)
@@ -299,7 +326,8 @@ def verify(full=False):
         actual = (mixed[:, support] @ coeff) % 3
         require(np.array_equal(actual, expected), "quadratic coefficient mismatch")
         require(actual[pivot] == 1 and not np.any(actual[:pivot]), "invalid leading monomial")
-    require(251*252//2 - (len(rank)-2101) == 30978, "Hilbert coefficient mismatch")
+    obstruction_rank = rational_augmented_rank - rational_jacobian_rank
+    require(251*252//2 - obstruction_rank == 30978, "Hilbert coefficient mismatch")
     print("54 literal functionals and coprime leading monomials checked; mixed rank: 648")
     if full:
         verify_full_quadrics(terms, np.concatenate((gauge, left, right)), functionals, quadrics)

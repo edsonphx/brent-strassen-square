@@ -14,10 +14,11 @@ proof, including the lift through `Z_(3)`.
 | Zariski tangent dimension | 251 |
 | Global isotropy and term-rescaling orbit dimension | 143 |
 | Complementary recursive tangent dimensions | 54 and 54 |
-| Rank of the projected mixed quadratic map over GF(3) | 648 |
+| Augmented rank over Q and GF(3) | 2,749 |
+| Rank of the projected mixed quadratic map over Q and GF(3) | 648 |
 | Coprime leading monomials in the certificate | 54 |
 | Local dimension | **197** |
-| Initial local Hilbert function over GF(3) | **(1, 251, 30978)** |
+| Initial local Hilbert function in both characteristics | **(1, 251, 30978)** |
 
 The two displayed smooth formal branches each have dimension 197 and their
 formal intersection has dimension 143. These statements concern the geometry
@@ -26,9 +27,11 @@ of a fixed decomposition.
 The preprint derives the orbit and branch tangent dimensions by hand,
 details the formal dimension argument, and specifies the finite checks
 in an appendix. It also gives two explicit smooth deformations and compares
-the families with the 14,236 integral AlphaTensor decompositions. The rank
-filters exclude 89 catalogue entries from the closures of the two displayed
-families over both fields. The membership of the other entries is unresolved.
+the families with the 14,236 integral AlphaTensor decompositions. Exactly
+14,149 entries have the full family rank profile in both characteristics.
+The anchor test excludes two of these entries from both family closures.
+The 14,147 remaining entries all have the full profile and their membership
+in the closures is unresolved.
 
 ## Verify
 
@@ -41,7 +44,9 @@ bash verify.sh
 The verifier runs offline with Python and NumPy. It checks
 SHA-256 hashes, contracts the signed tensor over the integers, rebuilds the
 Jacobian and all tangent generators, checks the frozen basis and ranks, and
-recomputes the mixed coefficients of the 54 certified quadrics. It prints
+recomputes the mixed coefficients of the 54 certified quadrics. It checks
+the Jacobian and augmented ranks both modulo three and by integer row
+elimination using only unit pivots. It prints
 `VERIFIED: local_dim = 197` when all finite checks pass. The algebraic
 implications of these checks appear in the preprint.
 
@@ -52,7 +57,7 @@ deformation endpoints, and verifies 40 additional integer points.
 | File | Contents |
 | --- | --- |
 | [paper.pdf](paper.pdf), [paper.tex](paper.tex) | Preprint and standalone LaTeX source |
-| [verify_certificate.py](verify_certificate.py) | Exact integer contractions and packed GF(3) elimination |
+| [verify_certificate.py](verify_certificate.py) | Exact integer contractions, packed GF(3) elimination, and integer rank verification |
 | [data/strassen_square_factors.npz](data/strassen_square_factors.npz) | Signed integer arrays `U`, `V`, `W`, each of shape `49 x 16` |
 | [data/tangent_bases.npz](data/tangent_bases.npz) | Integral arrays `G`, `X`, `Y` with 143, 54, and 54 basis directions |
 | [data/regular_sequence_certificate.npz](data/regular_sequence_certificate.npz) | 54 left-kernel functionals, quadrics, and the leading-monomial matching |
@@ -80,17 +85,14 @@ python3 alphatensor_rank_profiles.py alphatensor-catalog.npz
 
 ## Citation
 
-Edson Soares. *Exact Local Dimension of the Brent Variety V(4,4,4 | 49)
-at the Recursive Strassen-Square Point via Quadratic Obstructions*.
-Preprint and verification package, version 1.1.2, 2026.
-[DOI 10.5281/zenodo.24451072](https://doi.org/10.5281/zenodo.24451072).
-[GitHub release](https://github.com/edsonphx/brent-strassen-square/releases/tag/v1.1.2).
-This version contains the submission copy with the explicit Hilbert
-calculation and the human–AI collaboration disclosure.
+Edson Soares de Souza. *Exact Local Dimension of the Brent Variety V(4,4,4 | 49)
+at the Recursive Strassen-Square Point via Quadratic Obstructions* (2026).
+Use the commit permalink when citing this manuscript revision.
 
 The [Zenodo concept DOI](https://doi.org/10.5281/zenodo.24449375)
 resolves to the latest archived version. To cite specific files, use the
-DOI shown on that version's record. Earlier archives are
+DOI shown on that version's record. Archived releases include
+[version 1.1.2](https://doi.org/10.5281/zenodo.24451072),
 [version 1.1.1](https://doi.org/10.5281/zenodo.24450996),
 [version 1.1.0](https://doi.org/10.5281/zenodo.24450467) and the
 [original five-page version](https://doi.org/10.5281/zenodo.24449376).

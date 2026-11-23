@@ -1,7 +1,7 @@
 \documentclass[11pt]{amsart}
 \usepackage{amsmath,amssymb,mathtools}
 \usepackage[hidelinks]{hyperref}
-\hypersetup{pdftitle={Exact Local Dimension of the Brent Variety V(4,4,4 | 49) at the Recursive Strassen-Square Point via Quadratic Obstructions},pdfauthor={Edson Soares}}
+\hypersetup{pdftitle={Exact Local Dimension of the Brent Variety V(4,4,4 | 49) at the Recursive Strassen-Square Point via Quadratic Obstructions},pdfauthor={Edson Soares de Souza}}
 \addtolength{\textwidth}{18pt}
 \addtolength{\oddsidemargin}{-9pt}
 \addtolength{\evensidemargin}{-9pt}
@@ -19,7 +19,7 @@
 \title[Local dimension at the Strassen square]{Exact Local Dimension of the Brent Variety
 \texorpdfstring{$V(4,4,4\mid49)$}{V(4,4,4 | 49)} at the Recursive
 Strassen-Square Point via Quadratic Obstructions}
-\author{Edson Soares}
+\author{Edson Soares de Souza}
 \date{22 November 2026}
 \thanks{Repository \url{https://github.com/edsonphx/brent-strassen-square}.}
 \subjclass[2020]{14D15, 14Q20, 68Q17, 13P10}
@@ -37,10 +37,10 @@ finite-field certificate produces 54 quadratic initial forms with
 pairwise coprime leading monomials, selected by bipartite matching.
 A split Jacobian over $\Z_{(3)}$ lifts the regular sequence to
 characteristic zero. We exhibit two smooth formal branches of
-dimension 197 with intersection dimension 143, and compute the
-characteristic-three local Hilbert function through degree two as
-$(1,251,30978)$. Explicit deformations reach smooth points on both
-families. A comparison with the AlphaTensor catalogue rules out
+dimension 197 with intersection dimension 143. Exact integer
+elimination gives the local Hilbert function through degree two
+as $(1,251,30978)$ in both characteristics. Explicit deformations
+reach smooth points on both families. An AlphaTensor catalogue comparison rules out
 membership in their closures for 89 of its 14,236 integral schemes.
 \end{abstract}
 \maketitle
@@ -156,18 +156,24 @@ recursive point $p$,
 The continuous isotropy and term-rescaling orbit has dimension 143
 at $p$. There are at least two distinct smooth 197-dimensional
 formal branches through $p$, with scheme-theoretic formal
-intersection of dimension 143. Over $\overline{\F}_3$ the local
-Hilbert function of $\Br_k$ starts with $(1,251,30978)$.
+intersection of dimension 143. The local Hilbert function of
+$\Br_k$ starts with $(1,251,30978)$ in both characteristics.
 \end{theorem}
 
 \paragraph{Proof structure.}
-Section~\ref{sec:families} gives the two exact parametrizations and
-derives the dimensions $143$, $197$ and $251$ from their differentials.
-Sections~\ref{sec:quadratics} and \ref{sec:lift} turn the finite
-quadratic certificate into a local upper bound over both fields.
-Section~\ref{sec:branches} proves the claims about branches and the
-Hilbert function. Section~\ref{sec:alphatensor} compares the resulting
-families with the published catalogue.
+The two exact parametrizations in Section~\ref{sec:families} give
+the orbit dimension 143 and prove the lower bounds of 251 on
+the tangent dimension and 197 on the local dimension. A finite
+rank check gives the reverse tangent inequality. The finite
+quadratic certificate verifies the 54 functionals and their
+pairwise coprime leading monomials. The algebraic argument in
+Sections~\ref{sec:quadratics} and \ref{sec:lift} uses that
+certificate to prove the local upper bound in both characteristics.
+Section~\ref{sec:branches} derives the branch-intersection statement
+from the parametrizations and dimensions, and uses an exact
+augmented rank calculation for the Hilbert function.
+Section~\ref{sec:alphatensor} compares the families with the published
+catalogue. Appendix~\ref{sec:certificate} specifies the finite checks.
 
 \section{Two exact families and the tangent split}\label{sec:families}
 
@@ -579,19 +585,23 @@ exactly the image of $\lambda\mapsto\lambda M$ on $\ker(J^t)$.
 Every residual generator has order at least two, so only constant
 coefficients in their multiples contribute in degree two.
 The rank of this map is the dimension spanned by the columns
-of $M$ modulo $\im J$, which is $2749-2101=648$ by the exact
-rank calculation for $[J\mid M]$. The polynomial ring in 251
-tangent variables has $\binom{252}{2}$ quadratic monomials, so the
-degree-two quotient has dimension
+of $M$ modulo $\im J$. The same integral tangent vectors give
+bases in both characteristics, as shown in Section~\ref{sec:lift}.
+Exact elimination with unit pivots gives rank 2749 for
+$[J\mid M]$ over $\Q$ and $\F_3$
+(Appendix~\ref{sec:certificate}). The quadratic initial space
+therefore has dimension $2749-2101=648$ in both cases. The
+polynomial ring in 251 tangent variables has $\binom{252}{2}$
+quadratic monomials, so the degree-two quotient has dimension
 \[
  \binom{252}{2}-648=31626-648=30978.
 \]
 The reduced union of the two displayed subgerms would impose all
 $54^2=2916$ mixed monomials, with degree-two Hilbert value $28710$.
-The measured value $30978$ thus gives a dichotomy in characteristic
-three: the completed local ring is nonreduced, or there is an
-additional minimal prime. The full Hilbert series and branch count
-remain open.
+The degree-two Hilbert value $30978$ therefore implies that in
+each of the two characteristics the completed local ring is
+nonreduced or has an additional minimal prime. The full Hilbert
+series and the number of formal branches remain open.
 
 \section{Relation to the AlphaTensor schemes}\label{sec:alphatensor}
 
@@ -683,17 +693,19 @@ term has at least one such candidate anchor. This test is necessary
 for an actual partition.
 
 We applied these tests to the 14,236 public integral factorizations
-of Fawzi et al.\ \cite{alpha}, using exact row reduction. In both
-characteristics the rank bounds exclude 87 points from the closures
-of the two displayed families, and the row- and column-space test
-excludes two further points with the same profile, at zero-based
-catalogue indices 2445 and 5969. The first of these has only two
+of Fawzi et al.\ \cite{alpha}, using exact row reduction. Over
+both $\Q$ and $\F_3$, exactly 14,149 points have the full profile
+$36(1,1,1)+12(2,2,2)+1(4,4,4)$. These are precisely the points
+that satisfy the two rank bounds, which exclude 87 entries.
+The row- and column-space test
+excludes two of the 14,149 points, at zero-based catalogue indices
+2445 and 5969. The first of these has only two
 rank-two anchors compatible with at least six children, and the
 second has only one. A decomposition in the closure with this rank
-profile requires at least six. The remaining 14,147 pass the two
-necessary tests and their membership remains open. A catalogue
-point outside these closures could still be on another component
-through $p$.
+profile requires at least six. Thus all 14,147 points that pass
+both tests have the full profile. Their membership in the family
+closures remains open. A catalogue point outside these closures
+could still be on another component through $p$.
 
 The accompanying census records the input revision and checks its
 SHA-256 hash. For the characteristic-zero test, each relevant
@@ -724,15 +736,17 @@ Run \texttt{bash verify.sh} with Python and NumPy to check the tensor
 identity, tangent equations, Jacobian and augmented ranks, and
 the 54 functionals and matching positions. The verifier derives
 the mixed columns by signed polarization of integer contractions.
+It checks the ranks of $J$ and $[J\mid M]$ by packed elimination
+modulo three and by exact integer elimination with unit pivots.
 Pass \verb|--full| to check all 28,710 non-mixed monomials per
 certified form, the two explicit smooth witnesses, and 40
 additional exact family points. A separate script runs the
 catalogue census. The appendix specifies the finite input and
 output of the rank and polynomial tests.
 
-Version 1.1.0 of the preprint and its verifier are archived at
-\href{https://doi.org/10.5281/zenodo.24450467}{DOI 10.5281/zenodo.24450467}.
-The repository also carries the dated editorial revision.
+Version 1.1.2 of the preprint and its verifier are archived at
+\href{https://doi.org/10.5281/zenodo.24451072}{DOI 10.5281/zenodo.24451072}.
+The source repository carries subsequent revisions.
 The Zenodo record family is at
 \href{https://doi.org/10.5281/zenodo.24449375}{DOI 10.5281/zenodo.24449375}.
 The original five-page preprint has version DOI
@@ -824,13 +838,24 @@ the paper. Ordinary Gaussian elimination over $\F_3$ gives the
 same ranks as the packed implementation.
 \[
 \begin{array}{c|r}
- \text{Matrix over }\F_3 & \text{Rank}\\ \hline
+ \text{Matrix} & \text{Rank over }\F_3\\ \hline
  J(p)                   & 2101\\
  \left[J(p)\mid M\right] & 2749\\
  J(\mathcal D_L(1))\text{ along the displayed curve} & 2155\\
  J(\mathcal D_R(1))\text{ along the displayed curve} & 2155
 \end{array}
 \]
+For the rational ranks, read the integer rows of $J(p)^t$ first
+and then those of $M^t$, in the orders specified above. Reduce
+each row at its first nonzero coordinate using a stored pivot if
+one exists. When a new pivot is needed, the verifier checks that
+the coefficient is $1$ or $-1$ and negates the row if needed.
+These row additions and sign changes are invertible over the
+integers. The nonzero reduced rows have distinct first nonzero
+coordinates with coefficient one. There are 2101 such rows after
+$J(p)^t$ and 2749 after the augmentation, proving the ranks
+over $\Q$.
+
 The vectors in the three tangent arrays satisfy $Jv=0$ over the
 integers and have combined rank 251 modulo three. For each
 supplied row, compute $\lambda_iJ$ and require zero, then compute
