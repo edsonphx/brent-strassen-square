@@ -29,7 +29,14 @@ Proved in Lean:
   `Formal.sqIntersectionEquiv`, `Formal.ringKrullDim_sqIntersection`);
 - over every field of characteristic three or zero, the reduced local ring is not regular:
   the reduced Brent variety is singular at the recursive point
-  (`Formal.not_isRegularLocalRing_Ared_charThree`, `Formal.not_isRegularLocalRing_Ared_charZero`).
+  (`Formal.not_isRegularLocalRing_Ared_charThree`, `Formal.not_isRegularLocalRing_Ared_charZero`);
+- over every field with `2 ≠ 0`, `H(2) = 30978` holds for `Â` and for `SquareCompletion`
+  (`Formal.hilbertValue_two_Ahat`, `Formal.hilbertValue_two_squareCompletion`), while the reduced
+  union of the two branches `Â ⧸ (𝔭_L ⊓ 𝔭_R)` has `H(2) = binom(252, 2) − 54 · 54 = 28710`
+  (`Formal.hilbertValue_two_twoBranch`). Hence `𝔭_L ⊓ 𝔭_R ≠ 0` in `SquareCompletion`, so
+  `SquareCompletion` is nonreduced or has a minimal prime other than `𝔭_L` and `𝔭_R`
+  (`Formal.sqBranchPrime_inf_ne_bot`, `Formal.not_isReduced_or_extra_minimalPrime_charThree`,
+  `Formal.not_isReduced_or_extra_minimalPrime_charZero`).
 
 No §6 rows remain open.
 
@@ -53,6 +60,7 @@ No §6 rows remain open.
 | §6, formal branches and their intersection | `Formal.isNoetherianRing_mvPowerSeries`, `Formal.subst_bijective_equiv`, `Formal.ker_killCompl`, `Formal.psFamily_solves`, `Formal.H_bijective`, `Formal.map_brentPS_le`, `Formal.ringKrullDim_Ahat_le_charThree`, `Formal.ringKrullDim_Ahat_le_charZero`, `Formal.ringKrullDim_mvPowerSeries`, `Formal.branchQuotEquiv`, `Formal.branchPrime_minimal_charThree`, `Formal.branchPrime_minimal_charZero`, `Formal.branchPrime_ne`, `Formal.intersectionEquiv`, `Formal.ringKrullDim_intersection` | Kernel-verified. `Â = k⟦z⟧ ⧸ (Brent equations centered at the point)` is taken directly, avoiding the general theory of `AdicCompletion`. The two exact families are built over `k⟦t⟧` with unit parameters `1 + Σ tᵢEᵢ`. Extending the 251 frame vectors to a basis gives the coordinate change `H(c,x,y,n) = L(c,x) + R(c,y) − R(c,0) + N(n) − p` with linear part that basis. The formal inverse function theorem, proved by degree recursion, makes substitution along `H` an automorphism. In the new coordinates every Brent equation lies in `(y,n) ∩ (x,n)`: restricted to `(c,x)` it is `L − p`, and restricted to `(c,y)` it is `R − p` by the overlap `L(c,0) = R(c,0)`. The map `A → Â` sends `𝔪_A` onto `𝔪_Â`, so the degree-55 certificates transport and give `dim Â ≤ 197`. With `dim k⟦σ⟧ = |σ|`, this gives minimality of both branch primes. |
 | §6, completion `SquareCompletion ≃ Â` | `Formal.mem_pow_iff_lowZero`, `Formal.exists_limit`, `Formal.truncEquiv`, `Formal.completionEquiv`, `Formal.sqEquiv`, `Formal.sqBranchQuotEquiv`, `Formal.sqBranchPrime_minimal_charThree`, `Formal.sqBranchPrime_minimal_charZero`, `Formal.sqBranchPrime_ne`, `Formal.sqIntersectionEquiv`, `Formal.ringKrullDim_sqIntersection` | Kernel-verified. In `k⟦z⟧`, `(z)ⁿ` is the ideal of series with no terms below degree `n`, so `(z)`-adic Cauchy sequences converge coefficientwise and `Â` is `𝔪̂`-adically complete. The map `ψ : A → Â` induces `A ⧸ 𝔪ⁿ ≃ Â ⧸ 𝔪̂ⁿ`. Surjectivity: a series agrees with a polynomial modulo degree `n`. Injectivity: if `ψ(p) ∈ 𝔪̂ⁿ`, the coefficients of `ψ(p)` in the Brent equations can be truncated to polynomials, and what remains of `p` lies in `(z − p)ⁿ`. The universal properties of `AdicCompletion` and of complete rings then give `SquareCompletion ≃+* Â`, which carries the F6 and F7 statements over. Lean's default instance search equips `SquareCompletion` with the `OreLocalization` module structure, which hides its ring structure. The ring structure is taken from the definitionally equal completion with the standard module structure (`Formal.squareCompletion_eq`, proved by `rfl`). |
 | §6, reduced variety singular | `Formal.le_spanFinrank_maximalIdeal_Ared`, `Formal.not_isRegularLocalRing_Ared_charThree`, `Formal.not_isRegularLocalRing_Ared_charZero` | Kernel-verified. Any generating set of `𝔪` of `A_red` spans `𝔪/𝔪²`, so it has at least 251 elements. Since `dim A_red = dim A ≤ 197`, Mathlib's `IsRegularLocalRing` (minimal number of generators of `𝔪` equals Krull dimension) fails. |
+| §6, `H(2)` versus the two-branch value `28710` | `Formal.hilbertValue_eq_of_algHom`, `Formal.hilbertValue_two_Ahat`, `Formal.sqAlgEquiv`, `Formal.hilbertValue_two_squareCompletion`, `Formal.card_QIdx`, `Formal.hilbertValue_two_twoBranch`, `Formal.unionIdeal_ne_bot`, `Formal.sqBranchPrime_inf_ne_bot`, `Formal.not_isReduced_or_extra_minimalPrime` | Kernel-verified. `H(d)` only depends on `R ⧸ 𝔪^(d+1)`, so `A ⧸ 𝔪ⁿ ≃ Â ⧸ 𝔪̂ⁿ` and the `k`-algebra isomorphism `SquareCompletion ≃ Â` carry `H(2) = 30978` over. On `Â ⧸ (𝔭_L ⊓ 𝔭_R)`, in the F5 coordinates `(c, x, y, n)`, every `n` and every product `x_i y_j` vanishes, so the 28,710 products `w_i w_j` with `i ≤ j` and `(i, j)` not mixed span `𝔪²/𝔪³`. They are independent: their coefficients in the F5 coordinates are well defined, because a non-mixed monomial lies on one of the two branches. The paper's two-branch quotient `k⟦c,x,y⟧ ⧸ (x_i y_j)` is taken here as `Â ⧸ (𝔭_L ⊓ 𝔭_R)` itself, which is the ring the comparison needs. If `𝔭_L ⊓ 𝔭_R = 0`, then `Â` would equal this quotient and `30978 = 28710`. Finally, in a reduced Noetherian ring `0` is the intersection of the minimal primes, which gives the dichotomy. |
 | §6, reduced tangent dimension 251 | `Formal.hilbertValue_reduced_one` | Kernel-verified over every field. The 251 tangent coordinates bound `dim 𝔪/𝔪²` of `A_red` above. The two branch maps `A → k⟦c,x⟧`, `A → k⟦c,y⟧` land in domains, so they kill the nilradical. Their linear coefficients along the 197 + 197 chart variables take the translated coordinates to the 251 independent frame vectors. |
 
 ## Remaining proof graph
@@ -97,6 +105,10 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
   F6 and F7 statements transported to `SquareCompletion`.
 - [x] F11. The reduced local ring is not regular in characteristic three and zero
   (`Singular.not_isRegularLocalRing_Ared_charThree`, `Singular.not_isRegularLocalRing_Ared_charZero`).
+- [x] F12. `H(2) = 30978` transported to `Â` and `SquareCompletion`; the reduced union of the
+  branches has `H(2) = 28710`; hence `𝔭_L ⊓ 𝔭_R ≠ 0` and `SquareCompletion` is nonreduced or has
+  an additional minimal prime (`TwoBranch.not_isReduced_or_extra_minimalPrime_charThree`,
+  `TwoBranch.not_isReduced_or_extra_minimalPrime_charZero`).
 
 The published `bash verify.sh --full` replay passed independently of Lean
 at the pinned source revision. The Jacobian's 2,352 transposed columns admit

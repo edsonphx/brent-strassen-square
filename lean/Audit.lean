@@ -10,6 +10,7 @@ import Brent.KernelCheck.HilbertValues
 import Brent.Formal.ReducedTangent
 import Brent.Formal.Completion
 import Brent.Formal.Singular
+import Brent.Formal.TwoBranch
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -142,7 +143,18 @@ run_cmd do
     ``Brent.Formal.ringKrullDim_sqIntersection,
     ``Brent.Formal.le_spanFinrank_maximalIdeal_Ared,
     ``Brent.Formal.not_isRegularLocalRing_Ared_charThree,
-    ``Brent.Formal.not_isRegularLocalRing_Ared_charZero
+    ``Brent.Formal.not_isRegularLocalRing_Ared_charZero,
+    ``Brent.Formal.hilbertValue_eq_of_algHom,
+    ``Brent.Formal.hilbertValue_two_Ahat,
+    ``Brent.Formal.sqAlgEquiv,
+    ``Brent.Formal.hilbertValue_two_squareCompletion,
+    ``Brent.Formal.card_QIdx,
+    ``Brent.Formal.hilbertValue_two_twoBranch,
+    ``Brent.Formal.unionIdeal_ne_bot,
+    ``Brent.Formal.sqBranchPrime_inf_ne_bot,
+    ``Brent.Formal.not_isReduced_or_extra_minimalPrime,
+    ``Brent.Formal.not_isReduced_or_extra_minimalPrime_charThree,
+    ``Brent.Formal.not_isReduced_or_extra_minimalPrime_charZero
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -177,3 +189,7 @@ run_cmd do
 #print axioms Brent.Formal.ringKrullDim_sqIntersection
 #print axioms Brent.Formal.not_isRegularLocalRing_Ared_charThree
 #print axioms Brent.Formal.not_isRegularLocalRing_Ared_charZero
+#print axioms Brent.Formal.hilbertValue_two_squareCompletion
+#print axioms Brent.Formal.hilbertValue_two_twoBranch
+#print axioms Brent.Formal.not_isReduced_or_extra_minimalPrime_charThree
+#print axioms Brent.Formal.not_isReduced_or_extra_minimalPrime_charZero

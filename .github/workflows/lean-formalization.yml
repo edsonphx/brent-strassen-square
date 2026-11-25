@@ -40,6 +40,7 @@ jobs:
           lake build Brent.Formal.ReducedTangent
           lake build Brent.Formal.Completion
           lake build Brent.Formal.Singular
+          lake build Brent.Formal.TwoBranch
           lake env lean Audit.lean
           for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
             Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean; do
