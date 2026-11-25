@@ -2,6 +2,8 @@ import Brent.Differential
 import Brent.Deformations
 import Brent.DeformationJets
 import Brent.EmbeddingDimension
+import Brent.LocalHomDimension
+import Brent.AffineGerm
 import Brent.LocalDimension
 import Brent.Matching
 import Brent.SparseRow

@@ -1,7 +1,8 @@
 # Proof status
 
-The dimension-197 theorem is open **in this Lean project** in both
-characteristic zero and characteristic three.
+Proved in Lean, over every field `k : Type`:
+`197 ≤ squareLocalDimension k ≤ 251`. The equality `= 197` is still open
+(the upper bound needs the quadratic-obstruction argument of §4).
 
 | Paper dependency | Lean declaration | Status |
 | --- | --- | --- |
@@ -9,6 +10,7 @@ characteristic zero and characteristic three.
 | §2, ordered Brent scheme at the recursive point | `equation`, `brentIdeal`, `SquareCoordinateRing`, `squareMaximalIdeal`, `SquareLocalRing`, `SquareCompletion`, `squareLocalDimension` | Defined. The kernel of the surjective evaluation is proved maximal, and the 2,352 and 4,096 index counts are verified. |
 | §2, reduction and Krull dimension | `quotient_dimension_of_le_nilradical` | Kernel-verified for any commutative ring, including the Brent local ring. |
 | §3, identity on both families | `leftFamily_solves`, `rightFamily_solves`, `solves_changeBasis`, `solves_rescale` | Kernel-verified over any commutative ring. Both families specialize to the marked point at identity parameters. The first-order and two-parameter dual-number coefficient identities are kernel-verified in `DeformationJets.lean`. `chart_independent_derivatives` exhibits 197 independent first derivatives in each chart. The deduction of a local dimension lower bound remains open. |
+| §3, lower bound `dim ≥ 197` | `LowerBound.le_squareLocalDimension`, `ringKrullDim_le_of_maximalIdeal_le`, `le_ringKrullDim_affineGerm`, `mem_sq_of_germJet` | Kernel-verified over every field. The 197 left-chart directions are combined into one exact family over `k[t₁,…,t₁₉₇]` localized at the origin. This gives a local homomorphism from the Brent local ring. The 197 independent chart derivatives make it surjective on cotangent spaces, and a system-of-parameters argument (Nakayama plus Krull's height theorem) gives `dim ≥ 197`. This replaces the paper's formal-inverse/completion argument. |
 | §4, quadratic expansion and Jacobian columns | `Decomposition.entry_line`, `Decomposition.jacobianColumn` | Cubic expansion and sparse reconstruction of the actual Jacobian proved. `square_jacobian_rank` and `square_jacobian_nullity` certify 2,101 and 251 in the kernel over every field. The 54 archived covectors annihilate the actual Jacobian modulo three by `archived_covectors_annihilate`. |
 | §3, frozen tangent frame | `archived_frame_rank`, `archived_frame_tangent`, `archived_frame_split`, `archived_left_coordinates`, `archived_right_coordinates` | The kernel checks 251 independent integral kernel directions and block ranks 143, 54, and 54. The X and Y blocks match the mixed operands. `archived_origin` identifies each direction with the differential of its exact chart. |
 | §4, matching | `quadraticMatching_bijective`, `quadraticMatching_disjoint` | All 157,464 mixed coefficients, coefficient-one leaders, earlier mixed zeros, and disjoint matched supports are verified. `archived_nonmixed_zero` and `archived_square_zero` prove all other coefficients vanish. `archived_polar_leading` identifies the leaders of the actual 54 projected quadratic forms. |
@@ -24,9 +26,6 @@ characteristic zero and characteristic three.
   54 dimensions, e.g. a `d = 2` instance of
   `localDimension_le_of_power_le_span_sup_pow` with 197 parameters.
 
-- The lower bound still needs a formal inverse argument or a local
-  algebraic substitute connecting the rank-197 chart differential to Krull
-  dimension.
 - The kernel checks all coefficients of the 54 projected quadrics on the
   tangent frame. The formal elimination step, regular-sequence implication,
   and local upper bound remain open. The 2,749 augmented rank and 648 mixed

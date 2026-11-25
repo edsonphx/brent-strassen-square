@@ -4,6 +4,7 @@ import Brent.KernelCheck.QuadraticCertificates
 import Brent.KernelCheck.TangentFrame
 import Brent.KernelCheck.FamilyQuadratics
 import Brent.KernelCheck.EmbeddingBound
+import Brent.KernelCheck.LowerBound
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -59,7 +60,11 @@ run_cmd do
     ``Brent.Decomposition.equation_eq_expansion,
     ``Brent.maximalIdeal_pointLocalRing,
     ``Brent.pointLocalDimension_le,
-    ``Brent.squareLocalDimension_le_tangent
+    ``Brent.squareLocalDimension_le_tangent,
+    ``Brent.ringKrullDim_le_of_maximalIdeal_le,
+    ``Brent.le_ringKrullDim_affineGerm,
+    ``Brent.mem_sq_of_germJet,
+    ``Brent.LowerBound.le_squareLocalDimension
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -76,6 +81,7 @@ run_cmd do
 #print axioms Brent.square_jacobian_rank
 #print axioms Brent.square_jacobian_nullity
 #print axioms Brent.squareLocalDimension_le_tangent
+#print axioms Brent.LowerBound.le_squareLocalDimension
 #print axioms Brent.QuadraticData.archived_covectors_annihilate
 #print axioms Brent.QuadraticData.archived_mixed_coefficients
 #print axioms Brent.TangentData.archived_frame_tangent

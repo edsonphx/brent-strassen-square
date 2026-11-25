@@ -24,6 +24,7 @@ lake build Brent.KernelCheck.QuadraticCertificates
 lake build Brent.KernelCheck.TangentFrame
 lake build Brent.KernelCheck.FamilyQuadratics
 lake build Brent.KernelCheck.EmbeddingBound
+lake build Brent.KernelCheck.LowerBound
 lake env lean Audit.lean
 for file in Brent/*.lean Brent/KernelCheck/*.lean; do
   module=${file%.lean}
