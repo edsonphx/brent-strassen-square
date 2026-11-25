@@ -60,8 +60,10 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
   `H(c,x,y,n) = L(c,x) + (R(c,y) − R(c,0)) + N(n) − p` has invertible linear part, and
   the Brent ideal composed with `H` lies in `(y,n) ∩ (x,n)`
   (`CoordinateChange.H_bijective`, `CoordinateChange.map_brentPS_le`).
-- [ ] F6. `Â` is local and Noetherian, and `dim Â ≤ 197` via the degree-55 certificate,
-  Nakayama, and Krull's height theorem.
+- [x] F6. `Â` is local and Noetherian, and `dim Â ≤ 197` via the degree-55 certificate,
+  Nakayama, and Krull's height theorem. The map `A → Â` (`z ↦ p + z`) sends `𝔪_A` onto `𝔪_Â`,
+  so the existing relations transport (`FormalDimension.ringKrullDim_Ahat_le_charThree`,
+  `FormalDimension.ringKrullDim_Ahat_le_charZero`).
 - [ ] F7. Branches: `𝔭_L`, `𝔭_R` are prime and minimal, with `Â⧸𝔭_L ≃ k⟦c,x⟧` and
   `Â⧸𝔭_R ≃ k⟦c,y⟧`. They are distinct, and `Â⧸(𝔭_L+𝔭_R) ≃ k⟦c⟧` has dimension 143, in
   characteristic three and zero.
