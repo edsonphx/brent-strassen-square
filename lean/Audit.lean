@@ -2,7 +2,7 @@ import Brent
 import Brent.KernelCheck.SquareJacobianRank
 import Brent.KernelCheck.QuadraticCertificates
 import Brent.KernelCheck.TangentFrame
-import Brent.KernelCheck.JetProjection
+import Brent.KernelCheck.FamilyQuadratics
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -22,6 +22,12 @@ run_cmd do
     ``Brent.QuadraticData.archived_mixed_zero_before,
     ``Brent.QuadraticData.archived_mixed_pivots,
     ``Brent.QuadraticData.same_family_polar_zero,
+    ``Brent.TangentData.archived_origin,
+    ``Brent.TangentData.chart_independent_derivatives,
+    ``Brent.QuadraticData.archived_nonmixed_zero,
+    ``Brent.QuadraticData.archived_square_zero,
+    ``Brent.QuadraticData.archived_polar_mixed,
+    ``Brent.QuadraticData.archived_polar_leading,
     ``Brent.TangentData.archived_frame_rank,
     ``Brent.TangentData.archived_frame_tangent,
     ``Brent.TangentData.archived_frame_split,

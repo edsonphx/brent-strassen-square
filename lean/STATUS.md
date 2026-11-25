@@ -8,24 +8,23 @@ characteristic zero and characteristic three.
 | §2, signed Strassen table and its recursive square | `strassen_solves`, `strassenSquare_solves` | Kernel-verified. The lift of the signed integral identity works over every commutative ring. |
 | §2, ordered Brent scheme at the recursive point | `equation`, `brentIdeal`, `SquareCoordinateRing`, `squareMaximalIdeal`, `SquareLocalRing`, `SquareCompletion`, `squareLocalDimension` | Defined. The kernel of the surjective evaluation is proved maximal, and the 2,352 and 4,096 index counts are verified. |
 | §2, reduction and Krull dimension | `quotient_dimension_of_le_nilradical` | Kernel-verified for any commutative ring, including the Brent local ring. |
-| §3, identity on both families | `leftFamily_solves`, `rightFamily_solves`, `solves_changeBasis`, `solves_rescale` | Kernel-verified over any commutative ring. Both families specialize to the marked point at identity parameters. The first-order and two-parameter dual-number coefficient identities are kernel-verified in `DeformationJets.lean`. The 197-dimensional chart differential certificates and the connection to local dimension remain open. `same_family_polar_zero` proves the vanishing implication for pairs of actual first-order chart variations. |
+| §3, identity on both families | `leftFamily_solves`, `rightFamily_solves`, `solves_changeBasis`, `solves_rescale` | Kernel-verified over any commutative ring. Both families specialize to the marked point at identity parameters. The first-order and two-parameter dual-number coefficient identities are kernel-verified in `DeformationJets.lean`. `chart_independent_derivatives` exhibits 197 independent first derivatives in each chart. The deduction of a local dimension lower bound remains open. |
 | §4, quadratic expansion and Jacobian columns | `Decomposition.entry_line`, `Decomposition.jacobianColumn` | Cubic expansion and sparse reconstruction of the actual Jacobian proved. `square_jacobian_rank` and `square_jacobian_nullity` certify 2,101 and 251 in the kernel over every field. The 54 archived covectors annihilate the actual Jacobian modulo three by `archived_covectors_annihilate`. |
-| §3, frozen tangent frame | `archived_frame_rank`, `archived_frame_tangent`, `archived_frame_split`, `archived_left_coordinates`, `archived_right_coordinates` | The kernel checks 251 independent integral kernel directions and block ranks 143, 54, and 54. The X and Y blocks match the mixed operands. Chart provenance for the archived directions remains open. |
-| §4, matching | `quadraticMatching_bijective`, `quadraticMatching_disjoint` | All 157,464 mixed coefficients, coefficient-one leaders, earlier mixed zeros, and disjoint matched supports are verified. Vanishing of the other quadratic coefficients on the full tangent frame remains open. |
+| §3, frozen tangent frame | `archived_frame_rank`, `archived_frame_tangent`, `archived_frame_split`, `archived_left_coordinates`, `archived_right_coordinates` | The kernel checks 251 independent integral kernel directions and block ranks 143, 54, and 54. The X and Y blocks match the mixed operands. `archived_origin` identifies each direction with the differential of its exact chart. |
+| §4, matching | `quadraticMatching_bijective`, `quadraticMatching_disjoint` | All 157,464 mixed coefficients, coefficient-one leaders, earlier mixed zeros, and disjoint matched supports are verified. `archived_nonmixed_zero` and `archived_square_zero` prove all other coefficients vanish. `archived_polar_leading` identifies the leaders of the actual 54 projected quadratic forms. |
 | §4, alternative finite local upper bound | `localDimension_le_of_power_le_span_sup_pow` | Kernel-verified application of Nakayama and Krull's height theorem. It still needs a parameter-system certificate for the actual local ring. |
 | App. A, exact elimination | `SparseRow.coefficient_subScaled` | Sparse integer row operations, span preservation, and exact rank from the signed unit-pivot trace are kernel-verified using bounded radix checks. |
 | §§5–6, transfer, branches, and Hilbert data | — | Open. |
 
 ## Remaining proof graph
 
-- The two family identities feed the differential-rank certificate. That
-  rank and a formal inverse (or a local algebraic substitute) give the lower
-  bound. The differential alone gives a tangent-space statement.
-- The kernel now checks the 54 covectors and all their coefficients on the
-  mixed block. Relating these to the full tangent-space initial forms,
-  proving the regular sequence implication, and deriving the local upper
-  bound remain open. The 2,749 augmented rank and 648 mixed rank are additional inputs to
-  the degree-two Hilbert result.
+- The lower bound still needs a formal inverse argument or a local
+  algebraic substitute connecting the rank-197 chart differential to Krull
+  dimension.
+- The kernel checks all coefficients of the 54 projected quadrics on the
+  tangent frame. The formal elimination step, regular-sequence implication,
+  and local upper bound remain open. The 2,749 augmented rank and 648 mixed
+  rank are additional inputs to the degree-two Hilbert result.
 - The characteristic-zero argument requires lifting through the split
   integer-local Jacobian and preserving the resulting dimension bound.
   The dimensions of the formal intersection and of the reduced tangent

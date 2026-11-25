@@ -22,7 +22,7 @@ lake build Brent
 lake build Brent.KernelCheck.SquareJacobianRank
 lake build Brent.KernelCheck.QuadraticCertificates
 lake build Brent.KernelCheck.TangentFrame
-lake build Brent.KernelCheck.JetProjection
+lake build Brent.KernelCheck.FamilyQuadratics
 lake env lean Audit.lean
 for file in Brent/*.lean Brent/KernelCheck/*.lean; do
   module=${file%.lean}
@@ -83,10 +83,18 @@ their annihilation by the signed Jacobian, and the ranks 143, 54, and 54 of the
 three blocks over every field. It identifies the 108 directions used by the
 mixed certificate with the left and right blocks of this frame.
 
-`Brent.KernelCheck.JetProjection` proves that two first-order variations from
-the same exact chart have zero projected polar quadratic term. Identifying
-the archived vectors with the differentials of the chart parameters is a
-separate tracked obligation.
+`Brent.KernelCheck.FamilyQuadratics` verifies the origins of all 251
+directions by differentiating the two exact recursive charts. It certifies
+197 independent derivatives in each chart. The common 143 directions
+come from global basis changes and term rescalings. Using two dual-number
+parameters, it proves that all coefficients outside the mixed block vanish,
+including each diagonal square coefficient. The mixed table agrees with
+the quadratic coefficients evaluated on the full frame. Each of the 54
+coefficient-one leading monomials is therefore certified for an actual
+projected obstruction.
+
+The chart-origin data and batch declarations can be regenerated with
+`tools/generate_family_origins.py` and `tools/generate_origin_checks.py`.
 
 The ordering of `SquareVertex = Fin 2 × Fin 2` and
 `SquareSummand = Fin 7 × Fin 7` is `finProdFinEquiv`'s lexicographic
