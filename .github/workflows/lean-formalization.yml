@@ -28,7 +28,7 @@ jobs:
       - name: Fetch dependencies and check proofs
         run: |
           lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
-          lake build Brent Brent.KernelCheck.SquareJacobianRank
+          lake build Brent Brent.KernelCheck.SquareJacobianRank Brent.KernelCheck.QuadraticCertificates
           lake env lean Audit.lean
           for file in Brent/*.lean; do
             module=${file%.lean}

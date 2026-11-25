@@ -1,5 +1,6 @@
 import Brent.Differential
 import Brent.Deformations
+import Brent.DeformationJets
 import Brent.LocalDimension
 import Brent.Matching
 import Brent.SparseRow

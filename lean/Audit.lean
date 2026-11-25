@@ -1,5 +1,6 @@
 import Brent
 import Brent.KernelCheck.SquareJacobianRank
+import Brent.KernelCheck.QuadraticCertificates
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -12,6 +13,12 @@ run_cmd do
     ``Brent.square_equation_count,
     ``Brent.pointEvaluation_surjective,
     ``Brent.Decomposition.entry_line,
+    ``Brent.Decomposition.tangent_satisfies_differential,
+    ``Brent.Decomposition.mixed_entry_of_solution,
+    ``Brent.QuadraticData.archived_covectors_annihilate,
+    ``Brent.QuadraticData.archived_mixed_coefficients,
+    ``Brent.QuadraticData.archived_mixed_zero_before,
+    ``Brent.QuadraticData.archived_mixed_pivots,
     ``Brent.Decomposition.solves_changeBasis,
     ``Brent.Decomposition.solves_rescale,
     ``Brent.leftFamily_solves,
@@ -47,3 +54,5 @@ run_cmd do
 #print axioms Brent.localDimension_le_of_power_le_span_sup_pow
 #print axioms Brent.square_jacobian_rank
 #print axioms Brent.square_jacobian_nullity
+#print axioms Brent.QuadraticData.archived_covectors_annihilate
+#print axioms Brent.QuadraticData.archived_mixed_coefficients

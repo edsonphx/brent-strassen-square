@@ -18,7 +18,7 @@ revision are pinned in this directory.
 ```bash
 cd lean
 lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
-lake build Brent Brent.KernelCheck.SquareJacobianRank
+lake build Brent Brent.KernelCheck.SquareJacobianRank Brent.KernelCheck.QuadraticCertificates
 lake env lean Audit.lean
 for file in Brent/*.lean; do
   module=${file%.lean}
@@ -56,6 +56,21 @@ Python and NumPy can replay the paper's certificates independently.
 the frozen factor file. `python3 tools/generate_rank_checks.py` regenerates the
 batch declarations. Lean reconstructs the original columns and independently
 checks the decoded trace.
+
+## The 54 mixed quadratic forms
+
+`Brent.KernelCheck.QuadraticCertificates` checks the 54 archived covectors
+against the verified Jacobian pivots over `ZMod 3`. It then reconstructs
+the polar quadratic contribution on each of the 2,916 pairs of frozen
+left and right directions, and checks all 157,464 projected coefficients.
+The exports certify coefficient-one matching positions and vanishing of
+earlier mixed coefficients. The audit enforces the same kernel trust
+boundary as the rank proof.
+
+The source data and batch proofs can be regenerated with
+`tools/generate_quadratic_data.py`, `tools/generate_annihilator_checks.py`,
+`tools/generate_mixed_data.py`, and `tools/generate_mixed_checks.py`.
+The remaining mathematical obligations are recorded in [STATUS.md](STATUS.md).
 
 The ordering of `SquareVertex = Fin 2 × Fin 2` and
 `SquareSummand = Fin 7 × Fin 7` is `finProdFinEquiv`'s lexicographic
