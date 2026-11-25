@@ -12,6 +12,7 @@ import Brent.Formal.Completion
 import Brent.Formal.Singular
 import Brent.Formal.TwoBranch
 import Brent.Formal.OrbitDimension
+import Brent.Formal.SliceIndependence
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -171,7 +172,21 @@ run_cmd do
     ``Brent.Formal.sliceHat_eq,
     ``Brent.Formal.slicePull_surjective,
     ``Brent.Formal.sliceHat_surjective,
-    ``Brent.Formal.ringKrullDim_slice
+    ``Brent.Formal.ringKrullDim_slice,
+    ``Brent.Formal.killCompl_subst,
+    ``Brent.Formal.ker_fullHat_isPrime,
+    ``Brent.Formal.branchMap_eq,
+    ``Brent.Formal.ker_fullHat,
+    ``Brent.Formal.ker_fullHat_charThree,
+    ``Brent.Formal.ker_fullHat_charZero,
+    ``Brent.Formal.slice_independent,
+    ``Brent.Formal.gauge_origin,
+    ``Brent.Formal.slot_none,
+    ``Brent.Formal.orbitMap_eq,
+    ``Brent.Formal.orbitMap_eq_slice,
+    ``Brent.Formal.eq_ker_of_le,
+    ``Brent.Formal.ker_sliceHat,
+    ``Brent.Formal.orbitSubgermEquiv
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -214,3 +229,7 @@ run_cmd do
 #print axioms Brent.Formal.finrank_ker_dOrbit
 #print axioms Brent.Formal.sliceHat_eq
 #print axioms Brent.Formal.sliceHat_surjective
+#print axioms Brent.Formal.ker_fullHat_charThree
+#print axioms Brent.Formal.ker_fullHat_charZero
+#print axioms Brent.Formal.slice_independent
+#print axioms Brent.Formal.ker_sliceHat

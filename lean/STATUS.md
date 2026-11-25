@@ -44,6 +44,13 @@ Proved in Lean:
   `Formal.finrank_ker_dOrbit`). The gauge-fixed orbit map `Â → k⟦c⟧`, with `c` the 143 kept
   coordinates, is surjective (`Formal.sliceHat_surjective`). It is the restriction of `Φ_orb^*`
   to the gauge slice (`Formal.sliceHat_eq`).
+- in characteristic three and zero, each branch is independent of the slice used to detect it.
+  The comorphism `Â → k⟦230⟧` of the full parameter map of either family (all global, block and
+  scaling parameters) has kernel exactly `𝔭_L`, resp. `𝔭_R`. Any restriction of it with minimal
+  prime kernel gives the same prime (`Formal.ker_fullHat_charThree`, `Formal.ker_fullHat_charZero`,
+  `Formal.slice_independent`). Over every field, the intersection `Â ⧸ (𝔭_L + 𝔭_R)` is the formal
+  orbit subgerm of the group slice: the kernel of the gauge-fixed group orbit comorphism is
+  `𝔭_L + 𝔭_R` (`Formal.ker_sliceHat`, `Formal.orbitSubgermEquiv`).
 
 No §6 rows remain open.
 
@@ -69,6 +76,7 @@ No §6 rows remain open.
 | §6, reduced variety singular | `Formal.le_spanFinrank_maximalIdeal_Ared`, `Formal.not_isRegularLocalRing_Ared_charThree`, `Formal.not_isRegularLocalRing_Ared_charZero` | Kernel-verified. Any generating set of `𝔪` of `A_red` spans `𝔪/𝔪²`, so it has at least 251 elements. Since `dim A_red = dim A ≤ 197`, Mathlib's `IsRegularLocalRing` (minimal number of generators of `𝔪` equals Krull dimension) fails. |
 | §6, `H(2)` versus the two-branch value `28710` | `Formal.hilbertValue_eq_of_algHom`, `Formal.hilbertValue_two_Ahat`, `Formal.sqAlgEquiv`, `Formal.hilbertValue_two_squareCompletion`, `Formal.card_QIdx`, `Formal.hilbertValue_two_twoBranch`, `Formal.unionIdeal_ne_bot`, `Formal.sqBranchPrime_inf_ne_bot`, `Formal.not_isReduced_or_extra_minimalPrime` | Kernel-verified. `H(d)` only depends on `R ⧸ 𝔪^(d+1)`, so `A ⧸ 𝔪ⁿ ≃ Â ⧸ 𝔪̂ⁿ` and the `k`-algebra isomorphism `SquareCompletion ≃ Â` carry `H(2) = 30978` over. On `Â ⧸ (𝔭_L ⊓ 𝔭_R)`, in the F5 coordinates `(c, x, y, n)`, every `n` and every product `x_i y_j` vanishes, so the 28,710 products `w_i w_j` with `i ≤ j` and `(i, j)` not mixed span `𝔪²/𝔪³`. They are independent: their coefficients in the F5 coordinates are well defined, because a non-mixed monomial lies on one of the two branches. The paper's two-branch quotient `k⟦c,x,y⟧ ⧸ (x_i y_j)` is taken here as `Â ⧸ (𝔭_L ⊓ 𝔭_R)` itself, which is the ring the comparison needs. If `𝔭_L ⊓ 𝔭_R = 0`, then `Â` would equal this quotient and `30978 = 28710`. Finally, in a reduced Noetherian ring `0` is the intersection of the minimal primes, which gives the dichotomy. |
 | §3, orbit dimension 143 (lines 326–332) | `Formal.orbitHat`, `Formal.orbitA`, `Formal.orbPull_eqPS`, `Formal.coeff_orbitPull_X`, `Formal.dOrbit_kerVec`, `Formal.kerVec_independent`, `Formal.minor_upper`, `Formal.minor_diag`, `Formal.det_minor_ne_zero`, `Formal.finrank_range_dOrbit`, `Formal.finrank_ker_dOrbit`, `Formal.slicePull_eq`, `Formal.sliceHat_eq`, `Formal.sliceHat_surjective`, `Formal.ringKrullDim_slice` | Kernel-verified over every field. Parameters: 48 matrix units of the three global `GL₄` factors and, for each of the 49 terms, the rescalings `(λ, μ) = (1 + t₀ + t₁, 1 − t₁)`. Because the orbit consists of solutions, pullback kills the centered Brent ideal, so the comorphism factors through `Â` and `A`. Its linear part is the `jacRow` matrix, identified via first-order jets with the `globalUnit` and `termUnit` tangents. The three central scalings `K₃` lie in the kernel, so the rank is at most 143. Setting `(g, (1,1), (1,1))` to zero leaves 143 rows. A pivot search found 143 Brent coordinates for which the minor is upper triangular with diagonal `±1`. The kernel checks this over `ℤ` (`decide +kernel`), so the minor is invertible in every characteristic, including 3 and 0. Hence the rank is exactly 143 and the kernel is exactly `K₃`. The F2 formal inverse function theorem (`subst_bijective_equiv`) on the minor makes the gauge-fixed comorphism `Â → k⟦c⟧` surjective. |
+| §6, slice independence and the orbit subgerm (lines 543–565) | `Formal.killCompl_subst`, `Formal.fullHat`, `Formal.branchMap_eq`, `Formal.ker_fullHat_charThree`, `Formal.ker_fullHat_charZero`, `Formal.slice_independent`, `Formal.orbitMap_eq`, `Formal.gauge_origin`, `Formal.orbitMap_eq_slice`, `Formal.eq_ker_of_le`, `Formal.ker_sliceHat`, `Formal.orbitSubgermEquiv` | Kernel-verified. Restriction to coordinate subspaces (`killCompl`) commutes with substitution, because both are continuous algebra maps (`comp_aeval`). So the branch map `kill ∘ Φ` is the comorphism of the chosen 197-parameter chart family. That family is the full parameter family (`1 + t` on every global, block and scaling factor) substituted along the linear map `specF`. Therefore `ker(full) ⊆ 𝔭_L`; it is prime because `k⟦230⟧` is a domain, and minimality of `𝔭_L` forces equality. The same steps show the frame orbit map is the group orbit comorphism substituted along `specO`. That map factors through the gauge slice because no orbit frame direction moves the gauge entry `(1,1),(1,1)` (checked by `decide +kernel`). Hence `ker(slice) ⊆ 𝔭_L + 𝔭_R`. Both quotients are `k⟦143⟧`, so a 143-chain argument gives equality. |
 | §6, reduced tangent dimension 251 | `Formal.hilbertValue_reduced_one` | Kernel-verified over every field. The 251 tangent coordinates bound `dim 𝔪/𝔪²` of `A_red` above. The two branch maps `A → k⟦c,x⟧`, `A → k⟦c,y⟧` land in domains, so they kill the nilradical. Their linear coefficients along the 197 + 197 chart variables take the translated coordinates to the 251 independent frame vectors. |
 
 ## Remaining proof graph
@@ -120,6 +128,9 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
 - [x] F13. The 146-parameter group orbit has dimension 143: `rank dΦ_orb(0) = 143` with kernel
   `K₃`, and the gauge-fixed orbit comorphism `Â → k⟦c⟧` is surjective
   (`OrbitDimension.finrank_range_dOrbit`, `OrbitDimension.sliceHat_surjective`).
+- [x] F14. Slice independence: the full parameter map of each family has kernel `𝔭_L`, resp.
+  `𝔭_R`. The intersection `Â ⧸ (𝔭_L + 𝔭_R)` is the group orbit subgerm
+  (`SliceIndependence.ker_fullHat_charThree`, `SliceIndependence.ker_sliceHat`).
 
 The published `bash verify.sh --full` replay passed independently of Lean
 at the pinned source revision. The Jacobian's 2,352 transposed columns admit
