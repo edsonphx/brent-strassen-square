@@ -69,7 +69,7 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
   characteristic three and zero (`Branches.branchQuotEquiv`, `Branches.branchPrime_minimal_charThree`,
   `Branches.branchPrime_minimal_charZero`, `Branches.branchPrime_ne`, `Branches.intersectionEquiv`,
   `Branches.ringKrullDim_intersection`; `dim k⟦σ⟧ = |σ|` is `PowerSeriesDimension.ringKrullDim_mvPowerSeries`).
-- [ ] F8. The reduced local ring has tangent dimension 251.
+- [x] F8. The reduced local ring has tangent dimension 251 (`ReducedTangent.hilbertValue_reduced_one`).
 - [ ] F9. Audit, README, CI and STATUS updated, and the full `leanchecker` replay passes.
   No open rows remain.
 
