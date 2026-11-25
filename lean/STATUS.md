@@ -11,7 +11,16 @@ Proved in Lean:
   Hilbert function of the Brent local ring starts `(1, 251, 30978)`
   (`HilbertValues.hilbert_initial`, `hilbert_initial_charP_three`, `hilbert_initial_charZero`).
 
-The formal branches and their intersection in §6 remain open in Lean.
+- for the formal local ring `Â = k⟦z⟧ ⧸ (centered Brent equations)` over every field of
+  characteristic three or zero: `Â` is Noetherian local with `dim Â ≤ 197`; the branch primes
+  `𝔭_L`, `𝔭_R` are distinct minimal primes with `Â ⧸ 𝔭_L ≃ k⟦c, x⟧` and `Â ⧸ 𝔭_R ≃ k⟦c, y⟧`
+  (dimension 197 each), and `Â ⧸ (𝔭_L + 𝔭_R) ≃ k⟦c⟧` has dimension 143
+  (`Formal.branchPrime_minimal_charThree`, `Formal.branchPrime_minimal_charZero`,
+  `Formal.branchPrime_ne`, `Formal.intersectionEquiv`, `Formal.ringKrullDim_intersection`);
+- over every field, the reduced local ring has tangent dimension 251
+  (`Formal.hilbertValue_reduced_one`).
+
+No §6 rows remain open.
 
 | Paper dependency | Lean declaration | Status |
 | --- | --- | --- |
@@ -30,13 +39,12 @@ The formal branches and their intersection in §6 remain open in Lean.
 | App. A, exact elimination | `SparseRow.coefficient_subScaled` | Sparse integer row operations, span preservation, and exact rank from the signed unit-pivot trace are kernel-verified using bounded radix checks. |
 | §5, characteristic-zero transfer and exact dimension | `integer_annihilates`, `integerEntry_cast`, `Transfer.charZero_dim_le`, `CharZeroBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charZero` | The kernel checks that the 54 integer covectors annihilate the Jacobian and reduce to the archived covectors modulo three. Graded Nakayama transfer lifts the finite spanning certificate for the upper bound to characteristic zero. The same exact family lower bound then gives dimension 197. |
 | §6, Hilbert function `(1, 251, 30978)` | `HilbertInitial.hilbertValue_zero`, `HilbertInitial.hilbertValue_one`, `HilbertTwo.ker_Ψ₂`, `HilbertTwo.hilbertValue_two_add`, `KernelVanishing.nonmixed_zero`, `KernelVanishing.square_zero`, `AugmentedTrace.augmented_rank`, `MixedRank.finrank_Rel`, `HilbertValues.hilbert_initial` | Kernel-verified over every field with `2 ≠ 0`. `H(d)` is the dimension of `𝔪ᵈ/𝔪ᵈ⁺¹`. `H(1) = 251` uses the dual-number jet at every tangent vector. For `H(2)`, second-order jets `p + Σ tᵢvᵢ + ηW` into `k ⊕ k²⁵¹ ⊕ k` identify the relations among the `zᵢzⱼ` with the symmetrized quadratic tables of the full left kernel of the Jacobian, so `H(2) = 31626 − dim Rel` over every field. Two-parameter exact-family jets show that every left-kernel covector kills all non-mixed polar terms. With `2 ≠ 0` it also kills the squares. So `Rel` is the image of `λ ↦ λM` on `ker Jᵗ`, of dimension `2749 − 2101 = 648`. The rank 2,749 of `[J ∣ M]` is replayed in bounded kernel batches. This replaces the paper's residual-generator basis argument. |
-| §6, formal branches and their intersection | `Formal.isNoetherianRing_mvPowerSeries` | In progress. Route: take the formal local ring `Â = k⟦z⟧ ⧸ (Brent equations)` directly. This avoids the general theory of `AdicCompletion`. The power-series images of the two exact families give one formal coordinate change `H(c, x, y, n)` with invertible linear part, built by degree-by-degree recursion with no topology. In the new coordinates the branch kernels are `(y, n)` and `(x, n)`, with quotients `k⟦c, x⟧`, `k⟦c, y⟧` and `k⟦c⟧`. Minimality follows from `dim Â ≤ 197`: the degree-55 certificate holds in `Â`, so Nakayama and Krull's height theorem apply. Krull's height theorem needs `Â` Noetherian. Done so far: `R⟦σ⟧` is Noetherian for finite `σ` over a Noetherian `R`, via `R⟦Option σ⟧ ≃+* R⟦σ⟧⟦X⟧`. Still to do: the formal inverse function theorem, the power-series families, the coordinate change, and the dimension count. |
-| §6, reduced tangent dimension 251 | — | Open. The two family maps into the reduced germs kill the nilradical, and their 197 + 197 derivatives span all 251 tangent directions. The left-family map exists (`LowerBound.pull`). The right-family analogue is still to be written. |
+| §6, formal branches and their intersection | `Formal.isNoetherianRing_mvPowerSeries`, `Formal.subst_bijective_equiv`, `Formal.ker_killCompl`, `Formal.psFamily_solves`, `Formal.H_bijective`, `Formal.map_brentPS_le`, `Formal.ringKrullDim_Ahat_le_charThree`, `Formal.ringKrullDim_Ahat_le_charZero`, `Formal.ringKrullDim_mvPowerSeries`, `Formal.branchQuotEquiv`, `Formal.branchPrime_minimal_charThree`, `Formal.branchPrime_minimal_charZero`, `Formal.branchPrime_ne`, `Formal.intersectionEquiv`, `Formal.ringKrullDim_intersection` | Kernel-verified. `Â = k⟦z⟧ ⧸ (Brent equations centered at the point)` is taken directly, avoiding the general theory of `AdicCompletion`. The two exact families are built over `k⟦t⟧` with unit parameters `1 + Σ tᵢEᵢ`. Extending the 251 frame vectors to a basis gives the coordinate change `H(c,x,y,n) = L(c,x) + R(c,y) − R(c,0) + N(n) − p` with linear part that basis. The formal inverse function theorem, proved by degree recursion, makes substitution along `H` an automorphism. In the new coordinates every Brent equation lies in `(y,n) ∩ (x,n)`: restricted to `(c,x)` it is `L − p`, and restricted to `(c,y)` it is `R − p` by the overlap `L(c,0) = R(c,0)`. The map `A → Â` sends `𝔪_A` onto `𝔪_Â`, so the degree-55 certificates transport and give `dim Â ≤ 197`. With `dim k⟦σ⟧ = |σ|`, this gives minimality of both branch primes. |
+| §6, reduced tangent dimension 251 | `Formal.hilbertValue_reduced_one` | Kernel-verified over every field. The 251 tangent coordinates bound `dim 𝔪/𝔪²` of `A_red` above. The two branch maps `A → k⟦c,x⟧`, `A → k⟦c,y⟧` land in domains, so they kill the nilradical. Their linear coefficients along the 197 + 197 chart variables take the translated coordinates to the 251 independent frame vectors. |
 
 ## Remaining proof graph
 
-- §6: the two formal branches, their 143-dimensional formal intersection, and the reduced
-  tangent dimension 251.
+None. Every row above is kernel-verified.
 
 ## §6 roadmap
 
@@ -70,7 +78,7 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
   `Branches.branchPrime_minimal_charZero`, `Branches.branchPrime_ne`, `Branches.intersectionEquiv`,
   `Branches.ringKrullDim_intersection`; `dim k⟦σ⟧ = |σ|` is `PowerSeriesDimension.ringKrullDim_mvPowerSeries`).
 - [x] F8. The reduced local ring has tangent dimension 251 (`ReducedTangent.hilbertValue_reduced_one`).
-- [ ] F9. Audit, README, CI and STATUS updated, and the full `leanchecker` replay passes.
+- [x] F9. Audit, README, CI and STATUS updated, and the full `leanchecker` replay passes.
   No open rows remain.
 
 The published `bash verify.sh --full` replay passed independently of Lean

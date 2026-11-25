@@ -24,8 +24,13 @@ function starts `(1, 251, 30978)` (`Brent.HilbertValues.hilbert_initial`).
 The degree-two value uses second-order jets and the kernel-checked rank
 2,749 of the augmented matrix `[J ∣ M]`.
 
-[STATUS.md](STATUS.md) records the proof dependencies and the remaining
-work on the formal branches.
+Lean also proves the §6 branch structure. The formal local ring
+`Â = k⟦z⟧ ⧸ (Brent equations)` has two distinct minimal primes `𝔭_L`, `𝔭_R`
+in characteristics three and zero, with `Â ⧸ 𝔭_L ≃ k⟦c, x⟧`,
+`Â ⧸ 𝔭_R ≃ k⟦c, y⟧` (dimension 197 each), and `Â ⧸ (𝔭_L + 𝔭_R) ≃ k⟦c⟧`
+(dimension 143). The reduced local ring has tangent dimension 251.
+
+[STATUS.md](STATUS.md) records the proof dependencies.
 
 ## Build and audit
 
@@ -44,9 +49,10 @@ lake build Brent.KernelCheck.EmbeddingBound
 lake build Brent.KernelCheck.LowerBound
 lake build Brent.KernelCheck.MainTheorem
 lake build Brent.KernelCheck.HilbertValues
+lake build Brent.Formal.ReducedTangent
 lake env lean Audit.lean
 for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
-    Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean; do
+    Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean; do
   module=${file%.lean}
   lake env leanchecker -v "${module//\//.}"
 done
@@ -96,7 +102,7 @@ boundary as the rank proof.
 The source data and batch proofs can be regenerated with
 `tools/generate_quadratic_data.py`, `tools/generate_annihilator_checks.py`,
 `tools/generate_mixed_data.py`, and `tools/generate_mixed_checks.py`.
-The remaining mathematical obligations are recorded in [STATUS.md](STATUS.md).
+The proof dependencies are recorded in [STATUS.md](STATUS.md).
 
 ## Archived tangent frame
 

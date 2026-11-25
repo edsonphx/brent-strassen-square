@@ -7,6 +7,7 @@ import Brent.KernelCheck.EmbeddingBound
 import Brent.KernelCheck.LowerBound
 import Brent.KernelCheck.MainTheorem
 import Brent.KernelCheck.HilbertValues
+import Brent.Formal.ReducedTangent
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -100,7 +101,30 @@ run_cmd do
     ``Brent.HilbertValues.hilbertValue_two,
     ``Brent.HilbertValues.hilbert_initial,
     ``Brent.HilbertValues.hilbert_initial_charP_three,
-    ``Brent.HilbertValues.hilbert_initial_charZero
+    ``Brent.HilbertValues.hilbert_initial_charZero,
+    ``Brent.Formal.isNoetherianRing_mvPowerSeries,
+    ``Brent.Formal.value_left_eq_right,
+    ``Brent.Formal.subst_bijective_equiv,
+    ``Brent.Formal.ker_killCompl,
+    ``Brent.Formal.quotientKillEquiv,
+    ``Brent.Formal.psFamily_solves,
+    ``Brent.Formal.coeff_sel_in,
+    ``Brent.Formal.value_orbit_left_eq_right,
+    ``Brent.Formal.coeff_H,
+    ``Brent.Formal.H_bijective,
+    ``Brent.Formal.map_brentPS_le,
+    ``Brent.Formal.map_maximalIdeal,
+    ``Brent.Formal.ringKrullDim_Ahat_le_charThree,
+    ``Brent.Formal.ringKrullDim_Ahat_le_charZero,
+    ``Brent.Formal.ringKrullDim_mvPowerSeries,
+    ``Brent.Formal.branchQuotEquiv,
+    ``Brent.Formal.ringKrullDim_branch,
+    ``Brent.Formal.branchPrime_minimal_charThree,
+    ``Brent.Formal.branchPrime_minimal_charZero,
+    ``Brent.Formal.branchPrime_ne,
+    ``Brent.Formal.intersectionEquiv,
+    ``Brent.Formal.ringKrullDim_intersection,
+    ``Brent.Formal.hilbertValue_reduced_one
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -127,3 +151,6 @@ run_cmd do
 #print axioms Brent.QuadraticData.archived_mixed_coefficients
 #print axioms Brent.TangentData.archived_frame_tangent
 #print axioms Brent.TangentData.archived_frame_split
+#print axioms Brent.Formal.branchPrime_minimal_charThree
+#print axioms Brent.Formal.ringKrullDim_intersection
+#print axioms Brent.Formal.hilbertValue_reduced_one
