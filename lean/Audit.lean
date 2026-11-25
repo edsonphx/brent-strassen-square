@@ -19,6 +19,11 @@ run_cmd do
     ``Brent.SparseRow.coefficient_subScaled,
     ``Brent.rowSpan_eq_of_elimination,
     ``Brent.linearIndependent_of_pivots,
+    ``Brent.rowRank_eq_of_elimination,
+    ``Brent.SparseRow.rank_of_checked_trace,
+    ``Brent.Decomposition.jacobianColumn_eq,
+    ``Brent.squareJacobianColumn_correct,
+    ``Brent.square_nullity_of_rank,
     ``Brent.quotient_dimension_of_le_nilradical,
     ``Brent.localDimension_le_of_power_le_span_sup_pow
   ]

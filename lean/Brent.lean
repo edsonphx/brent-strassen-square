@@ -4,3 +4,5 @@ import Brent.LocalDimension
 import Brent.Matching
 import Brent.SparseRow
 import Brent.RankCertificate
+import Brent.RankReplay
+import Brent.SquareJacobian

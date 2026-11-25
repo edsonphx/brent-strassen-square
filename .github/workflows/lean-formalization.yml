@@ -27,7 +27,14 @@ jobs:
           use-github-cache: "false"
       - name: Fetch dependencies and check proofs
         run: |
-          lake exe cache get $(sed -n '/^import Mathlib/s/^import //p' Brent/*.lean | sort -u)
+          lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
           lake build
           lake env lean Audit.lean
-          lake env leanchecker -v Brent
+          for file in Brent/*.lean; do
+            module=${file%.lean}
+            lake env leanchecker -v "${module//\//.}"
+          done
+      - name: Audit compiler-backed rank calculation
+        run: |
+          lake build Brent.CompilerCheck.SquareJacobianRank
+          lake env lean RankAudit.lean

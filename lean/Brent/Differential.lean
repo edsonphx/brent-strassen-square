@@ -45,4 +45,15 @@ def jacobianColumn [DecidableEq α] [DecidableEq ι] (p : Decomposition R α ι)
     (x : Variable α ι) (a b c : α × α) : R :=
   p.jacobianEntry (coordinateDirection x) a b c
 
+theorem jacobianColumn_eq [DecidableEq α] [DecidableEq ι] (p : Decomposition R α ι)
+    (s : ι) (m : Mode) (x a b c : α × α) :
+    p.jacobianColumn (s, m, x) a b c =
+      match m with
+      | .u => if x = a then p.v s b * p.w s c else 0
+      | .v => if x = b then p.u s a * p.w s c else 0
+      | .w => if x = c then p.u s a * p.v s b else 0 := by
+  cases m <;>
+    simp [jacobianColumn, jacobianEntry, coordinateDirection, Prod.mk.injEq,
+      ite_and, ite_mul, mul_ite, Finset.sum_ite_eq]
+
 end Brent.Decomposition
