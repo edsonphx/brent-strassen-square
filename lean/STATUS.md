@@ -46,13 +46,13 @@ Each finished step is committed locally on `formalization/lean4` (not pushed). T
 in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
 
 - [x] F0. `isNoetherianRing_mvPowerSeries`: `R⟦σ⟧` is Noetherian for finite `σ` and Noetherian `R`.
-- [ ] F1. Overlap: when every block parameter is `1`, `value true p = value false p`. This defines
+- [x] F1. Overlap: when every block parameter is `1`, `value true p = value false p`. This defines
   the common orbit map `γ(c)`.
-- [ ] F2. "Agree up to degree d" for `MvPowerSeries`, then the formal inverse function theorem
+- [x] F2. "Agree up to degree d" for `MvPowerSeries`, then the formal inverse function theorem
   for any finite `σ` with invertible linear part, by degree recursion (no `subst` iteration).
-- [ ] F3. Monomial-ideal lemma: the kernel of setting a set of variables to `0` is the ideal they
+- [x] F3. Monomial-ideal lemma: the kernel of setting a set of variables to `0` is the ideal they
   generate (via `X_dvd_iff`). Quotient isomorphisms `k⟦c,x,y,n⟧ ⧸ (y,n) ≃ k⟦c,x⟧`, etc.
-- [ ] F4. `Germ → k⟦t⟧` (`IsLocalization.lift`) and the power-series left and right families
+- [x] F4. `Germ → k⟦t⟧` (`IsLocalization.lift`) and the power-series left and right families
   `L(c,x)` and `R(c,y)` solving the Brent equations.
 - [ ] F5. `Â := k⟦z⟧ ⧸ (Brent equations)`. Extend the 251 certified frame vectors to a basis
   (`Basis.extend`, no new certificate). Then
