@@ -11,6 +11,7 @@ import Brent.Formal.ReducedTangent
 import Brent.Formal.Completion
 import Brent.Formal.Singular
 import Brent.Formal.TwoBranch
+import Brent.Formal.OrbitDimension
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -154,7 +155,23 @@ run_cmd do
     ``Brent.Formal.sqBranchPrime_inf_ne_bot,
     ``Brent.Formal.not_isReduced_or_extra_minimalPrime,
     ``Brent.Formal.not_isReduced_or_extra_minimalPrime_charThree,
-    ``Brent.Formal.not_isReduced_or_extra_minimalPrime_charZero
+    ``Brent.Formal.not_isReduced_or_extra_minimalPrime_charZero,
+    ``Brent.Formal.minor_upper,
+    ``Brent.Formal.minor_diag,
+    ``Brent.Formal.det_minor_ne_zero,
+    ``Brent.Formal.orbPull_eqPS,
+    ``Brent.Formal.coeff_orbitPull_X,
+    ``Brent.Formal.dOrbit_kerVec,
+    ``Brent.Formal.kerVec_independent,
+    ``Brent.Formal.finrank_range_dOrbit_le,
+    ``Brent.Formal.le_finrank_range_dOrbit,
+    ``Brent.Formal.finrank_range_dOrbit,
+    ``Brent.Formal.finrank_ker_dOrbit,
+    ``Brent.Formal.slicePull_eq,
+    ``Brent.Formal.sliceHat_eq,
+    ``Brent.Formal.slicePull_surjective,
+    ``Brent.Formal.sliceHat_surjective,
+    ``Brent.Formal.ringKrullDim_slice
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -193,3 +210,7 @@ run_cmd do
 #print axioms Brent.Formal.hilbertValue_two_twoBranch
 #print axioms Brent.Formal.not_isReduced_or_extra_minimalPrime_charThree
 #print axioms Brent.Formal.not_isReduced_or_extra_minimalPrime_charZero
+#print axioms Brent.Formal.finrank_range_dOrbit
+#print axioms Brent.Formal.finrank_ker_dOrbit
+#print axioms Brent.Formal.sliceHat_eq
+#print axioms Brent.Formal.sliceHat_surjective
