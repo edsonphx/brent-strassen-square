@@ -168,49 +168,48 @@ theorem exists_coordinates : ∃ w : Fin 251 → Variable SquareVertex SquareSum
 
 /-! ### Quadratic relations in characteristic three -/
 
-section CharThree
+section Covector
 
-variable [CharP k 3]
-
-theorem lam_jac_zero (ell : Fin 54) :
-    ∑ e : EquationIndex SquareVertex, C (lam k ell e) *
+theorem lam_jac_zero (ν : EquationIndex SquareVertex → k)
+    (hν : ∀ x, ∑ e : EquationIndex SquareVertex, J k x e * ν e = 0) :
+    ∑ e : EquationIndex SquareVertex, C (ν e) *
       (strassenSquare k |>.map C).jacobianEntry (strassenSquare k).translated e.1 e.2.1 e.2.2 = 0 := by
   simp only [jac_poly, Finset.mul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_eq_zero fun x _ => ?_
-  have h : ∑ e : EquationIndex SquareVertex, C (lam k ell e) *
+  have h : ∑ e : EquationIndex SquareVertex, C (ν e) *
       ((X x - C ((strassenSquare k).coordinates x)) * C (J k x e)) =
       (X x - C ((strassenSquare k).coordinates x)) *
-        C (∑ e : EquationIndex SquareVertex, J k x e * lam k ell e) := by
+        C (∑ e : EquationIndex SquareVertex, J k x e * ν e) := by
     rw [map_sum, Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro e _
     rw [map_mul]; ring
-  rw [h, annihilate, map_zero, mul_zero]
+  rw [h, hν, map_zero, mul_zero]
 
-theorem quad_rel_poly (ell : Fin 54) :
-    ∑ e : EquationIndex SquareVertex, C (lam k ell e) *
+theorem quad_rel_poly (ν : EquationIndex SquareVertex → k)
+    (hν : ∀ x, ∑ e : EquationIndex SquareVertex, J k x e * ν e = 0) :
+    ∑ e : EquationIndex SquareVertex, C (ν e) *
       (strassenSquare k |>.map C).quadraticEntry (strassenSquare k).translated e.1 e.2.1 e.2.2 ∈
       brentIdeal k SquareVertex SquareSummand ⊔ M0 k ^ 3 := by
-  have hsplit : ∑ e : EquationIndex SquareVertex, C (lam k ell e) *
+  have hsplit : ∑ e : EquationIndex SquareVertex, C (ν e) *
       (strassenSquare k |>.map C).quadraticEntry (strassenSquare k).translated e.1 e.2.1 e.2.2 =
-      ∑ e : EquationIndex SquareVertex, C (lam k ell e) *
+      ∑ e : EquationIndex SquareVertex, C (ν e) *
         equation k SquareVertex SquareSummand e.1 e.2.1 e.2.2 -
-      ∑ e : EquationIndex SquareVertex, C (lam k ell e) *
+      ∑ e : EquationIndex SquareVertex, C (ν e) *
         (strassenSquare k |>.map C).jacobianEntry (strassenSquare k).translated e.1 e.2.1 e.2.2 -
-      ∑ e : EquationIndex SquareVertex, C (lam k ell e) *
+      ∑ e : EquationIndex SquareVertex, C (ν e) *
         (strassenSquare k).translated.entry e.1 e.2.1 e.2.2 := by
     rw [← Finset.sum_sub_distrib, ← Finset.sum_sub_distrib]
     apply Finset.sum_congr rfl
     intro e _
     rw [Decomposition.equation_eq_expansion (strassenSquare_solves k)]
     ring
-  rw [hsplit, lam_jac_zero, sub_zero]
+  rw [hsplit, lam_jac_zero k ν hν, sub_zero]
   refine Ideal.sub_mem _ (Ideal.mem_sup_left ?_) (Ideal.mem_sup_right ?_)
   · exact Submodule.sum_mem _ fun e _ => Ideal.mul_mem_left _ _ (equation_mem k e)
   · exact Submodule.sum_mem _ fun e _ => Ideal.mul_mem_left _ _ (cubic_mem k e)
 
-omit [CharP k 3] in
 theorem φ_C (c : k) : φ k (C c) = algebraMap k (A k) c := by
   rw [← MvPolynomial.algebraMap_eq, AlgHom.commutes]
 
@@ -222,7 +221,6 @@ noncomputable abbrev P : Decomposition (A k) SquareVertex SquareSummand :=
 noncomputable abbrev Y : Decomposition (A k) SquareVertex SquareSummand :=
   (strassenSquare k).translated.map (φ k).toRingHom
 
-omit [CharP k 3] in
 theorem φ_quadratic (e : EquationIndex SquareVertex) :
     φ k ((strassenSquare k |>.map C).quadraticEntry (strassenSquare k).translated e.1 e.2.1 e.2.2) =
       (P k).quadraticEntry (Y k) e.1 e.2.1 e.2.2 := by
@@ -233,10 +231,11 @@ theorem φ_quadratic (e : EquationIndex SquareVertex) :
     Decomposition.bilinearEntry_map]
   rfl
 
-theorem quad_rel_local (ell : Fin 54) :
-    ∑ e : EquationIndex SquareVertex, algebraMap k (A k) (lam k ell e) *
+theorem quad_rel_local (ν : EquationIndex SquareVertex → k)
+    (hν : ∀ x, ∑ e : EquationIndex SquareVertex, J k x e * ν e = 0) :
+    ∑ e : EquationIndex SquareVertex, algebraMap k (A k) (ν e) *
       (P k).quadraticEntry (Y k) e.1 e.2.1 e.2.2 ∈ maximalIdeal (A k) ^ 3 := by
-  have h := φ_sup k (quad_rel_poly k ell)
+  have h := φ_sup k (quad_rel_poly k ν hν)
   rw [map_sum] at h
   convert h using 2 with e _
   rw [map_mul, φ_C, φ_quadratic]
@@ -250,14 +249,11 @@ noncomputable def wv : Fin 251 → Variable SquareVertex SquareSummand → k :=
 /-- The 251 tangent coordinates in the local ring. -/
 noncomputable def z (i : Fin 251) : A k := Ψ k (wv k i)
 
-omit [CharP k 3] in
 theorem z_mem (i : Fin 251) : z k i ∈ maximalIdeal (A k) := Ψ_mem k _
 
-omit [CharP k 3] in
 theorem Ψ_single (x : Variable SquareVertex SquareSummand) : Ψ k (Pi.single x 1) = y k x := by
   rw [Ψ, Fintype.linearCombination_apply_single, one_smul]
 
-omit [CharP k 3] in
 theorem y_sub_mem (x : Variable SquareVertex SquareSummand) :
     y k x - ∑ i, z k i * algebraMap k (A k) (frameVec k i x) ∈ maximalIdeal (A k) ^ 2 := by
   have h := Ψ_rowSpace k (Classical.choose_spec (exists_coordinates k) x)
@@ -284,13 +280,11 @@ theorem map_coordinates {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S)
     (D.map f).coordinates x = f (D.coordinates x) := by
   obtain ⟨s, m, a⟩ := x; cases m <;> rfl
 
-omit [CharP k 3] in
 theorem Y_coordinates (x : Variable SquareVertex SquareSummand) :
     (Y k).coordinates x = y k x := by
   rw [map_coordinates, Decomposition.translated_coordinates]
   rfl
 
-omit [CharP k 3] in
 theorem Z_coordinates (x : Variable SquareVertex SquareSummand) :
     (Z k).coordinates x = ∑ i, z k i * algebraMap k (A k) (frameVec k i x) := by
   rw [lc_coordinates]
@@ -307,7 +301,6 @@ theorem components_sub {R : Type*} [CommRing R] {I : Ideal R}
     ∀ s a, D.u s a - E.u s a ∈ I ∧ D.v s a - E.v s a ∈ I ∧ D.w s a - E.w s a ∈ I :=
   fun s a => ⟨h (s, .u, a), h (s, .v, a), h (s, .w, a)⟩
 
-omit [CharP k 3] in
 theorem Z_mem (x : Variable SquareVertex SquareSummand) :
     (Z k).coordinates x ∈ maximalIdeal (A k) := by
   rw [Z_coordinates]
@@ -321,8 +314,9 @@ theorem sum_mul_mem_of_sub {R ι : Type*} [CommRing R] [Fintype ι] (m : Ideal R
   rw [e]
   exact Ideal.sub_mem _ hf (Submodule.sum_mem _ fun i _ => Ideal.mul_mem_left _ _ (hfg i))
 
-theorem quad_rel_Z (ell : Fin 54) :
-    ∑ e : EquationIndex SquareVertex, algebraMap k (A k) (lam k ell e) *
+theorem quad_rel_Z (ν : EquationIndex SquareVertex → k)
+    (hν : ∀ x, ∑ e : EquationIndex SquareVertex, J k x e * ν e = 0) :
+    ∑ e : EquationIndex SquareVertex, algebraMap k (A k) (ν e) *
       (P k).quadraticEntry (Z k) e.1 e.2.1 e.2.2 ∈ maximalIdeal (A k) ^ 3 := by
   have hY : ∀ s a, (Y k).u s a ∈ maximalIdeal (A k) ∧ (Y k).v s a ∈ maximalIdeal (A k) ∧
       (Y k).w s a ∈ maximalIdeal (A k) :=
@@ -333,21 +327,21 @@ theorem quad_rel_Z (ell : Fin 54) :
   have hYZ := components_sub (D := Y k) (E := Z k) (I := maximalIdeal (A k) ^ 2)
     fun x => by rw [Y_coordinates, Z_coordinates]; exact y_sub_mem k x
   have hq := Decomposition.quadraticEntry_sub_mem (maximalIdeal (A k)) (P k) (Y k) (Z k) hY hZ
-  exact sum_mul_mem_of_sub (maximalIdeal (A k) ^ 3) (fun e => algebraMap k (A k) (lam k ell e))
+  exact sum_mul_mem_of_sub (maximalIdeal (A k) ^ 3) (fun e => algebraMap k (A k) (ν e))
     (fun e => (P k).quadraticEntry (Y k) e.1 e.2.1 e.2.2)
-    (fun e => (P k).quadraticEntry (Z k) e.1 e.2.1 e.2.2) (quad_rel_local k ell)
+    (fun e => (P k).quadraticEntry (Z k) e.1 e.2.1 e.2.2) (quad_rel_local k ν hν)
     (fun e => hq hYZ e.1 e.2.1 e.2.2)
 
 /-- The bilinear values of the covectors on the frame. -/
-noncomputable def β (ell : Fin 54) (i j : Fin 251) : k :=
+noncomputable def β (ν : EquationIndex SquareVertex → k) (i j : Fin 251) : k :=
   ∑ e : EquationIndex SquareVertex,
     (strassenSquare k).bilinearEntry (frameDirection k i) (frameDirection k j) e.1 e.2.1 e.2.2 *
-      lam k ell e
+      ν e
 
-theorem expand (ell : Fin 54) :
-    ∑ e : EquationIndex SquareVertex, algebraMap k (A k) (lam k ell e) *
+theorem expand (ν : EquationIndex SquareVertex → k) :
+    ∑ e : EquationIndex SquareVertex, algebraMap k (A k) (ν e) *
       (P k).quadraticEntry (Z k) e.1 e.2.1 e.2.2 =
-      ∑ i, ∑ j, z k i * z k j * algebraMap k (A k) (β k ell i j) := by
+      ∑ i, ∑ j, z k i * z k j * algebraMap k (A k) (β k ν i j) := by
   simp only [Decomposition.quadraticEntry_lc, Finset.mul_sum]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun i _ => ?_
@@ -357,29 +351,6 @@ theorem expand (ell : Fin 54) :
   refine Finset.sum_congr rfl fun e _ => ?_
   rw [Decomposition.bilinearEntry_map, map_mul]
   ring
-
-theorem β_diag (ell : Fin 54) (i : Fin 251) : β k ell i i = 0 := by
-  rw [β, ← square_value k ell i]
-  simp only [Decomposition.quadraticEntry_eq_bilinear]
-
-theorem β_polar (ell : Fin 54) (i j : Fin 251) :
-    β k ell i j + β k ell j i = castK k (projectedPolar ell i j) := by
-  rw [β, β, ← polar_value, ← Finset.sum_add_distrib]
-  apply Finset.sum_congr rfl
-  intro e _
-  rw [Decomposition.polarizedEntry_eq_bilinear]
-  ring
-
-theorem ordered_rel (ell : Fin 54) :
-    ∑ i, ∑ j, (if i < j then z k i * z k j *
-      algebraMap k (A k) (castK k (projectedPolar ell i j)) else 0) ∈ maximalIdeal (A k) ^ 3 := by
-  have h := quad_rel_Z k ell
-  rw [expand, sum_sum_eq_ordered (R := A k)] at h
-  convert h using 4 with i _ j _
-  · rw [← β_polar, map_add]; ring
-  · split_ifs with h2
-    · subst h2; rw [β_diag, map_zero, mul_zero]
-    · rfl
 
 /-! ### The mixed block and its leading terms -/
 
@@ -400,6 +371,76 @@ noncomputable def xs (a : Fin 54) : A k := z k (xFrameIndex a)
 
 /-- The `y` coordinates. -/
 noncomputable def ys (b : Fin 54) : A k := z k (yFrameIndex b)
+
+/-- The 143 coordinates outside the mixed block. -/
+noncomputable def cs (i : Fin 143) : A k := z k (Fin.castLE (by norm_num) i)
+
+theorem z_mem_gen (i : Fin 251) : z k i ∈ Ideal.span (Set.range (cs k)) ⊔
+    Ideal.span (Set.range (xs k)) ⊔ Ideal.span (Set.range (ys k)) := by
+  by_cases h1 : i.val < 143
+  · have : z k i = cs k ⟨i.val, h1⟩ := rfl
+    rw [this]
+    exact Ideal.mem_sup_left (Ideal.mem_sup_left (Ideal.subset_span ⟨_, rfl⟩))
+  by_cases h2 : i.val < 197
+  · have hi : i = xFrameIndex ⟨i.val - 143, by omega⟩ :=
+      Fin.ext (by simp only [xFrameIndex]; omega)
+    have : z k i = xs k ⟨i.val - 143, by omega⟩ := by rw [xs, ← hi]
+    rw [this]
+    exact Ideal.mem_sup_left (Ideal.mem_sup_right (Ideal.subset_span ⟨_, rfl⟩))
+  · have hi : i = yFrameIndex ⟨i.val - 197, by have := i.isLt; omega⟩ :=
+      Fin.ext (by simp only [yFrameIndex]; omega)
+    have : z k i = ys k ⟨i.val - 197, by have := i.isLt; omega⟩ := by rw [ys, ← hi]
+    rw [this]
+    exact Ideal.mem_sup_right (Ideal.subset_span ⟨_, rfl⟩)
+
+theorem gen : maximalIdeal (A k) ≤ Ideal.span (Set.range (cs k)) ⊔
+    Ideal.span (Set.range (xs k)) ⊔ Ideal.span (Set.range (ys k)) ⊔ maximalIdeal (A k) ^ 2 := by
+  have h : Ideal.span (Set.range (y k)) ≤ Ideal.span (Set.range (cs k)) ⊔
+      Ideal.span (Set.range (xs k)) ⊔ Ideal.span (Set.range (ys k)) ⊔
+        maximalIdeal (A k) ^ 2 := by
+    rw [Ideal.span_le]
+    rintro _ ⟨x, rfl⟩
+    have hr := Classical.choose_spec (exists_coordinates k) x
+    have e : (Pi.single x 1 : Variable SquareVertex SquareSummand → k) =
+        (Pi.single x 1 - ∑ i, frameVec k i x • wv k i) + ∑ i, frameVec k i x • wv k i :=
+      (sub_add_cancel _ _).symm
+    rw [← Ψ_single, e, map_add, map_sum]
+    refine Ideal.add_mem _ (Ideal.mem_sup_right (Ψ_rowSpace k hr))
+      (Ideal.mem_sup_left (Submodule.sum_mem _ fun i _ => ?_))
+    rw [map_smul]
+    exact Submodule.smul_of_tower_mem _ _ (z_mem_gen k i)
+  rwa [← maximalIdeal_eq] at h
+
+end Covector
+
+/-! ### Characteristic three -/
+
+section CharThree
+
+variable [CharP k 3]
+
+theorem β_diag (ell : Fin 54) (i : Fin 251) : β k (lam k ell) i i = 0 := by
+  rw [β, ← square_value k ell i]
+  simp only [Decomposition.quadraticEntry_eq_bilinear]
+
+theorem β_polar (ell : Fin 54) (i j : Fin 251) :
+    β k (lam k ell) i j + β k (lam k ell) j i = castK k (projectedPolar ell i j) := by
+  rw [β, β, ← polar_value, ← Finset.sum_add_distrib]
+  apply Finset.sum_congr rfl
+  intro e _
+  rw [Decomposition.polarizedEntry_eq_bilinear]
+  ring
+
+theorem ordered_rel (ell : Fin 54) :
+    ∑ i, ∑ j, (if i < j then z k i * z k j *
+      algebraMap k (A k) (castK k (projectedPolar ell i j)) else 0) ∈ maximalIdeal (A k) ^ 3 := by
+  have h := quad_rel_Z k (lam k ell) (annihilate k ell)
+  rw [expand, sum_sum_eq_ordered (R := A k)] at h
+  convert h using 4 with i _ j _
+  · rw [← β_polar, map_add]; ring
+  · split_ifs with h2
+    · subst h2; rw [β_diag, map_zero, mul_zero]
+    · rfl
 
 /-- The mixed coefficient tables in the local ring. -/
 noncomputable def Mc (ell a b : Fin 54) : A k :=
@@ -449,47 +490,6 @@ theorem Mc_lead (ell : Fin 54) : Mc k ell ell (quadraticMatching ell) = 1 := by
 theorem Mc_zero (ell a b : Fin 54)
     (h : 54 * a.val + b.val < 54 * ell.val + (quadraticMatching ell).val) : Mc k ell a b = 0 := by
   rw [Mc, (archived_polar_leading ell).2 a b h, map_zero, map_zero]
-
-/-- The 143 coordinates outside the mixed block. -/
-noncomputable def cs (i : Fin 143) : A k := z k (Fin.castLE (by norm_num) i)
-
-omit [CharP k 3] in
-theorem z_mem_gen (i : Fin 251) : z k i ∈ Ideal.span (Set.range (cs k)) ⊔
-    Ideal.span (Set.range (xs k)) ⊔ Ideal.span (Set.range (ys k)) := by
-  by_cases h1 : i.val < 143
-  · have : z k i = cs k ⟨i.val, h1⟩ := rfl
-    rw [this]
-    exact Ideal.mem_sup_left (Ideal.mem_sup_left (Ideal.subset_span ⟨_, rfl⟩))
-  by_cases h2 : i.val < 197
-  · have hi : i = xFrameIndex ⟨i.val - 143, by omega⟩ :=
-      Fin.ext (by simp only [xFrameIndex]; omega)
-    have : z k i = xs k ⟨i.val - 143, by omega⟩ := by rw [xs, ← hi]
-    rw [this]
-    exact Ideal.mem_sup_left (Ideal.mem_sup_right (Ideal.subset_span ⟨_, rfl⟩))
-  · have hi : i = yFrameIndex ⟨i.val - 197, by have := i.isLt; omega⟩ :=
-      Fin.ext (by simp only [yFrameIndex]; omega)
-    have : z k i = ys k ⟨i.val - 197, by have := i.isLt; omega⟩ := by rw [ys, ← hi]
-    rw [this]
-    exact Ideal.mem_sup_right (Ideal.subset_span ⟨_, rfl⟩)
-
-omit [CharP k 3] in
-theorem gen : maximalIdeal (A k) ≤ Ideal.span (Set.range (cs k)) ⊔
-    Ideal.span (Set.range (xs k)) ⊔ Ideal.span (Set.range (ys k)) ⊔ maximalIdeal (A k) ^ 2 := by
-  have h : Ideal.span (Set.range (y k)) ≤ Ideal.span (Set.range (cs k)) ⊔
-      Ideal.span (Set.range (xs k)) ⊔ Ideal.span (Set.range (ys k)) ⊔
-        maximalIdeal (A k) ^ 2 := by
-    rw [Ideal.span_le]
-    rintro _ ⟨x, rfl⟩
-    have hr := Classical.choose_spec (exists_coordinates k) x
-    have e : (Pi.single x 1 : Variable SquareVertex SquareSummand → k) =
-        (Pi.single x 1 - ∑ i, frameVec k i x • wv k i) + ∑ i, frameVec k i x • wv k i :=
-      (sub_add_cancel _ _).symm
-    rw [← Ψ_single, e, map_add, map_sum]
-    refine Ideal.add_mem _ (Ideal.mem_sup_right (Ψ_rowSpace k hr))
-      (Ideal.mem_sup_left (Submodule.sum_mem _ fun i _ => ?_))
-    rw [map_smul]
-    exact Submodule.smul_of_tower_mem _ _ (z_mem_gen k i)
-  rwa [← maximalIdeal_eq] at h
 
 theorem ringKrullDim_le : ringKrullDim (A k) ≤ ((143 + 54 : ℕ) : WithBot ℕ∞) :=
   triangular_dim_le (cs k) (xs k) (ys k) (Mc k) quadraticMatching
