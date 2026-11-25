@@ -36,8 +36,10 @@ jobs:
           lake build Brent.KernelCheck.EmbeddingBound
           lake build Brent.KernelCheck.LowerBound
           lake build Brent.KernelCheck.MainTheorem
+          lake build Brent.KernelCheck.HilbertValues
           lake env lean Audit.lean
-          for file in Brent/*.lean Brent/KernelCheck/*.lean; do
+          for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
+            Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean; do
             module=${file%.lean}
             lake env leanchecker -v "${module//\//.}"
           done

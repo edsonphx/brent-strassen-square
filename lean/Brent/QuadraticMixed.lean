@@ -82,7 +82,8 @@ private theorem mixedEntry_sum (i j : Fin 54) (e : EquationIndex SquareVertex) :
   simp only [mixedSummand, combineDirections]
   ring
 
-private def mixedColumn (i j : Fin 54) : SparseRow.Row :=
+/-- Reconstruct a mixed quadratic column from the common summand. -/
+def mixedColumn (i j : Fin 54) : SparseRow.Row :=
   let s := (xBlock i, yBlock j)
   let x := xFactor i s.2
   let y := yFactor j s.1
@@ -103,7 +104,8 @@ private theorem mixedColumn_fits (i j : Fin 54) :
   simp only [mixedColumn, List.mem_append, or_assoc] at hx
   rcases hx with h | h | h | h | h | h <;> exact SparseTensor.tensor_fits _ _ _ _ h
 
-private theorem coefficient_mixedColumn (i j : Fin 54) (e : EquationIndex SquareVertex) :
+/-- The reconstructed sparse column gives the signed quadratic entry at every coordinate. -/
+theorem coefficient_mixedColumn (i j : Fin 54) (e : EquationIndex SquareVertex) :
     SparseRow.coefficient (squareEquationNumber e).val (mixedColumn i j) = mixedEntry i j e := by
   rw [mixedEntry_sum, Finset.sum_eq_single (xBlock i, yBlock j)]
   · simp only [mixedColumn, SparseRow.coefficient_append, SparseTensor.coefficient_tensor,

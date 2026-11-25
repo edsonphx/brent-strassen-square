@@ -6,6 +6,7 @@ import Brent.KernelCheck.FamilyQuadratics
 import Brent.KernelCheck.EmbeddingBound
 import Brent.KernelCheck.LowerBound
 import Brent.KernelCheck.MainTheorem
+import Brent.KernelCheck.HilbertValues
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -79,7 +80,27 @@ run_cmd do
     ``Brent.UpperBound.quad_rel_local,
     ``Brent.UpperBound.mixed_rel,
     ``Brent.UpperBound.squareLocalDimension_le_197,
-    ``Brent.squareLocalDimension_eq_197_of_charThree
+    ``Brent.Transfer.charZero_dim_le,
+    ``Brent.QuadraticData.integerEntry_cast,
+    ``Brent.QuadraticData.integer_annihilates,
+    ``Brent.CharZeroBound.mu_annihilate,
+    ``Brent.CharZeroBound.rel_B,
+    ``Brent.CharZeroBound.squareLocalDimension_le_197,
+    ``Brent.squareLocalDimension_eq_197_of_charThree,
+    ``Brent.squareLocalDimension_eq_197_of_charZero,
+    ``Brent.HilbertInitial.hilbertValue_zero,
+    ``Brent.HilbertInitial.hilbertValue_one,
+    ``Brent.HilbertTwo.ker_Ψ₂,
+    ``Brent.HilbertTwo.hilbertValue_two_add,
+    ``Brent.KernelVanishing.nonmixed_zero,
+    ``Brent.KernelVanishing.square_zero,
+    ``Brent.AugmentedTrace.augmented_rank,
+    ``Brent.MixedRank.finrank_map_Mt,
+    ``Brent.MixedRank.finrank_Rel,
+    ``Brent.HilbertValues.hilbertValue_two,
+    ``Brent.HilbertValues.hilbert_initial,
+    ``Brent.HilbertValues.hilbert_initial_charP_three,
+    ``Brent.HilbertValues.hilbert_initial_charZero
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -99,6 +120,9 @@ run_cmd do
 #print axioms Brent.LowerBound.le_squareLocalDimension
 #print axioms Brent.UpperBound.squareLocalDimension_le_197
 #print axioms Brent.squareLocalDimension_eq_197_of_charThree
+#print axioms Brent.squareLocalDimension_eq_197_of_charZero
+#print axioms Brent.HilbertValues.hilbert_initial_charP_three
+#print axioms Brent.HilbertValues.hilbert_initial_charZero
 #print axioms Brent.QuadraticData.archived_covectors_annihilate
 #print axioms Brent.QuadraticData.archived_mixed_coefficients
 #print axioms Brent.TangentData.archived_frame_tangent

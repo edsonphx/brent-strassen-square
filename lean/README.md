@@ -4,11 +4,28 @@ The formalization targets the ordered Brent scheme in *Exact Local Dimension of
 the Brent Variety V(4,4,4 | 49) at the Recursive Strassen-Square Point via
 Quadratic Obstructions* by Edson Soares de Souza.
 
-The source revision is `00f45dc3ec9aaaaf2e7bae0a09a1a8623f18e300`. The main
-declaration to prove is an equality with `Brent.squareLocalDimension k`, the
-Krull dimension of the localization of the Brent coordinate ring at the
-maximal ideal cut out by the exact recursive point. See [STATUS.md](STATUS.md)
-for the proof dependencies and current scope.
+The source revision is `00f45dc3ec9aaaaf2e7bae0a09a1a8623f18e300`.
+Lean proves that `Brent.squareLocalDimension k = 197` for every field
+`k : Type` of characteristic three or zero. This is the Krull dimension
+of the localization of the ordered Brent coordinate ring at the maximal
+ideal of the signed recursive point. The two main theorems are
+`Brent.squareLocalDimension_eq_197_of_charThree` and
+`Brent.squareLocalDimension_eq_197_of_charZero`.
+
+The characteristic-zero proof uses kernel-verified integral lifts of
+the 54 covectors. Their reductions modulo three give the degree-55
+spanning certificate used in characteristic three. Graded Nakayama
+transfer takes that spanning certificate to characteristic zero, where
+Krull's height theorem gives the upper bound. In both cases the lower
+bound comes from the exact family with 197 independent first derivatives.
+
+Over every field with `2 ≠ 0`, Lean also proves that the local Hilbert
+function starts `(1, 251, 30978)` (`Brent.HilbertValues.hilbert_initial`).
+The degree-two value uses second-order jets and the kernel-checked rank
+2,749 of the augmented matrix `[J ∣ M]`.
+
+[STATUS.md](STATUS.md) records the proof dependencies and the remaining
+work on the formal branches.
 
 ## Build and audit
 
@@ -26,8 +43,10 @@ lake build Brent.KernelCheck.FamilyQuadratics
 lake build Brent.KernelCheck.EmbeddingBound
 lake build Brent.KernelCheck.LowerBound
 lake build Brent.KernelCheck.MainTheorem
+lake build Brent.KernelCheck.HilbertValues
 lake env lean Audit.lean
-for file in Brent/*.lean Brent/KernelCheck/*.lean; do
+for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
+    Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean; do
   module=${file%.lean}
   lake env leanchecker -v "${module//\//.}"
 done
