@@ -52,8 +52,9 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
   for any finite `σ` with invertible linear part, by degree recursion (no `subst` iteration).
 - [x] F3. Monomial-ideal lemma: the kernel of setting a set of variables to `0` is the ideal they
   generate (via `X_dvd_iff`). Quotient isomorphisms `k⟦c,x,y,n⟧ ⧸ (y,n) ≃ k⟦c,x⟧`, etc.
-- [x] F4. `Germ → k⟦t⟧` (`IsLocalization.lift`) and the power-series left and right families
-  `L(c,x)` and `R(c,y)` solving the Brent equations.
+- [x] F4. The power-series left and right families `L(c,x)` and `R(c,y)` solving the Brent
+  equations, built directly over `k⟦t⟧` (unit parameters `1 + Σ tᵢEᵢ`, so no map out of
+  `Germ` is needed), with their constant terms and linear parts.
 - [ ] F5. `Â := k⟦z⟧ ⧸ (Brent equations)`. Extend the 251 certified frame vectors to a basis
   (`Basis.extend`, no new certificate). Then
   `H(c,x,y,n) = L(c,x) + (R(c,y) − R(c,0)) + N(n)` has invertible linear part, and
