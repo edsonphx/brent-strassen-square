@@ -9,10 +9,10 @@ characteristic zero and characteristic three.
 | §2, ordered Brent scheme at the recursive point | `equation`, `brentIdeal`, `SquareCoordinateRing`, `squareMaximalIdeal`, `SquareLocalRing`, `SquareCompletion`, `squareLocalDimension` | Defined. The kernel of the surjective evaluation is proved maximal, and the 2,352 and 4,096 index counts are verified. |
 | §2, reduction and Krull dimension | `quotient_dimension_of_le_nilradical` | Kernel-verified for any commutative ring, including the Brent local ring. |
 | §3, identity on both families | `leftFamily_solves`, `rightFamily_solves`, `solves_changeBasis`, `solves_rescale` | Kernel-verified over any commutative ring. Both families specialize to the marked point at identity parameters. The 197-dimensional differential certificates and the connection to local dimension remain open. |
-| §4, quadratic expansion and Jacobian columns | `Decomposition.entry_line`, `Decomposition.jacobianColumn` | Cubic expansion and a sparse reconstruction of the actual Jacobian proved. The optional compiler-backed rank is 2,101, with linearized kernel dimension 251. The full kernel-only rank replay and left-kernel calculations remain open. |
+| §4, quadratic expansion and Jacobian columns | `Decomposition.entry_line`, `Decomposition.jacobianColumn` | Cubic expansion and sparse reconstruction of the actual Jacobian proved. `square_jacobian_rank` and `square_jacobian_nullity` certify 2,101 and 251 in the kernel over every field. The left-kernel calculations for the quadratic witnesses remain open. |
 | §4, matching | `quadraticMatching_bijective`, `quadraticMatching_disjoint` | The permutation and disjoint support of the proposed leaders are verified. Verification that the 54 original quadrics have these leaders remains open. |
 | §4, alternative finite local upper bound | `localDimension_le_of_power_le_span_sup_pow` | Kernel-verified application of Nakayama and Krull's height theorem. It still needs a parameter-system certificate for the actual local ring. |
-| App. A, exact elimination | `SparseRow.coefficient_subScaled` | Sparse integer row operations, span preservation, and exact rank from an ordered unit-pivot trace are kernel-verified. The signed trace is checked in the optional compiler-backed module. |
+| App. A, exact elimination | `SparseRow.coefficient_subScaled` | Sparse integer row operations, span preservation, and exact rank from the signed unit-pivot trace are kernel-verified using bounded radix checks. |
 | §§5–6, transfer, branches, and Hilbert data | — | Open. |
 
 ## Remaining proof graph
@@ -33,9 +33,9 @@ The published `bash verify.sh --full` replay passed independently of Lean
 at the pinned source revision. The Jacobian's 2,352 transposed columns admit
 a sparse integer elimination with 2,101 unit pivots and 15,124 row
 additions in that order. The kernel proves the implication from a checked trace to the rank theorem.
-A whole-matrix kernel reduction used about 6 GB and was stopped. The optional
-module instead checks all four predicates with compiler evaluation and audits
-the resulting extra assumptions. A smaller kernel-checkable replay remains open.
+The row identities, pivot checks, and coverage are replayed in separate
+kernel batches. The rank and nullity audit permits only Lean's standard
+`propext`, `Classical.choice`, and `Quot.sound`.
 
 Mathlib supplies ideal localization, the adic completion construction,
 prime-spectrum and quotient APIs, Nakayama's lemma, and Krull's height

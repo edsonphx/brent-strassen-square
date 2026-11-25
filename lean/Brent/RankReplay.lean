@@ -51,28 +51,31 @@ def checkCover {n r : ℕ} (reduced : Fin n → Row)
   | none => decide (reduced i = [])
   | some j => decide (select j = i)
 
-/-- Replay soundness over every field. The numeric witnesses can be generated
-externally, but rank follows from these local boolean checks. -/
-theorem rank_of_checked_trace {K κ : Type*} [Field K] {n r : ℕ}
+/-- Integer row identities and unit pivots certify the rank over every field. -/
+theorem rank_of_elimination_certificate {K κ : Type*} [Field K] {n r : ℕ}
     (coord : κ → Nat) (original reduced : Fin n → Row) (steps : Fin n → List (Fin n × ℤ))
     (select : Fin r → Fin n) (pivot : Fin r → κ) (index : Fin n → Option (Fin r))
     (increasing : StrictMono (coord ∘ pivot))
-    (hstep : ∀ i, checkStep original reduced steps i = true)
+    (earlier : ∀ i, ∀ x ∈ steps i, x.1 < i)
+    (identity : ∀ i j, coefficient (coord j) (reduced i) = coefficient (coord j) (original i) -
+      ((steps i).map fun x => x.2 * coefficient (coord j) (reduced x.1)).sum)
     (hpiv : ∀ i, checkPivot (reduced (select i)) (coord (pivot i)) = true)
     (hcover : ∀ i, checkCover reduced select index i = true) :
     Module.finrank K (Submodule.span K (Set.range (fun i => decode (K := K) coord (original i)))) = r := by
-  have ht (i : Fin n) := hstep i
-  simp only [checkStep, Bool.and_eq_true, List.all_eq_true, decide_eq_true_eq] at ht
   have hp (i : Fin r) := hpiv i
   simp only [checkPivot, Bool.and_eq_true, Bool.or_eq_true, decide_eq_true_eq] at hp
   apply rowRank_eq_of_elimination (reduced := fun i => decode coord (reduced i))
     (steps := fun i => (steps i).map fun (j, a) => (j, (a : K))) (select := select) (pivot := pivot)
   · intro i x hx
     obtain ⟨⟨j, a⟩, hj, rfl⟩ := List.mem_map.mp hx
-    exact (ht i).1 _ hj
+    exact earlier i _ hj
   · intro i
+    have equal : (decode (K := K) coord (reduce reduced (original i) (steps i))) =
+        decode coord (reduced i) := by
+      funext j
+      simp only [decode, coefficient_reduce, identity i j]
     have hh := decode_reduce (K := K) coord reduced (original i) (steps i)
-    rw [(ht i).2] at hh
+    rw [equal] at hh
     simpa [List.map_map, Function.comp_def] using hh
   · intro i
     rcases (hp i).1 with h | h <;> simp [decode, h]
@@ -91,5 +94,22 @@ theorem rank_of_checked_trace {K κ : Type*} [Field K] {n r : ℕ}
     | some j =>
       right
       exact ⟨j, by simpa [checkCover, h] using hh⟩
+
+/-- Replay soundness for the sparse merge checker. -/
+theorem rank_of_checked_trace {K κ : Type*} [Field K] {n r : ℕ}
+    (coord : κ → Nat) (original reduced : Fin n → Row) (steps : Fin n → List (Fin n × ℤ))
+    (select : Fin r → Fin n) (pivot : Fin r → κ) (index : Fin n → Option (Fin r))
+    (increasing : StrictMono (coord ∘ pivot))
+    (hstep : ∀ i, checkStep original reduced steps i = true)
+    (hpiv : ∀ i, checkPivot (reduced (select i)) (coord (pivot i)) = true)
+    (hcover : ∀ i, checkCover reduced select index i = true) :
+    Module.finrank K (Submodule.span K (Set.range (fun i => decode (K := K) coord (original i)))) = r := by
+  have ht (i : Fin n) := hstep i
+  simp only [checkStep, Bool.and_eq_true, List.all_eq_true, decide_eq_true_eq] at ht
+  apply rank_of_elimination_certificate coord original reduced steps select pivot index increasing
+    (fun i => (ht i).1) _ hpiv hcover
+  intro i j
+  have hh := coefficient_reduce reduced (original i) (steps i) (coord j)
+  rwa [(ht i).2] at hh
 
 end Brent.SparseRow

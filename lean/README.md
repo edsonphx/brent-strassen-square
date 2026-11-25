@@ -18,7 +18,7 @@ revision are pinned in this directory.
 ```bash
 cd lean
 lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
-lake build
+lake build Brent Brent.KernelCheck.SquareJacobianRank
 lake env lean Audit.lean
 for file in Brent/*.lean; do
   module=${file%.lean}
@@ -36,24 +36,26 @@ their imported environments. Modules replay sequentially to limit memory use.
 The finite Strassen and matching identities use kernel reduction with `decide`.
 The main library uses only the three audited standard axioms.
 
-## Optional compiler-backed Jacobian rank
+## Exact Jacobian rank
 
-```bash
-lake build Brent.CompilerCheck.SquareJacobianRank
-lake env lean RankAudit.lean
-```
+`Brent.square_jacobian_rank` and `Brent.square_jacobian_nullity` concern the
+Jacobian of the actual ordered Brent equations. The kernel replays 2,352 signed
+row identities, checks all 2,101 unit pivots, and verifies coverage and pivot
+order. Integer coefficients allow the result over every field. The numerical
+checks use `decide +kernel` in bounded-size batches. A clean build of the rank
+target takes several minutes.
 
-The optional theorem verifies the signed sparse elimination trace against the
-Jacobian reconstructed from the Lean definition of the recursive point.
-`SparseRow.rank_of_checked_trace` proves that checked trace data certify rank
-over any field. This implementation uses `native_decide` for four finite
-predicates, so the final rank and nullity declarations depend on Lean's compiler
-in addition to the kernel. The main library does not import this optional module.
+The elimination step compares signed integers in radix 4096. The checker also
+verifies an absolute bound on each coefficient of the difference. A zero
+encoding then forces all coefficients to be zero, by taking successive
+residues in the radix. `SparseRow.rank_of_checked_radix_trace` connects these
+identities to the field-linear rank.
 
-Python and NumPy can replay the original paper's certificates independently.
+Python and NumPy can replay the paper's certificates independently.
 `python3 tools/generate_jacobian_trace.py` recreates the candidate trace from
-the frozen factor file. Lean checks the decoded trace and reconstructs the
-matrix independently of the generator.
+the frozen factor file. `python3 tools/generate_rank_checks.py` regenerates the
+batch declarations. Lean reconstructs the original columns and independently
+checks the decoded trace.
 
 The ordering of `SquareVertex = Fin 2 × Fin 2` and
 `SquareSummand = Fin 7 × Fin 7` is `finProdFinEquiv`'s lexicographic

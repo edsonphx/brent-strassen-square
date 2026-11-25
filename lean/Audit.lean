@@ -1,4 +1,5 @@
 import Brent
+import Brent.KernelCheck.SquareJacobianRank
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -23,6 +24,9 @@ run_cmd do
     ``Brent.linearIndependent_of_pivots,
     ``Brent.rowRank_eq_of_elimination,
     ``Brent.SparseRow.rank_of_checked_trace,
+    ``Brent.SparseRow.rank_of_checked_radix_trace,
+    ``Brent.square_jacobian_rank,
+    ``Brent.square_jacobian_nullity,
     ``Brent.Decomposition.jacobianColumn_eq,
     ``Brent.squareJacobianColumn_correct,
     ``Brent.square_nullity_of_rank,
@@ -41,3 +45,5 @@ run_cmd do
 #print axioms Brent.leftFamily_solves
 #print axioms Brent.rightFamily_solves
 #print axioms Brent.localDimension_le_of_power_le_span_sup_pow
+#print axioms Brent.square_jacobian_rank
+#print axioms Brent.square_jacobian_nullity

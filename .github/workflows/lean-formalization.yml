@@ -13,7 +13,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     defaults:
       run:
         working-directory: lean
@@ -28,13 +28,10 @@ jobs:
       - name: Fetch dependencies and check proofs
         run: |
           lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
-          lake build
+          lake build Brent Brent.KernelCheck.SquareJacobianRank
           lake env lean Audit.lean
           for file in Brent/*.lean; do
             module=${file%.lean}
             lake env leanchecker -v "${module//\//.}"
           done
-      - name: Audit compiler-backed rank calculation
-        run: |
-          lake build Brent.CompilerCheck.SquareJacobianRank
-          lake env lean RankAudit.lean
+          lake env leanchecker -v Brent.KernelCheck
