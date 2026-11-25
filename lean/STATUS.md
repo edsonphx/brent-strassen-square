@@ -1,8 +1,12 @@
 # Proof status
 
-Proved in Lean, over every field `k : Type`:
-`197 ≤ squareLocalDimension k ≤ 251`. The equality `= 197` is still open
-(the upper bound needs the quadratic-obstruction argument of §4).
+Proved in Lean:
+
+- over every field `k : Type`, `197 ≤ squareLocalDimension k ≤ 251`;
+- over every field of characteristic three,
+  `squareLocalDimension k = 197` (`squareLocalDimension_eq_197_of_charThree`).
+
+The characteristic-zero equality (§5) and §6 (branches, Hilbert data) are still open.
 
 | Paper dependency | Lean declaration | Status |
 | --- | --- | --- |
@@ -15,25 +19,19 @@ Proved in Lean, over every field `k : Type`:
 | §3, frozen tangent frame | `archived_frame_rank`, `archived_frame_tangent`, `archived_frame_split`, `archived_left_coordinates`, `archived_right_coordinates` | The kernel checks 251 independent integral kernel directions and block ranks 143, 54, and 54. The X and Y blocks match the mixed operands. `archived_origin` identifies each direction with the differential of its exact chart. |
 | §4, matching | `quadraticMatching_bijective`, `quadraticMatching_disjoint` | All 157,464 mixed coefficients, coefficient-one leaders, earlier mixed zeros, and disjoint matched supports are verified. `archived_nonmixed_zero` and `archived_square_zero` prove all other coefficients vanish. `archived_polar_leading` identifies the leaders of the actual 54 projected quadratic forms. |
 | §§2–4, tangent (embedding-dimension) upper bound | `pointLocalDimension_le`, `squareLocalDimension_le_tangent` | Kernel-verified over every field: `squareLocalDimension k ≤ 251`. At any solution the local Krull dimension is at most #variables − Jacobian rank. Supporting lemmas: `ker_eval_eq_span` (ideal of a point), `jacobianEntry_eq_sum`, `equation_eq_expansion` (Taylor expansion of the actual equations via `entry_line`), `maximalIdeal_pointLocalRing`. |
-| §4, alternative finite local upper bound | `localDimension_le_of_power_le_span_sup_pow` | Kernel-verified application of Nakayama and Krull's height theorem. It still needs a parameter-system certificate for the actual local ring. |
+| §4, alternative finite local upper bound | `localDimension_le_of_power_le_span_sup_pow` | Kernel-verified application of Nakayama and Krull's height theorem. |
+| §4, upper bound `dim ≤ 197` in characteristic three | `UpperBound.squareLocalDimension_le_197`, `triangular_dim_le`, `pow_succ_le_of_triangular`, `exists_dual_frame`, `quadraticEntry_sub_mem`, `CharThree.*` | Kernel-verified over every field of characteristic three. Tangent coordinates `zᵢ` dual to the 251-vector frame satisfy `y ≡ Σ zᵢ vᵢ (mod 𝔪²)`. Contracting the Taylor expansion with the 54 covectors kills the linear part and gives 54 relations `Σ M_ℓ[a,b] x_a y_b ∈ 𝔪³`. The certified tables are triangular with unit leaders. With the 197 parameters `cᵢ` and `u_ℓ − x_ℓ`, every square `x_ℓ²` reduces to larger indices, so `𝔪⁵⁵ ⊆ (parameters) + 𝔪⁵⁶`, and Krull's height theorem gives `dim ≤ 197`. This elementary monomial reduction replaces the paper's Gröbner/Hilbert–Samuel step. |
+| §4, exact dimension in characteristic three | `squareLocalDimension_eq_197_of_charThree` | Kernel-verified: the lower and upper bounds combine to `= 197`. |
 | App. A, exact elimination | `SparseRow.coefficient_subScaled` | Sparse integer row operations, span preservation, and exact rank from the signed unit-pivot trace are kernel-verified using bounded radix checks. |
 | §§5–6, transfer, branches, and Hilbert data | — | Open. |
 
 ## Remaining proof graph
 
-- Proved so far: `squareLocalDimension k ≤ 251` (tangent bound). The paper's
-  bound 197 still needs the 54 quadratic obstructions to cut the remaining
-  54 dimensions, e.g. a `d = 2` instance of
-  `localDimension_le_of_power_le_span_sup_pow` with 197 parameters.
-
-- The kernel checks all coefficients of the 54 projected quadrics on the
-  tangent frame. The formal elimination step, regular-sequence implication,
-  and local upper bound remain open. The 2,749 augmented rank and 648 mixed
-  rank are additional inputs to the degree-two Hilbert result.
-- The characteristic-zero argument requires lifting through the split
-  integer-local Jacobian and preserving the resulting dimension bound.
-  The dimensions of the formal intersection and of the reduced tangent
-  space follow after both bounds and the tangent split are established.
+- §5, characteristic zero: the covectors and tables are certified modulo three. One route is to
+  lift them to `ℤ₍₃₎` (or `ℚ`) with new certified rational kernel data, then rerun
+  `triangular_dim_le`; the lower bound already holds over every field.
+- §6: branches and the Hilbert initial values `(1, 251, 30978)`. The 2,749 augmented rank and
+  648 mixed rank are additional inputs to the degree-two Hilbert result.
 
 The published `bash verify.sh --full` replay passed independently of Lean
 at the pinned source revision. The Jacobian's 2,352 transposed columns admit

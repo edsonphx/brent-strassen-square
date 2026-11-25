@@ -10,3 +10,7 @@ import Brent.SparseRow
 import Brent.RankCertificate
 import Brent.RankReplay
 import Brent.SquareJacobian
+import Brent.MonomialReduction
+import Brent.QuadraticExpansion
+import Brent.DualFrame
+import Brent.TriangularBound

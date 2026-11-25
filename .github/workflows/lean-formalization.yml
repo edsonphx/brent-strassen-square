@@ -35,6 +35,7 @@ jobs:
           lake build Brent.KernelCheck.FamilyQuadratics
           lake build Brent.KernelCheck.EmbeddingBound
           lake build Brent.KernelCheck.LowerBound
+          lake build Brent.KernelCheck.MainTheorem
           lake env lean Audit.lean
           for file in Brent/*.lean Brent/KernelCheck/*.lean; do
             module=${file%.lean}
