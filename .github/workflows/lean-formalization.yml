@@ -38,6 +38,8 @@ jobs:
           lake build Brent.KernelCheck.MainTheorem
           lake build Brent.KernelCheck.HilbertValues
           lake build Brent.Formal.ReducedTangent
+          lake build Brent.Formal.Completion
+          lake build Brent.Formal.Singular
           lake env lean Audit.lean
           for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
             Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean; do

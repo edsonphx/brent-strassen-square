@@ -8,6 +8,8 @@ import Brent.KernelCheck.LowerBound
 import Brent.KernelCheck.MainTheorem
 import Brent.KernelCheck.HilbertValues
 import Brent.Formal.ReducedTangent
+import Brent.Formal.Completion
+import Brent.Formal.Singular
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -124,7 +126,23 @@ run_cmd do
     ``Brent.Formal.branchPrime_ne,
     ``Brent.Formal.intersectionEquiv,
     ``Brent.Formal.ringKrullDim_intersection,
-    ``Brent.Formal.hilbertValue_reduced_one
+    ``Brent.Formal.hilbertValue_reduced_one,
+    ``Brent.Formal.mem_pow_iff_lowZero,
+    ``Brent.Formal.truncEquiv,
+    ``Brent.Formal.completionEquiv,
+    ``Brent.Formal.sqEquiv,
+    ``Brent.Formal.ringKrullDim_squareCompletion_le_charThree,
+    ``Brent.Formal.ringKrullDim_squareCompletion_le_charZero,
+    ``Brent.Formal.sqBranchQuotEquiv,
+    ``Brent.Formal.ringKrullDim_sqBranch,
+    ``Brent.Formal.sqBranchPrime_minimal_charThree,
+    ``Brent.Formal.sqBranchPrime_minimal_charZero,
+    ``Brent.Formal.sqBranchPrime_ne,
+    ``Brent.Formal.sqIntersectionEquiv,
+    ``Brent.Formal.ringKrullDim_sqIntersection,
+    ``Brent.Formal.le_spanFinrank_maximalIdeal_Ared,
+    ``Brent.Formal.not_isRegularLocalRing_Ared_charThree,
+    ``Brent.Formal.not_isRegularLocalRing_Ared_charZero
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -154,3 +172,8 @@ run_cmd do
 #print axioms Brent.Formal.branchPrime_minimal_charThree
 #print axioms Brent.Formal.ringKrullDim_intersection
 #print axioms Brent.Formal.hilbertValue_reduced_one
+#print axioms Brent.Formal.sqEquiv
+#print axioms Brent.Formal.sqBranchPrime_minimal_charZero
+#print axioms Brent.Formal.ringKrullDim_sqIntersection
+#print axioms Brent.Formal.not_isRegularLocalRing_Ared_charThree
+#print axioms Brent.Formal.not_isRegularLocalRing_Ared_charZero

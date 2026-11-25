@@ -18,14 +18,25 @@ Proved in Lean:
   (`Formal.branchPrime_minimal_charThree`, `Formal.branchPrime_minimal_charZero`,
   `Formal.branchPrime_ne`, `Formal.intersectionEquiv`, `Formal.ringKrullDim_intersection`);
 - over every field, the reduced local ring has tangent dimension 251
-  (`Formal.hilbertValue_reduced_one`).
+  (`Formal.hilbertValue_reduced_one`);
+- over every field, the paper's `SquareCompletion` (the `𝔪`-adic completion of the Brent local
+  ring) is isomorphic to `Â` (`Formal.sqEquiv`). Over every field of characteristic three or zero,
+  the statements above about `Â` therefore hold for `SquareCompletion` itself: it is Noetherian
+  local with dimension at most 197, with distinct minimal primes `𝔭_L`, `𝔭_R`, branch quotients
+  `k⟦c, x⟧`, `k⟦c, y⟧`, and intersection `k⟦c⟧` of dimension 143
+  (`Formal.ringKrullDim_squareCompletion_le_charThree`, `Formal.sqBranchPrime_minimal_charThree`,
+  `Formal.sqBranchPrime_minimal_charZero`, `Formal.sqBranchPrime_ne`, `Formal.sqBranchQuotEquiv`,
+  `Formal.sqIntersectionEquiv`, `Formal.ringKrullDim_sqIntersection`);
+- over every field of characteristic three or zero, the reduced local ring is not regular:
+  the reduced Brent variety is singular at the recursive point
+  (`Formal.not_isRegularLocalRing_Ared_charThree`, `Formal.not_isRegularLocalRing_Ared_charZero`).
 
 No §6 rows remain open.
 
 | Paper dependency | Lean declaration | Status |
 | --- | --- | --- |
 | §2, signed Strassen table and its recursive square | `strassen_solves`, `strassenSquare_solves` | Kernel-verified. The lift of the signed integral identity works over every commutative ring. |
-| §2, ordered Brent scheme at the recursive point | `equation`, `brentIdeal`, `SquareCoordinateRing`, `squareMaximalIdeal`, `SquareLocalRing`, `SquareCompletion`, `squareLocalDimension` | Defined. The kernel of the surjective evaluation is proved maximal, and the 2,352 and 4,096 index counts are verified. |
+| §2, ordered Brent scheme at the recursive point | `equation`, `brentIdeal`, `SquareCoordinateRing`, `squareMaximalIdeal`, `SquareLocalRing`, `SquareCompletion`, `squareLocalDimension` | Defined. `SquareCompletion` is identified with `Â` in the §6 completion row. The kernel of the surjective evaluation is proved maximal, and the 2,352 and 4,096 index counts are verified. |
 | §2, reduction and Krull dimension | `quotient_dimension_of_le_nilradical` | Kernel-verified for any commutative ring, including the Brent local ring. |
 | §3, identity on both families | `leftFamily_solves`, `rightFamily_solves`, `solves_changeBasis`, `solves_rescale` | Kernel-verified over any commutative ring. Both families specialize to the marked point at identity parameters. The first-order and two-parameter dual-number coefficient identities are kernel-verified in `DeformationJets.lean`. `chart_independent_derivatives` exhibits 197 independent first derivatives in each chart. |
 | §3, lower bound `dim ≥ 197` | `LowerBound.le_squareLocalDimension`, `ringKrullDim_le_of_maximalIdeal_le`, `le_ringKrullDim_affineGerm`, `mem_sq_of_germJet` | Kernel-verified over every field. The 197 left-chart directions are combined into one exact family over `k[t₁,…,t₁₉₇]` localized at the origin. This gives a local homomorphism from the Brent local ring. The 197 independent chart derivatives make it surjective on cotangent spaces, and a system-of-parameters argument (Nakayama plus Krull's height theorem) gives `dim ≥ 197`. This replaces the paper's formal-inverse/completion argument. |
@@ -40,6 +51,8 @@ No §6 rows remain open.
 | §5, characteristic-zero transfer and exact dimension | `integer_annihilates`, `integerEntry_cast`, `Transfer.charZero_dim_le`, `CharZeroBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charZero` | The kernel checks that the 54 integer covectors annihilate the Jacobian and reduce to the archived covectors modulo three. Graded Nakayama transfer lifts the finite spanning certificate for the upper bound to characteristic zero. The same exact family lower bound then gives dimension 197. |
 | §6, Hilbert function `(1, 251, 30978)` | `HilbertInitial.hilbertValue_zero`, `HilbertInitial.hilbertValue_one`, `HilbertTwo.ker_Ψ₂`, `HilbertTwo.hilbertValue_two_add`, `KernelVanishing.nonmixed_zero`, `KernelVanishing.square_zero`, `AugmentedTrace.augmented_rank`, `MixedRank.finrank_Rel`, `HilbertValues.hilbert_initial` | Kernel-verified over every field with `2 ≠ 0`. `H(d)` is the dimension of `𝔪ᵈ/𝔪ᵈ⁺¹`. `H(1) = 251` uses the dual-number jet at every tangent vector. For `H(2)`, second-order jets `p + Σ tᵢvᵢ + ηW` into `k ⊕ k²⁵¹ ⊕ k` identify the relations among the `zᵢzⱼ` with the symmetrized quadratic tables of the full left kernel of the Jacobian, so `H(2) = 31626 − dim Rel` over every field. Two-parameter exact-family jets show that every left-kernel covector kills all non-mixed polar terms. With `2 ≠ 0` it also kills the squares. So `Rel` is the image of `λ ↦ λM` on `ker Jᵗ`, of dimension `2749 − 2101 = 648`. The rank 2,749 of `[J ∣ M]` is replayed in bounded kernel batches. This replaces the paper's residual-generator basis argument. |
 | §6, formal branches and their intersection | `Formal.isNoetherianRing_mvPowerSeries`, `Formal.subst_bijective_equiv`, `Formal.ker_killCompl`, `Formal.psFamily_solves`, `Formal.H_bijective`, `Formal.map_brentPS_le`, `Formal.ringKrullDim_Ahat_le_charThree`, `Formal.ringKrullDim_Ahat_le_charZero`, `Formal.ringKrullDim_mvPowerSeries`, `Formal.branchQuotEquiv`, `Formal.branchPrime_minimal_charThree`, `Formal.branchPrime_minimal_charZero`, `Formal.branchPrime_ne`, `Formal.intersectionEquiv`, `Formal.ringKrullDim_intersection` | Kernel-verified. `Â = k⟦z⟧ ⧸ (Brent equations centered at the point)` is taken directly, avoiding the general theory of `AdicCompletion`. The two exact families are built over `k⟦t⟧` with unit parameters `1 + Σ tᵢEᵢ`. Extending the 251 frame vectors to a basis gives the coordinate change `H(c,x,y,n) = L(c,x) + R(c,y) − R(c,0) + N(n) − p` with linear part that basis. The formal inverse function theorem, proved by degree recursion, makes substitution along `H` an automorphism. In the new coordinates every Brent equation lies in `(y,n) ∩ (x,n)`: restricted to `(c,x)` it is `L − p`, and restricted to `(c,y)` it is `R − p` by the overlap `L(c,0) = R(c,0)`. The map `A → Â` sends `𝔪_A` onto `𝔪_Â`, so the degree-55 certificates transport and give `dim Â ≤ 197`. With `dim k⟦σ⟧ = |σ|`, this gives minimality of both branch primes. |
+| §6, completion `SquareCompletion ≃ Â` | `Formal.mem_pow_iff_lowZero`, `Formal.exists_limit`, `Formal.truncEquiv`, `Formal.completionEquiv`, `Formal.sqEquiv`, `Formal.sqBranchQuotEquiv`, `Formal.sqBranchPrime_minimal_charThree`, `Formal.sqBranchPrime_minimal_charZero`, `Formal.sqBranchPrime_ne`, `Formal.sqIntersectionEquiv`, `Formal.ringKrullDim_sqIntersection` | Kernel-verified. In `k⟦z⟧`, `(z)ⁿ` is the ideal of series with no terms below degree `n`, so `(z)`-adic Cauchy sequences converge coefficientwise and `Â` is `𝔪̂`-adically complete. The map `ψ : A → Â` induces `A ⧸ 𝔪ⁿ ≃ Â ⧸ 𝔪̂ⁿ`. Surjectivity: a series agrees with a polynomial modulo degree `n`. Injectivity: if `ψ(p) ∈ 𝔪̂ⁿ`, the coefficients of `ψ(p)` in the Brent equations can be truncated to polynomials, and what remains of `p` lies in `(z − p)ⁿ`. The universal properties of `AdicCompletion` and of complete rings then give `SquareCompletion ≃+* Â`, which carries the F6 and F7 statements over. Lean's default instance search equips `SquareCompletion` with the `OreLocalization` module structure, which hides its ring structure. The ring structure is taken from the definitionally equal completion with the standard module structure (`Formal.squareCompletion_eq`, proved by `rfl`). |
+| §6, reduced variety singular | `Formal.le_spanFinrank_maximalIdeal_Ared`, `Formal.not_isRegularLocalRing_Ared_charThree`, `Formal.not_isRegularLocalRing_Ared_charZero` | Kernel-verified. Any generating set of `𝔪` of `A_red` spans `𝔪/𝔪²`, so it has at least 251 elements. Since `dim A_red = dim A ≤ 197`, Mathlib's `IsRegularLocalRing` (minimal number of generators of `𝔪` equals Krull dimension) fails. |
 | §6, reduced tangent dimension 251 | `Formal.hilbertValue_reduced_one` | Kernel-verified over every field. The 251 tangent coordinates bound `dim 𝔪/𝔪²` of `A_red` above. The two branch maps `A → k⟦c,x⟧`, `A → k⟦c,y⟧` land in domains, so they kill the nilradical. Their linear coefficients along the 197 + 197 chart variables take the translated coordinates to the 251 independent frame vectors. |
 
 ## Remaining proof graph
@@ -80,6 +93,10 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
 - [x] F8. The reduced local ring has tangent dimension 251 (`ReducedTangent.hilbertValue_reduced_one`).
 - [x] F9. Audit, README, CI and STATUS updated, and the full `leanchecker` replay passes.
   No open rows remain.
+- [x] F10. `SquareCompletion ≃+* Â` (`Completion.sqEquiv`, via `PowerSeriesAdic`), with the
+  F6 and F7 statements transported to `SquareCompletion`.
+- [x] F11. The reduced local ring is not regular in characteristic three and zero
+  (`Singular.not_isRegularLocalRing_Ared_charThree`, `Singular.not_isRegularLocalRing_Ared_charZero`).
 
 The published `bash verify.sh --full` replay passed independently of Lean
 at the pinned source revision. The Jacobian's 2,352 transposed columns admit
