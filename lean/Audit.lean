@@ -14,6 +14,8 @@ import Brent.Formal.TwoBranch
 import Brent.Formal.OrbitDimension
 import Brent.Formal.SliceIndependence
 import Brent.Formal.SwapSymmetry
+import Brent.Formal.SmoothPoints
+import Brent.Equidim.Equidim
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -200,7 +202,46 @@ run_cmd do
     ``Brent.Formal.comap_swapHat_left,
     ``Brent.Formal.comap_swapHat_sup,
     ``Brent.Formal.comap_swapHat_right_charThree,
-    ``Brent.Formal.comap_swapHat_right_charZero
+    ``Brent.Formal.comap_swapHat_right_charZero,
+    ``Brent.SmoothL.rank_of_checks,
+    ``Brent.SmoothL.checked,
+    ``Brent.SmoothL.det_minor_ne_zero,
+    ``Brent.Formal.SmoothLeftMinor.isUnit_minor_map,
+    ``Brent.Formal.SmoothLeftMinor.freeVar_not_col,
+    ``Brent.Formal.SmoothLeftMinor.col_injective,
+    ``Brent.Formal.injective_of_surjective_endo,
+    ``Brent.Formal.coeff_eqAt,
+    ``Brent.Formal.freeMap_surjective,
+    ``Brent.Formal.freeMap_bijective,
+    ``Brent.Formal.swapAtEquiv,
+    ``Brent.Formal.swapDec_value_trivial,
+    ``Brent.Formal.coeff_qArg,
+    ``Brent.Formal.qGroup_jet,
+    ``Brent.GermLower.le_pointLocalDimension,
+    ``Brent.Formal.le_localDimension_of_tangents,
+    ``Brent.spanFinrank_maximalIdeal_le,
+    ``Brent.isRegularLocalRing_of_dim,
+    ``Brent.Formal.pqInt_value_left,
+    ``Brent.Formal.curve_value_zero,
+    ``Brent.Formal.curve_one,
+    ``Brent.Formal.det_e12,
+    ``Brent.Formal.det_e21,
+    ``Brent.Formal.SmoothLeftPoint.jacobian_rank,
+    ``Brent.Formal.SmoothLeftPoint.tangent_dimension,
+    ``Brent.Formal.SmoothLeftPoint.local_dimension,
+    ``Brent.Formal.SmoothLeftPoint.ahatEquiv,
+    ``Brent.Formal.SmoothRightPoint.jacobian_rank,
+    ``Brent.Formal.SmoothRightPoint.tangent_dimension,
+    ``Brent.Formal.SmoothRightPoint.local_dimension,
+    ``Brent.Formal.SmoothRightPoint.ahat_equiv,
+    ``Brent.Formal.SmoothPoints.minor_det_ne_zero,
+    ``Brent.Formal.SmoothPoints.qL_regular,
+    ``Brent.Formal.SmoothPoints.qR_regular,
+    ``Brent.Formal.SmoothPoints.smooth_points,
+    ``Brent.Equidim.height_eq_ringKrullDim_of_isMaximal,
+    ``Brent.Equidim.ringKrullDim_localization_eq,
+    ``Brent.Equidim.ringKrullDim_ne_top,
+    ``Brent.Equidim.eq_zero_of_eval_eq_zero_of_eval_ne_zero
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -251,3 +292,9 @@ run_cmd do
 #print axioms Brent.Formal.comap_swapHat_right_charThree
 #print axioms Brent.Formal.comap_swapHat_right_charZero
 #print axioms Brent.Formal.comap_swapHat_sup
+#print axioms Brent.Formal.SmoothPoints.smooth_points
+#print axioms Brent.Formal.SmoothPoints.qL_regular
+#print axioms Brent.Formal.SmoothPoints.qR_regular
+#print axioms Brent.Equidim.height_eq_ringKrullDim_of_isMaximal
+#print axioms Brent.Equidim.ringKrullDim_localization_eq
+#print axioms Brent.Equidim.ringKrullDim_ne_top

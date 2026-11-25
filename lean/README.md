@@ -30,6 +30,15 @@ in characteristics three and zero, with `Â ⧸ 𝔭_L ≃ k⟦c, x⟧`,
 `Â ⧸ 𝔭_R ≃ k⟦c, y⟧` (dimension 197 each), and `Â ⧸ (𝔭_L + 𝔭_R) ≃ k⟦c⟧`
 (dimension 143). The reduced local ring has tangent dimension 251.
 
+Lean proves the §7 smooth-point statements. The one-parameter curves through
+`p` reach the points `q_L`, `q_R` (blocks 4 and 5 at `t = 1`). In
+characteristics three and zero, both points have Jacobian rank exactly 2155,
+tangent and local dimension 197, a regular local ring, and formal
+neighbourhood `k⟦z₁,…,z₁₉₇⟧` (`Brent.Formal.SmoothPoints.smooth_points`).
+The rank uses a 2155 × 2155 integer minor certified modulo three in six
+kernel blocks (`Brent/Generated/SmoothBlocks`). Each block takes several GB
+and about fifteen minutes, so build them one at a time.
+
 [STATUS.md](STATUS.md) records the proof dependencies.
 
 ## Build and audit
@@ -56,9 +65,14 @@ lake build Brent.Formal.TwoBranch
 lake build Brent.Formal.OrbitDimension
 lake build Brent.Formal.SliceIndependence
 lake build Brent.Formal.SwapSymmetry
+for b in 0 1 2 3 4 5; do lake build Brent.Generated.SmoothBlocks.L$b; done
+lake build Brent.Formal.SmoothPoints
+lake build Brent.Equidim.Equidim
+lake build Brent.Formal.FamilyClosure Brent.Formal.GermQuotLower
 lake env lean Audit.lean
 for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
-    Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean; do
+    Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean \
+    Brent/Generated/SmoothL{Data,Checks}.lean Brent/Generated/SmoothBlocks/*.lean Brent/Equidim/*.lean; do
   module=${file%.lean}
   lake env leanchecker -v "${module//\//.}"
 done
