@@ -43,6 +43,7 @@ jobs:
           lake build Brent.Formal.TwoBranch
           lake build Brent.Formal.OrbitDimension
           lake build Brent.Formal.SliceIndependence
+          lake build Brent.Formal.SwapSymmetry
           lake env lean Audit.lean
           for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
             Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean; do

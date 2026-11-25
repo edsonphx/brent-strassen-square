@@ -13,6 +13,7 @@ import Brent.Formal.Singular
 import Brent.Formal.TwoBranch
 import Brent.Formal.OrbitDimension
 import Brent.Formal.SliceIndependence
+import Brent.Formal.SwapSymmetry
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -186,7 +187,20 @@ run_cmd do
     ``Brent.Formal.orbitMap_eq_slice,
     ``Brent.Formal.eq_ker_of_le,
     ``Brent.Formal.ker_sliceHat,
-    ``Brent.Formal.orbitSubgermEquiv
+    ``Brent.Formal.orbitSubgermEquiv,
+    ``Brent.Formal.swapDec_solves,
+    ``Brent.Formal.swapDec_leftFamily,
+    ``Brent.Formal.swapDec_strassenSquare,
+    ``Brent.Formal.swapDec_changeBasis,
+    ``Brent.Formal.swapDec_value,
+    ``Brent.Formal.swapPS_eqPS,
+    ``Brent.Formal.swapHatEquiv,
+    ``Brent.Formal.fullHat_swapHat,
+    ``Brent.Formal.comap_swapHat_right,
+    ``Brent.Formal.comap_swapHat_left,
+    ``Brent.Formal.comap_swapHat_sup,
+    ``Brent.Formal.comap_swapHat_right_charThree,
+    ``Brent.Formal.comap_swapHat_right_charZero
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -233,3 +247,7 @@ run_cmd do
 #print axioms Brent.Formal.ker_fullHat_charZero
 #print axioms Brent.Formal.slice_independent
 #print axioms Brent.Formal.ker_sliceHat
+#print axioms Brent.Formal.swapDec_value
+#print axioms Brent.Formal.comap_swapHat_right_charThree
+#print axioms Brent.Formal.comap_swapHat_right_charZero
+#print axioms Brent.Formal.comap_swapHat_sup
