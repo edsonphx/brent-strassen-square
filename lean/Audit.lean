@@ -15,6 +15,8 @@ run_cmd do
     ``Brent.Decomposition.solves_rescale,
     ``Brent.leftFamily_solves,
     ``Brent.rightFamily_solves,
+    ``Brent.leftFamily_at_identity,
+    ``Brent.rightFamily_at_identity,
     ``Brent.quadraticMatching_disjoint,
     ``Brent.SparseRow.coefficient_subScaled,
     ``Brent.rowSpan_eq_of_elimination,

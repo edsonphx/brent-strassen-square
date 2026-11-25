@@ -95,6 +95,14 @@ def changeBasis (d : Decomposition R α ι) (P Q T : (Matrix α α R)ˣ) :
   v s := entries (Q.val.transpose * asMatrix (d.v s) * T.inv.transpose)
   w s := entries (P.inv * asMatrix (d.w s) * T.val)
 
+omit [Fintype ι] in
+@[simp]
+theorem changeBasis_identity (d : Decomposition R α ι) :
+    d.changeBasis 1 1 1 = d := by
+  cases d
+  simp [changeBasis, Matrix.transpose_one]
+  exact ⟨rfl, rfl, rfl⟩
+
 private lemma evaluate_changeBasis (d : Decomposition R α ι) (P Q T : (Matrix α α R)ˣ)
     (X Y : Matrix α α R) :
     evaluate (d.changeBasis P Q T) X Y =
@@ -167,5 +175,20 @@ theorem rightFamily_solves {R : Type*} [CommRing R]
     (P Q T : Fin 7 → (Matrix (Fin 2) (Fin 2) R)ˣ) : (rightFamily P Q T).Solves :=
   Decomposition.solves_recursiveRight
     (fun j => Decomposition.solves_changeBasis (baseStrassen_solves R) (P j) (Q j) (T j)) (baseStrassen_solves R)
+
+private theorem left_recursive_base (R : Type*) [CommRing R] :
+    (baseStrassen R).recursiveLeft (fun _ => baseStrassen R) = strassenSquare R := by
+  simp [baseStrassen, strassenSquare, strassenSquareInt, Decomposition.recursiveLeft,
+    Decomposition.map, map_mul]
+
+/-- The common identity parameter values of both algebraic families are the marked point. -/
+theorem leftFamily_at_identity (R : Type*) [CommRing R] :
+    leftFamily (R := R) (fun _ => 1) (fun _ => 1) (fun _ => 1) = strassenSquare R := by
+  simp only [leftFamily, Decomposition.changeBasis_identity, left_recursive_base]
+
+theorem rightFamily_at_identity (R : Type*) [CommRing R] :
+    rightFamily (R := R) (fun _ => 1) (fun _ => 1) (fun _ => 1) = strassenSquare R := by
+  simp only [rightFamily, Decomposition.changeBasis_identity]
+  exact left_recursive_base R
 
 end Brent
