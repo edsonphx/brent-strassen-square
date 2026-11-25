@@ -64,9 +64,11 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
   Nakayama, and Krull's height theorem. The map `A → Â` (`z ↦ p + z`) sends `𝔪_A` onto `𝔪_Â`,
   so the existing relations transport (`FormalDimension.ringKrullDim_Ahat_le_charThree`,
   `FormalDimension.ringKrullDim_Ahat_le_charZero`).
-- [ ] F7. Branches: `𝔭_L`, `𝔭_R` are prime and minimal, with `Â⧸𝔭_L ≃ k⟦c,x⟧` and
+- [x] F7. Branches: `𝔭_L`, `𝔭_R` are prime and minimal, with `Â⧸𝔭_L ≃ k⟦c,x⟧` and
   `Â⧸𝔭_R ≃ k⟦c,y⟧`. They are distinct, and `Â⧸(𝔭_L+𝔭_R) ≃ k⟦c⟧` has dimension 143, in
-  characteristic three and zero.
+  characteristic three and zero (`Branches.branchQuotEquiv`, `Branches.branchPrime_minimal_charThree`,
+  `Branches.branchPrime_minimal_charZero`, `Branches.branchPrime_ne`, `Branches.intersectionEquiv`,
+  `Branches.ringKrullDim_intersection`; `dim k⟦σ⟧ = |σ|` is `PowerSeriesDimension.ringKrullDim_mvPowerSeries`).
 - [ ] F8. The reduced local ring has tangent dimension 251.
 - [ ] F9. Audit, README, CI and STATUS updated, and the full `leanchecker` replay passes.
   No open rows remain.
