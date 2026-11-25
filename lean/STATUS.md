@@ -12,11 +12,17 @@ characteristic zero and characteristic three.
 | §4, quadratic expansion and Jacobian columns | `Decomposition.entry_line`, `Decomposition.jacobianColumn` | Cubic expansion and sparse reconstruction of the actual Jacobian proved. `square_jacobian_rank` and `square_jacobian_nullity` certify 2,101 and 251 in the kernel over every field. The 54 archived covectors annihilate the actual Jacobian modulo three by `archived_covectors_annihilate`. |
 | §3, frozen tangent frame | `archived_frame_rank`, `archived_frame_tangent`, `archived_frame_split`, `archived_left_coordinates`, `archived_right_coordinates` | The kernel checks 251 independent integral kernel directions and block ranks 143, 54, and 54. The X and Y blocks match the mixed operands. `archived_origin` identifies each direction with the differential of its exact chart. |
 | §4, matching | `quadraticMatching_bijective`, `quadraticMatching_disjoint` | All 157,464 mixed coefficients, coefficient-one leaders, earlier mixed zeros, and disjoint matched supports are verified. `archived_nonmixed_zero` and `archived_square_zero` prove all other coefficients vanish. `archived_polar_leading` identifies the leaders of the actual 54 projected quadratic forms. |
+| §§2–4, tangent (embedding-dimension) upper bound | `pointLocalDimension_le`, `squareLocalDimension_le_tangent` | Kernel-verified over every field: `squareLocalDimension k ≤ 251`. At any solution the local Krull dimension is at most #variables − Jacobian rank. Supporting lemmas: `ker_eval_eq_span` (ideal of a point), `jacobianEntry_eq_sum`, `equation_eq_expansion` (Taylor expansion of the actual equations via `entry_line`), `maximalIdeal_pointLocalRing`. |
 | §4, alternative finite local upper bound | `localDimension_le_of_power_le_span_sup_pow` | Kernel-verified application of Nakayama and Krull's height theorem. It still needs a parameter-system certificate for the actual local ring. |
 | App. A, exact elimination | `SparseRow.coefficient_subScaled` | Sparse integer row operations, span preservation, and exact rank from the signed unit-pivot trace are kernel-verified using bounded radix checks. |
 | §§5–6, transfer, branches, and Hilbert data | — | Open. |
 
 ## Remaining proof graph
+
+- Proved so far: `squareLocalDimension k ≤ 251` (tangent bound). The paper's
+  bound 197 still needs the 54 quadratic obstructions to cut the remaining
+  54 dimensions, e.g. a `d = 2` instance of
+  `localDimension_le_of_power_le_span_sup_pow` with 197 parameters.
 
 - The lower bound still needs a formal inverse argument or a local
   algebraic substitute connecting the rank-197 chart differential to Krull

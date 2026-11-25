@@ -3,6 +3,7 @@ import Brent.KernelCheck.SquareJacobianRank
 import Brent.KernelCheck.QuadraticCertificates
 import Brent.KernelCheck.TangentFrame
 import Brent.KernelCheck.FamilyQuadratics
+import Brent.KernelCheck.EmbeddingBound
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -52,7 +53,13 @@ run_cmd do
     ``Brent.squareJacobianColumn_correct,
     ``Brent.square_nullity_of_rank,
     ``Brent.quotient_dimension_of_le_nilradical,
-    ``Brent.localDimension_le_of_power_le_span_sup_pow
+    ``Brent.localDimension_le_of_power_le_span_sup_pow,
+    ``Brent.ker_eval_eq_span,
+    ``Brent.Decomposition.jacobianEntry_eq_sum,
+    ``Brent.Decomposition.equation_eq_expansion,
+    ``Brent.maximalIdeal_pointLocalRing,
+    ``Brent.pointLocalDimension_le,
+    ``Brent.squareLocalDimension_le_tangent
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -68,6 +75,7 @@ run_cmd do
 #print axioms Brent.localDimension_le_of_power_le_span_sup_pow
 #print axioms Brent.square_jacobian_rank
 #print axioms Brent.square_jacobian_nullity
+#print axioms Brent.squareLocalDimension_le_tangent
 #print axioms Brent.QuadraticData.archived_covectors_annihilate
 #print axioms Brent.QuadraticData.archived_mixed_coefficients
 #print axioms Brent.TangentData.archived_frame_tangent
