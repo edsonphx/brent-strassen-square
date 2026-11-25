@@ -103,6 +103,23 @@ theorem changeBasis_identity (d : Decomposition R α ι) :
   simp [changeBasis, Matrix.transpose_one]
   exact ⟨rfl, rfl, rfl⟩
 
+omit [Fintype ι] in
+theorem map_changeBasis {S : Type*} [CommRing S] (f : R →+* S)
+    (d : Decomposition R α ι) (P Q T : (Matrix α α R)ˣ) :
+    (d.changeBasis P Q T).map f = (d.map f).changeBasis
+      (Units.map (f.mapMatrix.toMonoidHom) P)
+      (Units.map (f.mapMatrix.toMonoidHom) Q)
+      (Units.map (f.mapMatrix.toMonoidHom) T) := by
+  have transport (A B C : Matrix α α R) :
+      (fun a => f (entries (A * B * C) a)) =
+        entries (A.map f * B.map f * C.map f) := by
+    funext a
+    simp only [← Matrix.map_mul, entries, Matrix.map_apply]
+  cases d
+  simp only [changeBasis, map, Decomposition.mk.injEq]
+  exact ⟨funext (fun _ => transport _ _ _), funext (fun _ => transport _ _ _),
+    funext (fun _ => transport _ _ _)⟩
+
 private lemma evaluate_changeBasis (d : Decomposition R α ι) (P Q T : (Matrix α α R)ˣ)
     (X Y : Matrix α α R) :
     evaluate (d.changeBasis P Q T) X Y =
@@ -131,6 +148,15 @@ def rescale (d : Decomposition R α ι) (l m : ι → Rˣ) : Decomposition R α 
   v s a := (m s).val * d.v s a
   w s a := ↑((l s)⁻¹) * ↑((m s)⁻¹) * d.w s a
 
+omit [Fintype ι] [Fintype α] [DecidableEq α] in
+theorem map_rescale {S : Type*} [CommRing S] (f : R →+* S)
+    (d : Decomposition R α ι) (l m : ι → Rˣ) :
+    (d.rescale l m).map f = (d.map f).rescale
+      (fun i => Units.map f.toMonoidHom (l i)) (fun i => Units.map f.toMonoidHom (m i)) := by
+  cases d
+  simp only [rescale, map, Decomposition.mk.injEq, map_mul]
+  exact ⟨rfl, rfl, rfl⟩
+
 omit [Fintype α] in
 theorem solves_rescale {d : Decomposition R α ι} (hd : d.Solves) (l m : ι → Rˣ) :
     (d.rescale l m).Solves := by
@@ -144,6 +170,19 @@ theorem solves_rescale {d : Decomposition R α ι} (hd : d.Solves) (l m : ι →
     _ = ((l s).val * ↑((l s)⁻¹)) * ((m s).val * ↑((m s)⁻¹)) *
         (d.u s a * d.v s b * d.w s c) := by ring
     _ = _ := by simp
+
+omit [DecidableEq α] [Fintype α] [Fintype ι] in
+theorem map_recursiveLeft {S β κ : Type*} [CommRing S] (f : R →+* S)
+    (d : Decomposition R α ι) (e : ι → Decomposition R β κ) :
+    (d.recursiveLeft e).map f = (d.map f).recursiveLeft (fun i => (e i).map f) := by
+  simp [recursiveLeft, map, map_mul]
+
+omit [DecidableEq α] [Fintype α] [Fintype ι] in
+theorem map_recursiveRight {S β κ : Type*} [CommRing S] (f : R →+* S)
+    (d : κ → Decomposition R α ι) (e : Decomposition R β κ) :
+    (Decomposition.recursiveRight d e).map f =
+      Decomposition.recursiveRight (fun i => (d i).map f) (e.map f) := by
+  simp [recursiveRight, map, map_mul]
 
 end Brent.Decomposition
 
@@ -175,6 +214,26 @@ theorem rightFamily_solves {R : Type*} [CommRing R]
     (P Q T : Fin 7 → (Matrix (Fin 2) (Fin 2) R)ˣ) : (rightFamily P Q T).Solves :=
   Decomposition.solves_recursiveRight
     (fun j => Decomposition.solves_changeBasis (baseStrassen_solves R) (P j) (Q j) (T j)) (baseStrassen_solves R)
+
+private theorem map_baseStrassen {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S) :
+    (baseStrassen R).map f = baseStrassen S := by
+  simp [baseStrassen, Decomposition.map]
+
+theorem map_leftFamily {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S)
+    (P Q T : Fin 7 → (Matrix (Fin 2) (Fin 2) R)ˣ) :
+    (leftFamily P Q T).map f = leftFamily
+      (fun i => Units.map f.mapMatrix.toMonoidHom (P i))
+      (fun i => Units.map f.mapMatrix.toMonoidHom (Q i))
+      (fun i => Units.map f.mapMatrix.toMonoidHom (T i)) := by
+  simp [leftFamily, Decomposition.map_recursiveLeft, Decomposition.map_changeBasis, map_baseStrassen]
+
+theorem map_rightFamily {R S : Type*} [CommRing R] [CommRing S] (f : R →+* S)
+    (P Q T : Fin 7 → (Matrix (Fin 2) (Fin 2) R)ˣ) :
+    (rightFamily P Q T).map f = rightFamily
+      (fun i => Units.map f.mapMatrix.toMonoidHom (P i))
+      (fun i => Units.map f.mapMatrix.toMonoidHom (Q i))
+      (fun i => Units.map f.mapMatrix.toMonoidHom (T i)) := by
+  simp [rightFamily, Decomposition.map_recursiveRight, Decomposition.map_changeBasis, map_baseStrassen]
 
 private theorem left_recursive_base (R : Type*) [CommRing R] :
     (baseStrassen R).recursiveLeft (fun _ => baseStrassen R) = strassenSquare R := by

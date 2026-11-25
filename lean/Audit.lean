@@ -1,6 +1,8 @@
 import Brent
 import Brent.KernelCheck.SquareJacobianRank
 import Brent.KernelCheck.QuadraticCertificates
+import Brent.KernelCheck.TangentFrame
+import Brent.KernelCheck.JetProjection
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -19,6 +21,12 @@ run_cmd do
     ``Brent.QuadraticData.archived_mixed_coefficients,
     ``Brent.QuadraticData.archived_mixed_zero_before,
     ``Brent.QuadraticData.archived_mixed_pivots,
+    ``Brent.QuadraticData.same_family_polar_zero,
+    ``Brent.TangentData.archived_frame_rank,
+    ``Brent.TangentData.archived_frame_tangent,
+    ``Brent.TangentData.archived_frame_split,
+    ``Brent.TangentData.archived_left_coordinates,
+    ``Brent.TangentData.archived_right_coordinates,
     ``Brent.Decomposition.solves_changeBasis,
     ``Brent.Decomposition.solves_rescale,
     ``Brent.leftFamily_solves,
@@ -56,3 +64,5 @@ run_cmd do
 #print axioms Brent.square_jacobian_nullity
 #print axioms Brent.QuadraticData.archived_covectors_annihilate
 #print axioms Brent.QuadraticData.archived_mixed_coefficients
+#print axioms Brent.TangentData.archived_frame_tangent
+#print axioms Brent.TangentData.archived_frame_split

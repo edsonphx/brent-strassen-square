@@ -18,9 +18,13 @@ revision are pinned in this directory.
 ```bash
 cd lean
 lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
-lake build Brent Brent.KernelCheck.SquareJacobianRank Brent.KernelCheck.QuadraticCertificates
+lake build Brent
+lake build Brent.KernelCheck.SquareJacobianRank
+lake build Brent.KernelCheck.QuadraticCertificates
+lake build Brent.KernelCheck.TangentFrame
+lake build Brent.KernelCheck.JetProjection
 lake env lean Audit.lean
-for file in Brent/*.lean; do
+for file in Brent/*.lean Brent/KernelCheck/*.lean; do
   module=${file%.lean}
   lake env leanchecker -v "${module//\//.}"
 done
@@ -71,6 +75,18 @@ The source data and batch proofs can be regenerated with
 `tools/generate_quadratic_data.py`, `tools/generate_annihilator_checks.py`,
 `tools/generate_mixed_data.py`, and `tools/generate_mixed_checks.py`.
 The remaining mathematical obligations are recorded in [STATUS.md](STATUS.md).
+
+## Archived tangent frame
+
+`Brent.KernelCheck.TangentFrame` certifies the 251 archived integer directions,
+their annihilation by the signed Jacobian, and the ranks 143, 54, and 54 of the
+three blocks over every field. It identifies the 108 directions used by the
+mixed certificate with the left and right blocks of this frame.
+
+`Brent.KernelCheck.JetProjection` proves that two first-order variations from
+the same exact chart have zero projected polar quadratic term. Identifying
+the archived vectors with the differentials of the chart parameters is a
+separate tracked obligation.
 
 The ordering of `SquareVertex = Fin 2 × Fin 2` and
 `SquareSummand = Fin 7 × Fin 7` is `finProdFinEquiv`'s lexicographic
