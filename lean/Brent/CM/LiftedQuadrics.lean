@@ -1,3 +1,5 @@
+import Brent.Generated.AnnihilatorChecks
+import Brent.Generated.LiftChecks
 import Brent.CM.LiftInstance
 import Brent.KernelCheck.QuadraticCertificates
 
@@ -75,5 +77,32 @@ theorem qtCanon_regular (M₂ : Type*) [AddCommGroup M₂]
     IsWeaklyRegular M₂ ((List.ofFn (qtOf lamCanon)).map
       (algebraMap (P R0 (Fin 54 ⊕ Fin 54)) (Loc rho3 (σ := Fin 54 ⊕ Fin 54)))) :=
   qtOf_regular map_lamCanon M₂
+
+/-- The certified integer corrections give actual left-kernel lifts. -/
+noncomputable def lamExact (ell : Fin 54) (x : Fin 4096) : R0 :=
+  (integerEntry ell x : R0)
+
+theorem map_lamExact (ell : Fin 54) (x : Fin 4096) :
+    rho3 (lamExact ell x) = functionalEntry ell x := by
+  rw [lamExact, map_intCast]
+  exact integerEntry_cast ell x
+
+theorem lamExact_annihilates (ell : Fin 54)
+    (x : Variable SquareVertex SquareSummand) :
+    ∑ e : EquationIndex SquareVertex,
+      (strassenSquare R0).jacobianColumn x e.1 e.2.1 e.2.2 *
+        lamExact ell (squareEquationNumber e) = 0 := by
+  exact integer_annihilates checkedAnnihilator checkedLift R0 ell x
+
+theorem map_qtExact (ell : Fin 54) :
+    MvPolynomial.map rho3 (qtOf lamExact ell) = q ell :=
+  map_qtOf map_lamExact ell
+
+theorem qtExact_regular (M₂ : Type*) [AddCommGroup M₂]
+    [Module (Loc rho3 (σ := Fin 54 ⊕ Fin 54)) M₂]
+    [Module.Flat (Loc rho3 (σ := Fin 54 ⊕ Fin 54)) M₂] :
+    IsWeaklyRegular M₂ ((List.ofFn (qtOf lamExact)).map
+      (algebraMap (P R0 (Fin 54 ⊕ Fin 54)) (Loc rho3 (σ := Fin 54 ⊕ Fin 54)))) :=
+  qtOf_regular map_lamExact M₂
 
 end Brent.CM.LiftedQuadrics

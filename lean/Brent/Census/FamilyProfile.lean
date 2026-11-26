@@ -210,4 +210,28 @@ theorem family_factor_ne_zero (pq : FamilyParameters k) (left : Bool) (s : Squar
   have := Nat.mul_pos (budget_pos i) (budget_pos j)
   omega
 
+/-- In a rank-one outer group the inner identity is the unique rank-two term. -/
+theorem unique_rankTwo_left (pq : FamilyParameters k) (i : Fin 7)
+    (hi : i ≠ 0) (m : Mode) :
+    ∃! j : Fin 7, (modeMat (pq.value true).coordinates (i, j) m).rank = 2 := by
+  refine ⟨0, ?_, ?_⟩
+  · rw [rank_value_eq]
+    simp [budget, hi]
+  · intro j hj
+    rw [rank_value_eq] at hj
+    by_contra hn
+    simp [budget, hi, hn] at hj
+
+/-- The same uniqueness in the other recursive orientation. -/
+theorem unique_rankTwo_right (pq : FamilyParameters k) (j : Fin 7)
+    (hj : j ≠ 0) (m : Mode) :
+    ∃! i : Fin 7, (modeMat (pq.value false).coordinates (i, j) m).rank = 2 := by
+  refine ⟨0, ?_, ?_⟩
+  · rw [rank_value_eq]
+    simp [budget, hj]
+  · intro i hi
+    rw [rank_value_eq] at hi
+    by_contra hn
+    simp [budget, hj, hn] at hi
+
 end Brent.Census

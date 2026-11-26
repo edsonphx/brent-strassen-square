@@ -484,6 +484,12 @@ run_cmd do
     ``Brent.CM.PSInstance.lemma41_q,
     ``Brent.CM.LiftedQuadrics.map_qtOf,
     ``Brent.CM.LiftedQuadrics.qtOf_regular,
+    ``Brent.Census.unique_rankTwo_left,
+    ``Brent.Census.unique_rankTwo_right,
+    ``Brent.CM.LiftedQuadrics.map_lamExact,
+    ``Brent.CM.LiftedQuadrics.lamExact_annihilates,
+    ``Brent.CM.LiftedQuadrics.map_qtExact,
+    ``Brent.CM.LiftedQuadrics.qtExact_regular,
     ``Brent.CM.LiftedQuadrics.qtCanon_regular
   ]
   for name in theorems do
