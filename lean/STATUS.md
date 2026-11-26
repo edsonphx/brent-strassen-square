@@ -158,6 +158,10 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
   is an irreducible component of `V(4,4,4|49)` over algebraically closed `k`.
 - [ ] F18. §7 rank-profile exclusions and the AlphaTensor catalogue census (14,149 / 87 / 2 / 89).
 - [ ] F19. §7 Li–Wang–Hu comparison (tangent 197, orbit tangent 143).
+  On `compilation-pending`, the integer Brent identity, the supporting trace and kernel
+  modules, and Jacobian certificate blocks `L0`–`L3` have compiled. Blocks `L4` and `L5`,
+  the integer kernel-vector checks, the orbit module, and the final theorem audit and
+  `leanchecker` replay are pending.
 - [ ] F20. `main_theorem` bundling Theorem 1.1, and the final line-by-line faithfulness audit.
 
 The published `bash verify.sh --full` replay passed independently of Lean
