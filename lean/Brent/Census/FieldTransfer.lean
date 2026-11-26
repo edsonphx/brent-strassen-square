@@ -25,6 +25,7 @@ variable {F K : Type*} [Field F] [Field K] [Algebra F K]
 variable {m n : Type*} [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
 
 /-- **Rank is invariant under field extension.** -/
+omit [DecidableEq m] in
 theorem rank_map_algebraMap (M : Matrix m n F) :
     (M.map (algebraMap F K)).rank = M.rank := by
   have key : ∀ r, (M.map (algebraMap F K)).rank ≤ r ↔ M.rank ≤ r := by

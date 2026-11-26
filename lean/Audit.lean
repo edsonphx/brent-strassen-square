@@ -19,6 +19,7 @@ import Brent.Equidim.Equidim
 import Brent.LWH
 import Brent.Theorem11
 import Brent.Section7
+import Brent.Groebner.Paper
 import Brent.BaseLemma
 import Brent.BranchTangents
 import Brent.SecondOrderLift
@@ -427,7 +428,17 @@ run_cmd do
     ``Brent.Z3.kernel_basis_Z3,
     ``Brent.Z3.kernel_retract_Z3,
     ``Brent.Z3.kernel_lift_mod3,
-    ``Brent.Z3.kernel_span_field
+    ``Brent.Z3.kernel_span_field,
+    ``Brent.Groebner.isGroebnerBasis_iff,
+    ``Brent.Groebner.isGroebnerBasis_of_coprime,
+    ``Brent.Groebner.initialIdeal_span_of_coprime,
+    ``Brent.Groebner.Paper.degree_q,
+    ``Brent.Groebner.Paper.monic_q,
+    ``Brent.Groebner.Paper.leadingTerm_q,
+    ``Brent.Groebner.Paper.coprime_degree,
+    ``Brent.Groebner.Paper.q_isGroebnerBasis,
+    ``Brent.Groebner.Paper.q_initialIdeal,
+    ``Brent.Groebner.Paper.row11
   ]
   for name in theorems do
     let axioms ← collectAxioms name

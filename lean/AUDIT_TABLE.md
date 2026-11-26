@@ -81,7 +81,7 @@ yet validated), **open** (not formalized; reason given).
 | 414–426 | The 54 rows `λᵢ` kill `J` and `qᵢ = λᵢ M (x ⊗ y)` | `archived_covectors_annihilate`, `archived_mixed_coefficients` | compiled | — |
 | 427–432 | Leading monomials `xᵢ y_π(i)` form a perfect matching | `quadraticMatching_bijective`, `archived_mixed_pivots`, `archived_mixed_zero_before`, `archived_polar_leading` | compiled | — |
 | 433–443 | How the witnesses were found (bipartite matching) | — | not a claim | Method description. |
-| 444–456 | Buchberger: the `qᵢ` are a Gröbner basis; height 54; regular sequence by Cohen–Macaulayness | — | **open** | Proof step. The Lean upper bound uses the triangular unit-leader tables directly (`triangular_dim_le`, `pow_succ_le_of_triangular`). |
+| 444–456 | Buchberger: the `qᵢ` are a Gröbner basis; height 54; regular sequence by Cohen–Macaulayness | Buchberger sentence: `Groebner.Paper.row11` (`q_isGroebnerBasis`, `q_initialIdeal`, `monic_q`, `coprime_degree`; general criterion `Groebner.isGroebnerBasis_of_coprime`) | **open** (Buchberger part drafted; height 54 and regular sequence remain) | Proof step. The Lean upper bound uses the triangular unit-leader tables directly (`triangular_dim_le`, `pow_succ_le_of_triangular`). |
 | 457–482 | Lemma 4.1: `dim A/I ≤ N − s` when the initial forms are a regular sequence; associated graded presentation | — | **open** | Proof step, replaced by `triangular_dim_le` and `localDimension_le_of_power_le_span_sup_pow`. |
 | 483–498 | Normal elimination: `Â = k⟦z⟧/I`, `fᵢ* = qᵢ`, `dim ≤ 251 − 54 = 197` in characteristic three | `UpperBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charThree`, `Formal.H_bijective` | compiled | Same conclusion; different route. |
 
