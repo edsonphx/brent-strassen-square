@@ -298,7 +298,7 @@ theorem chain_bound (hfin : ∀ n, Module.length A (A ⧸ maximalIdeal A ^ n) �
 /-- **`dim A ≤ d(A)`.** If the Hilbert–Samuel function `n ↦ length (A ⧸ mⁿ)` has order `≤ e`
 (eventually a polynomial of degree `< e`), then `dim A ≤ e − 1`. -/
 theorem ringKrullDim_le_of_orderLE (hfin : ∀ n, Module.length A (A ⧸ maximalIdeal A ^ n) ≠ ⊤)
-    (hpoly : ∀ J : Ideal A, ∃ a, OrderLE (chi J) a) {e : ℕ} (he : OrderLE (chi ⊥) e) :
+    (hpoly : ∀ J : Ideal A, ∃ a, OrderLE (chi J) a) {e : ℕ} (he : OrderLE (chi (⊥ : Ideal A)) e) :
     ringKrullDim A ≤ ((e - 1 : ℕ) : WithBot ℕ∞) := by
   unfold ringKrullDim Order.krullDim
   refine iSup_le fun q => ?_
