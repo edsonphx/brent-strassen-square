@@ -262,7 +262,9 @@ theorem rowRel_rescale {α ι : Type*} [Fintype α] [DecidableEq α] [Fintype ι
   refine ⟨((c t).val * (c a).inv) • Z, ?_⟩
   have hscalar : (c t).val * (c a).inv * (c a).val = (c t).val := by
     rw [mul_assoc, (c a).inv_val, mul_one]
-  simp only [hc t, hc a, hZ, Matrix.smul_mul, Matrix.mul_smul, smul_smul, hscalar]
+  have hscalar' : (c a).val * ((c t).val * (c a).inv) = (c t).val := by
+    rw [mul_comm (c a).val, hscalar]
+  simp only [hc t, hc a, hZ, Matrix.smul_mul, Matrix.mul_smul, smul_smul, hscalar']
 
 theorem colRel_rescale {α ι : Type*} [Fintype α] [DecidableEq α] [Fintype ι]
     (d : Decomposition k α ι) (l m' : ι → kˣ) {t a : ι} {m : Mode}
