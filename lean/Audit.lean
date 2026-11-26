@@ -42,6 +42,9 @@ import Brent.Formal.BaseChange
 import Brent.Formal.NormalEliminationZ3
 import Brent.HadamardSmall
 import Brent.CM.GradedRingAssembly
+import Brent.CM.GradedPolynomial
+import Brent.Formal.OrbitClosure
+import Brent.Formal.NormalFrameZ3
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -562,7 +565,37 @@ run_cmd do
     ``Brent.CM.GradedRingAssembly.product_mk,
     ``Brent.CM.GradedRingAssembly.pieceEquiv_mul,
     ``Brent.CM.GradedRingAssembly.lemma41_ringEquiv,
-    ``Brent.CM.GradedRingAssembly.lemma41_ringEquiv_of
+    ``Brent.CM.GradedRingAssembly.lemma41_ringEquiv_of,
+    ``Brent.CM.firstIdeal_inf_pow_le_relI_prefix,
+    ``Brent.CM.GradedRingAssembly.projection_ker,
+    ``Brent.CM.GradedRingAssembly.initialQuotientEquiv,
+    ``Brent.CM.GradedRingAssembly.lemma41_initialQuotientEquiv,
+    ``Brent.CM.GradedPolynomial.H_mul,
+    ``Brent.CM.GradedPolynomial.basePolynomialEquiv,
+    ``Brent.CM.GradedPolynomial.map_initialIdeal,
+    ``Brent.CM.GradedPolynomial.H_mem_iff_relI,
+    ``Brent.CM.GradedPolynomial.initialRegular_of_polynomial,
+    ``Brent.CM.GradedPolynomial.lemma41_polynomialQuotientEquiv,
+    ``Brent.CM.GradedPolynomial.lemma41_polynomialQuotientEquiv_of_regular,
+    ``Brent.CM.GradedPolynomial.lemma41_finite_polynomialQuotientEquiv,
+    ``Brent.Formal.OrbitClosure.orbitClosure_vanishingIdeal,
+    ``Brent.Formal.OrbitClosure.centralNormalize_value,
+    ``Brent.Formal.OrbitClosure.rowsA_cover,
+    ``Brent.Formal.OrbitClosure.orbit_trdeg_lower,
+    ``Brent.Formal.OrbitClosure.ker_gaugePsi,
+    ``Brent.Formal.OrbitClosure.orbit_trdeg_upper,
+    ``Brent.Formal.OrbitClosure.orbitClosure_dimension_eq_143,
+    ``Brent.Formal.OrbitClosure.orbitClosure_localDimension_eq_143,
+    ``Brent.Formal.OrbitClosure.point_mem_orbitClosure,
+    ``Brent.Formal.NormalEliminationZ3.coeff_frame_eqAt,
+    ``Brent.Formal.NormalEliminationZ3.inverse_in_frame,
+    ``Brent.Formal.NormalEliminationZ3.normal_elimination_frozen_frame,
+    ``Brent.Formal.NormalEliminationZ3.weighted_residual_mod_cube,
+    ``Brent.Formal.NormalEliminationZ3.actual_residual_initial_quadric,
+    ``Brent.Formal.NormalEliminationZ3.liftBilinear_diag,
+    ``Brent.Formal.NormalEliminationZ3.liftPolar_nonmixed,
+    ``Brent.Formal.NormalEliminationZ3.liftPolar_mixed,
+    ``Brent.Formal.NormalEliminationZ3.fullFrameQuadric_mixed
   ]
   for name in theorems do
     let axioms ← collectAxioms name

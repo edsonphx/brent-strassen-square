@@ -180,7 +180,7 @@ The row identities, pivot checks, and coverage are replayed in separate
 kernel batches. The rank and nullity audit permits only Lean's standard
 `propext`, `Classical.choice`, and `Quot.sound`.
 
-## Additional paper-coverage drafts (not compiled)
+## Historical additional paper-coverage drafts (not compiled)
 
 - [~] Arbitrary left-kernel lifting: `Brent.LeftKernelLift.actual_leftKernel_lift_mod3`; uses unit pivots of the integer Jacobian trace. Idempotent projection, linear retraction and explicit free-coordinate basis drafted.
 - [~] Exact anchors 2445 and 5969: `Brent.Catalogue.ExactAnchors`; checks both positive and negative finite certificates over the reference fields and transfers to other fields. Generated catalogue data are needed to evaluate these checks.
@@ -199,10 +199,30 @@ All new major declarations are included in `Audit.lean`. Existing compiled/draft
 - [~] Prime 65521 and sufficient determinant bound: `Brent.PaperDetails` (Leibniz, not the general Hadamard inequality).
 - [~] Independent external source binding verifier in CI; tested on synthetic data only.
 
-### Third coverage extension (not compiled)
+### Third coverage extension (historical snapshot) (not compiled)
 
 - [~] Actual normal elimination over R0 and naturality of every residual equation: `Brent.Formal.NormalEliminationZ3.normal_elimination_exists`. The explicit bridge to the paper's frozen tangent frame and its quadratic initial forms is not complete.
 - [~] Exact squared Hadamard inequality for every relevant minor order (≤4): `Brent.PaperDetails.HadamardSmall.squared_hadamard`, `censusMinor_vanishing_iff_hadamard`. Independent finite arithmetic enumeration passed; not a kernel replay.
 - [~] Full direct-sum graded ring assembly: `Brent.CM.GradedRingAssembly.lemma41_ringEquiv`, `lemma41_ringEquiv_of`. The separate bundled identification of its source as the polynomial quotient by the ideal of initial forms remains open.
 
 Still open: geometric orbit closure dimension, polynomial quotient identification, tangent-frame comparison noted above, and kernel-level catalogue provenance. Original NPZ and generated catalogue absent from the input. No compilation or kernel replay claimed for these new declarations.
+
+## Fourth coverage extension — current source status
+
+All entries below are **drafted, not compiled**. This supersedes earlier
+open-row descriptions for these specific targets; it does not certify Lean
+elaboration, kernel acceptance, or an independent complete paper audit.
+
+| Target | Declaration(s) | Status |
+|---|---|---|
+| Geometric orbit closure (not only tangent rank) | `Formal.OrbitClosure.orbitClosure_vanishingIdeal`, `orbit_trdeg_lower`, `orbit_trdeg_upper`, `orbitClosure_dimension_eq_143`, `orbitClosure_localDimension_eq_143` | Draft: actual orbit vanishing ideal over infinite fields, normalized 143-parameter chart, both transcendence-degree bounds. Includes algebraically closed fields in the paper's characteristics. |
+| Original quadratic ideal height | `CM.quadraticIdeal_height_eq_54` | Prior draft retained. |
+| Literal polynomial quotient in Lemma 4.1 | `CM.GradedRingAssembly.projection_ker`, `CM.GradedPolynomial.basePolynomialEquiv`, `lemma41_finite_polynomialQuotientEquiv` | Draft: actual homogeneous coefficient map, kernel ideal, multiplication and finite-prefix regularity, not just degreewise dimensions. |
+| Full left-kernel freeness and retraction | `LeftKernelLift.leftKernel_linear_retraction`, `leftKernelFreeEquiv`, `leftKernelBasis` | Prior drafts retained. |
+| Reduction and the frozen integral frame | `Formal.NormalEliminationZ3.normal_elimination_frozen_frame`, `actual_residual_initial_quadric`, `fullFrameQuadric_mixed` | Draft: actual normal equations, reduction of the substitution and exact mixed coefficients using the lifted left-kernel covectors. |
+| Hadamard and modulus | `PaperDetails.HadamardSmall.squared_hadamard`, `censusMinor_vanishing_iff_hadamard`, `PaperDetails.censusPrime_isPrime` | Prior drafts retained. |
+| Original catalogue provenance | `tools/catalogue/verify_source_binding.py` and CI | External verifier retained; original NPZ absent, real dataset replay and kernel-level source binding not established. Exact anchor count drafts require generated catalogue data. |
+
+The remaining catalogue provenance issue is not closed by the mathematical
+drafts. No original-data validation or complete kernel replay is claimed.
+The paper is unchanged. All major new declarations are registered in Audit.lean.

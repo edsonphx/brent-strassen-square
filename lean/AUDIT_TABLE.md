@@ -123,7 +123,7 @@ yet validated), **open** (not formalized; reason given).
 | 807–830 | The matching permutation `π`; the sample coefficient `M₀,₁₉` | `quadraticMatching_bijective`, `archived_mixed_pivots`, `PaperDetails.appendix_mixed_entry`, `appendix_covector_entry`, `appendix_unique_support`, `appendix_earlier_zero`, `appendix_projected_coefficient` | compiled (matching and pivots); drafted (worked example) | Numeric example now has direct source statements. |
 | 831–900 | Independent replay specification | — | not a claim | Verifier description; the Lean kernel checks replace it. |
 
-## Open rows
+## Historical open rows (see latest extension below)
 
 1. **Regular sequence (lines 444–456) and the dimension step of Lemma 4.1 (457–482).** Need Cohen–Macaulay and Hilbert–Samuel theory, absent from Mathlib at our pin. The Gröbner basis, height 54 and the graded presentation are formalized; the bound they serve is compiled by another route.
 2. **Regular-sequence lift over `ℤ₍₃₎` (lines 521–545).** Drafted in `CM/LiftInstance.lean` and `CM/LiftedQuadrics.lean` (lifted quadrics from lifted rows); the left-kernel property has a draft in `CM.LiftedQuadrics.lamExact_annihilates`. The characteristic-zero bound is compiled by another route.
@@ -139,7 +139,7 @@ yet validated), **open** (not formalized; reason given).
 | Appendix A.2 worked example | `PaperDetails.appendix_*` | Draft, directly checking actual sparse mixed entries and covector |
 | Faithful modular reduction of bounded determinants | `PaperDetails.minor_vanishing_iff_mod_prime` | Draft, conditional on the determinant size bound |
 
-## Further coverage extension (source drafts, not kernel acceptance)
+## Further coverage extension (historical source drafts, not kernel acceptance)
 
 | Target | Declaration / evidence | Residual gap |
 |---|---|---|
@@ -153,7 +153,7 @@ yet validated), **open** (not formalized; reason given).
 
 No change to paper.tex. No claim of 100% semantic coverage or successful compilation is made. The existing audit entries labelled compiled are inherited from the input archive and have not been independently replayed here.
 
-### Third coverage extension (source drafts, not kernel acceptance)
+### Third coverage extension (historical snapshot) (source drafts, not kernel acceptance)
 
 - `NormalEliminationZ3.normal_elimination_exists`: actual 2101-equation unit-minor chart over R0, 251 free coordinates, centered inverse, reduction of both inverse identities and every residual equation; selected equations vanish. No assumed minor or assumed inverse. Explicit comparison to the frozen tangent-frame coordinates and its quadratic initial forms remains separate.
 - `HadamardSmall.squared_hadamard`: exact squared bound for every integer entry bound and each order 0–4, including stacked minors. Finite sign-corner checks independently enumerated in Python (66,067 cases; maxima 1, 1, 4, 16, 256). This is not a Lean kernel result. The argument uses endpoint convexity from determinant multilinearity, not the earlier factorial estimate.
@@ -161,3 +161,23 @@ No change to paper.tex. No claim of 100% semantic coverage or successful compila
 - Geometric orbit closure dimension and kernel-level source catalogue provenance still open. The NPZ was not included and could not be retrieved in this environment.
 
 The new declarations are registered in `Audit.lean`. No compilation or kernel acceptance is claimed.
+
+## Fourth coverage extension — current source status
+
+All entries below are **drafted, not compiled**. This supersedes earlier
+open-row descriptions for these specific targets; it does not certify Lean
+elaboration, kernel acceptance, or an independent complete paper audit.
+
+| Target | Declaration(s) | Status |
+|---|---|---|
+| Geometric orbit closure (not only tangent rank) | `Formal.OrbitClosure.orbitClosure_vanishingIdeal`, `orbit_trdeg_lower`, `orbit_trdeg_upper`, `orbitClosure_dimension_eq_143`, `orbitClosure_localDimension_eq_143` | Draft: actual orbit vanishing ideal over infinite fields, normalized 143-parameter chart, both transcendence-degree bounds. Includes algebraically closed fields in the paper's characteristics. |
+| Original quadratic ideal height | `CM.quadraticIdeal_height_eq_54` | Prior draft retained. |
+| Literal polynomial quotient in Lemma 4.1 | `CM.GradedRingAssembly.projection_ker`, `CM.GradedPolynomial.basePolynomialEquiv`, `lemma41_finite_polynomialQuotientEquiv` | Draft: actual homogeneous coefficient map, kernel ideal, multiplication and finite-prefix regularity, not just degreewise dimensions. |
+| Full left-kernel freeness and retraction | `LeftKernelLift.leftKernel_linear_retraction`, `leftKernelFreeEquiv`, `leftKernelBasis` | Prior drafts retained. |
+| Reduction and the frozen integral frame | `Formal.NormalEliminationZ3.normal_elimination_frozen_frame`, `actual_residual_initial_quadric`, `fullFrameQuadric_mixed` | Draft: actual normal equations, reduction of the substitution and exact mixed coefficients using the lifted left-kernel covectors. |
+| Hadamard and modulus | `PaperDetails.HadamardSmall.squared_hadamard`, `censusMinor_vanishing_iff_hadamard`, `PaperDetails.censusPrime_isPrime` | Prior drafts retained. |
+| Original catalogue provenance | `tools/catalogue/verify_source_binding.py` and CI | External verifier retained; original NPZ absent, real dataset replay and kernel-level source binding not established. Exact anchor count drafts require generated catalogue data. |
+
+The remaining catalogue provenance issue is not closed by the mathematical
+drafts. No original-data validation or complete kernel replay is claimed.
+The paper is unchanged. All major new declarations are registered in Audit.lean.
