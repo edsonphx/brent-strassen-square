@@ -520,16 +520,20 @@ theorem orbit_trdeg_upper : Algebra.trdeg k (OrbitRing k) ≤ (143 : Cardinal) :
     simpa using hb.cardinalMk_eq_trdeg.symm
   exact (trdeg_le_of_injective e he).trans (le_of_eq ht)
 
-/-- Geometric dimension of the actual algebraic orbit closure over an
-infinite field, in particular an algebraic closure of Q or F_3. -/
-theorem orbitClosure_dimension_eq_143 [Infinite k] :
-    ringKrullDim (MvPolynomial Var k ⧸ Component.vanishingIdeal k (orbitClosure k)) = 143 := by
-  rw [orbitClosure_vanishingIdeal]
+/-- Dimension of the scheme-theoretic generic orbit closure, over any field. -/
+theorem orbitRing_dimension_eq_143 : ringKrullDim (OrbitRing k) = 143 := by
   obtain ⟨n,hn,ht⟩ := finiteType_dim_trdeg k (OrbitRing k)
   have he := le_antisymm (orbit_trdeg_upper k) (orbit_trdeg_lower k)
   rw [ht] at he
   have hn' : n = 143 := by exact_mod_cast he
   rw [hn, hn'] <;> rfl
+
+/-- Geometric dimension of the actual algebraic orbit closure over an
+infinite field, in particular an algebraic closure of Q or F_3. -/
+theorem orbitClosure_dimension_eq_143 [Infinite k] :
+    ringKrullDim (MvPolynomial Var k ⧸ Component.vanishingIdeal k (orbitClosure k)) = 143 := by
+  rw [orbitClosure_vanishingIdeal]
+  exact orbitRing_dimension_eq_143 k
 
 /-- The same geometric dimension holds at every closed point of the
 orbit closure, including the recursive point. -/

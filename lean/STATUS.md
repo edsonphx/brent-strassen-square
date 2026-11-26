@@ -226,3 +226,23 @@ elaboration, kernel acceptance, or an independent complete paper audit.
 The remaining catalogue provenance issue is not closed by the mathematical
 drafts. No original-data validation or complete kernel replay is claimed.
 The paper is unchanged. All major new declarations are registered in Audit.lean.
+
+## Final three follow-up items — current status
+
+- [~] `Brent.main_theorem` now includes the scheme-theoretic orbit closure dimension
+  and the actual geometric closure dimension over infinite fields, in addition to the
+  differential rank. This strengthened theorem is a new source draft.
+- [~] `Brent.Formal.NormalEliminationZ3.normal_elimination_completion_baseChange` and
+  `completion_frozen_residual_quotient`: the selected unit minor, inverse and frozen
+  251-variable chart give an explicit quotient by the full residual ideal over R0
+  and on specialization to each field in the paper. The field source is the actual
+  `SquareCompletion`, via `sqEquiv`. New source draft, not compiled.
+- [x] External source binding and catalogue replay on the real pinned NPZ: all
+  33,483,072 coordinates and 341 generated Lean file hashes checked; 87 rank
+  exclusions and 2 anchor exclusions reproduced; exact useful anchors verified
+  over Q and F3. See `Brent/Catalogue/SOURCE_REPLAY.md`.
+- [~] Lean elaboration, kernel replay and axiom audit for the new declarations and
+  generated catalogue remain pending. External source binding is not a Lean
+  implementation of SHA-256/NPZ parsing.
+
+This section supersedes historical catalogue-absent and residual-presentation-open descriptions.

@@ -115,6 +115,8 @@ jobs:
           "$RUNNER_TEMP/venv/bin/python" -I tools/catalogue/verify_source_binding.py "$RUNNER_TEMP/catalogue/alphatensor_14236_factorizations.npz" .
           # The generated files must match the helper's published hashes.
           sed '1s/^\xEF\xBB\xBF//' Brent/Catalogue/GENERATED_SHA256.txt | tr -d '\r' | sha256sum -c --quiet -
+          # Independently bind the earlier 87 rank-exclusion witnesses to the same source.
+          "$RUNNER_TEMP/venv/bin/python" -I ../tools/verify_alphatensor_witnesses.py "$RUNNER_TEMP/catalogue/alphatensor_14236_factorizations.npz" Brent/Generated/AlphaTensorBound*.lean
       - name: §7 catalogue census (14,236 points)
         run: |
           lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)

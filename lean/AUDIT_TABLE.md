@@ -28,7 +28,7 @@ yet validated), **open** (not formalized; reason given).
 | 689–694 | The filter: six rank-two terms each accommodating six rank-one terms, every rank-one term with a candidate anchor | `Catalogue.AnchorTest` | drafted | Matches `alphatensor_rank_profiles.py` (`Useful`: rank two with at least six children). |
 | 696–698 | Over ℚ and 𝔽₃ exactly 14,149 points have the full profile | `Section7.census` (1), `Catalogue.Q/F3.card_fullProfile` | drafted | Every field of characteristic 3 or 0. |
 | 698–699 | These are precisely the points satisfying the rank bounds, which exclude 87 entries | `Section7.census` (2, 3), `Section7.rank_bound_exclusion` | drafted | Excluded from the closure of the saturated families. |
-| 700–703 | The space test excludes 2445 and 5969 (two and one useful anchors) | `Section7.census` (4), `Section7.anchor_exclusion` | drafted | Excluded from the closure of the families closed under all equivalences (`eqClosed`). Exact counts now have draft certificate proofs `Catalogue.usefulAnchors_count_2445`, `usefulAnchors_count_5969`; the generated catalogue must be present to check them. |
+| 700–703 | The space test excludes 2445 and 5969 (two and one useful anchors) | `Section7.census` (4), `Section7.anchor_exclusion` | drafted | Excluded from the closure of the families closed under all equivalences (`eqClosed`). Exact counts now have draft certificate proofs `Catalogue.usefulAnchors_count_2445`, `usefulAnchors_count_5969`; the generated catalogue was replayed against the pinned NPZ; Lean kernel checks remain pending. |
 | 703–704 | A decomposition in the closure with this profile requires at least six | `Census.anchorTest_of_shape` | drafted | — |
 | 704–705 | All 14,147 points passing both tests have the full profile | `Section7.census` (5) | drafted | — |
 | 705–707 | Their membership remains open; other components through `p` possible | — | not a claim | Statement of an open problem. |
@@ -37,8 +37,8 @@ yet validated), **open** (not formalized; reason given).
 
 | Lines | Claim | Declaration | Status | Difference from the paper |
 |---|---|---|---|---|
-| abstract | Local dimension 197 over `F̄₃` and in characteristic 0; tangent dimension 251 | `main_theorem` | compiled | Every field of characteristic 3 or 0, not only `F̄₃`. |
-| abstract | Two smooth formal branches of dimension 197 with intersection dimension 143; Hilbert function `(1, 251, 30978)` | `main_theorem` | compiled | — |
+| abstract | Local dimension 197 over `F̄₃` and in characteristic 0; tangent dimension 251 | `main_theorem` | drafted (strengthened) | Every field of characteristic 3 or 0, not only `F̄₃`. |
+| abstract | Two smooth formal branches of dimension 197 with intersection dimension 143; Hilbert function `(1, 251, 30978)` | `main_theorem` | drafted (strengthened) | — |
 | abstract | Explicit deformations reach smooth points on both families | `Section7.smooth_points` | compiled | — |
 | abstract | The catalogue comparison rules out membership for 89 of 14,236 schemes | `Section7.excluded_count`, `Section7.rank_bound_exclusion`, `Section7.anchor_exclusion` | drafted | — |
 | 20–58 | Background, related work (Li–Bao–Zhang, Li–Zhang–Ke, Brysiewicz–Sinn) | — | not a claim | Citations of other papers' results. |
@@ -52,7 +52,7 @@ yet validated), **open** (not formalized; reason given).
 | 100–110 | `M_n`, the Brent map with 2352 variables and 4096 equations | `matrixMultiplicationEntry`, `equation`, `square_variable_count`, `square_equation_count` | compiled | — |
 | 111–115 | `V = Br_red`; local Krull dimensions agree because reduction preserves primes | `quotient_dimension_of_le_nilradical`, `reduced_localDimension_eq_197` | compiled | — |
 | 118–140 | The integral point `p` (Strassen table, Kronecker shuffle) lies in `Br(ℤ)` | `strassen_solves`, `strassenSquare_solves` | compiled | Over every commutative ring. |
-| 141–152 | Theorem 1.1: rank 2101, tangent 251, local dimension 197, orbit 143, two smooth branches of dimension 197 with intersection 143, Hilbert function `(1, 251, 30978)` | `main_theorem` | compiled | `k` any field of characteristic 3 or 0 (the paper: `F̄₃` or characteristic 0). "At least two distinct smooth branches" is stated as two distinct minimal primes `𝔭_L ≠ 𝔭_R` of `Â` with `Â ⧸ 𝔭 ≃ k⟦197⟧`. |
+| 141–152 | Theorem 1.1: rank 2101, tangent 251, local dimension 197, orbit 143, two smooth branches of dimension 197 with intersection 143, Hilbert function `(1, 251, 30978)` | `main_theorem` | drafted (strengthened) | `k` any field of characteristic 3 or 0 (the paper: `F̄₃` or characteristic 0). "At least two distinct smooth branches" is stated as two distinct minimal primes `𝔭_L ≠ 𝔭_R` of `Â` with `Â ⧸ 𝔭 ≃ k⟦197⟧`. |
 
 ## §3 Two exact families and the tangent split (lines 176–390)
 
@@ -181,3 +181,16 @@ elaboration, kernel acceptance, or an independent complete paper audit.
 The remaining catalogue provenance issue is not closed by the mathematical
 drafts. No original-data validation or complete kernel replay is claimed.
 The paper is unchanged. All major new declarations are registered in Audit.lean.
+
+## Final three follow-up items (supersedes historical open rows above)
+
+Base revision: `049d1d4b416ad439cd6db65e7ee9dceac747e59a`. The paper is unchanged.
+The new Lean source below is drafted, not elaborated or kernel-checked in this audit.
+
+| Paper claim | Declaration / evidence | Current status |
+|---|---|---|
+| Theorem 1.1 and §3: geometric orbit dimension 143, not merely differential rank | `Brent.main_theorem` now includes `OrbitClosure.orbitRing_dimension_eq_143` and the dimension of the actual Zariski closure over infinite fields; `orbitClosure_dimension_eq_143` | Draft, bundled in the main theorem; no additional assumptions for the paper's fields. |
+| §§4–5: the actual completed local ring is the quotient by all residual equations after eliminating the 2101 normals in the frozen frame | `NormalEliminationZ3.normal_elimination_completion_baseChange`, `completion_frozen_residual_quotient`, `residualQuotientEquiv` | Draft: exact ideal image and kernel containment, surjective frozen-frame map, coefficient change and `sqEquiv` to the adic completion. Includes all 4096 residuals; `card_unselected` and `residualIdeal_eq_unselected` identify the ideal with its 1995 unselected generators. |
+| §7: catalogue provenance | `Brent/Catalogue/SOURCE_REPLAY.md`, `tools/catalogue/verify_source_binding.py`, `GENERATED_SHA256.txt` | Actual pinned NPZ validated externally: all 33,483,072 factor entries and all 341 generated files agree; exact rank/anchor census reproduced. Kernel acceptance of the generated Lean certificate theorems is still pending. |
+
+No unresolved source-level target is asserted for these three items. This does not certify compilation or prove NPZ parsing / SHA-256 inside Lean; the external data boundary is explicitly recorded.

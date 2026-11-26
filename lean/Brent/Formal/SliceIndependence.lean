@@ -26,7 +26,7 @@ set_option linter.unusedSectionVars false
 
 open MvPowerSeries.WithPiTopology in
 /-- Setting variables to zero commutes with substitution. -/
-theorem killCompl_subst {k : Type} [Field k] {σ τ υ : Type} [Finite υ] (e : σ ↪ τ)
+theorem killCompl_subst {k : Type} [CommRing k] {σ τ υ : Type} [Finite υ] (e : σ ↪ τ)
     {a : υ → MvPowerSeries τ k} (ha0 : ∀ x, constantCoeff (a x) = 0) (f : MvPowerSeries υ k) :
     killCompl e (subst a f) = subst (fun x => killCompl e (a x)) f := by
   letI : UniformSpace k := ⊥

@@ -3,7 +3,7 @@ import Brent.KernelCheck.SquareJacobianRank
 import Brent.KernelCheck.HilbertValues
 import Brent.Formal.Completion
 import Brent.Formal.Branches
-import Brent.Formal.OrbitDimension
+import Brent.Formal.OrbitClosure
 import Brent.LocalDimension
 
 /-!
@@ -21,7 +21,9 @@ Clause map (paper → Lean):
 3. `dim_p V_k(4,4,4|49) = 197` → `squareLocalDimension_eq_197` (the scheme local ring) and
    `reduced_localDimension_eq_197` (its reduction; nilpotents do not change Krull dimension).
 4. Orbit dimension 143 → `Formal.finrank_range_dOrbit` (rank of the differential of the
-   146-parameter isotropy and term-rescaling orbit map at `p`, every field).
+   146-parameter isotropy and term-rescaling orbit map at `p`, every field), and
+   `Formal.OrbitClosure.orbitRing_dimension_eq_143` and
+   `Formal.OrbitClosure.orbitClosure_dimension_eq_143` (geometric orbit closure over infinite fields).
 5. Two distinct smooth 197-dimensional formal branches → `Formal.sqBranchPrime_ne`,
    `sqBranchPrime_minimal` (minimal primes of the `𝔪`-adic completion `SquareCompletion k` of the
    scheme local ring), `Formal.sqBranchQuotEquiv` (each quotient is a power series ring) and
@@ -81,6 +83,9 @@ theorem main_theorem (k : Type) [Field k] (hk : CharP k 3 ∨ CharZero k) :
     squareLocalDimension k = 197 ∧
     ringKrullDim (SquareLocalRing k ⧸ nilradical (SquareLocalRing k)) = 197 ∧
     Module.finrank k (LinearMap.range (Formal.dOrbit k)) = 143 ∧
+    ringKrullDim (Formal.OrbitClosure.OrbitRing k) = 143 ∧
+    (Infinite k → ringKrullDim (MvPolynomial Formal.Var k ⧸
+      Formal.Component.vanishingIdeal k (Formal.OrbitClosure.orbitClosure k)) = 143) ∧
     Formal.sqBranchPrime k true ≠ Formal.sqBranchPrime k false ∧
     (∀ left : Bool, Formal.sqBranchPrime k left ∈ minimalPrimes (SquareCompletion k) ∧
       Nonempty ((SquareCompletion k ⧸ Formal.sqBranchPrime k left) ≃+*
@@ -95,7 +100,9 @@ theorem main_theorem (k : Type) [Field k] (hk : CharP k 3 ∨ CharZero k) :
       hilbertValue k (UpperBound.A k) 2 = 30978) :=
   ⟨square_jacobian_rank k, square_jacobian_nullity k, HilbertInitial.hilbertValue_one k,
     squareLocalDimension_eq_197 k hk, reduced_localDimension_eq_197 k hk,
-    Formal.finrank_range_dOrbit k, Formal.sqBranchPrime_ne k,
+    Formal.finrank_range_dOrbit k, Formal.OrbitClosure.orbitRing_dimension_eq_143 k,
+    (fun hi => by letI := hi; exact Formal.OrbitClosure.orbitClosure_dimension_eq_143 k),
+    Formal.sqBranchPrime_ne k,
     fun left => ⟨sqBranchPrime_minimal k hk left, ⟨Formal.sqBranchQuotEquiv k left⟩,
       Formal.card_branchVar k left⟩,
     Formal.ringKrullDim_sqIntersection k, ⟨Formal.sqIntersectionEquiv k⟩, Formal.card_orbitVar k,

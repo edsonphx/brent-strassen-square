@@ -44,7 +44,7 @@ import Brent.HadamardSmall
 import Brent.CM.GradedRingAssembly
 import Brent.CM.GradedPolynomial
 import Brent.Formal.OrbitClosure
-import Brent.Formal.NormalFrameZ3
+import Brent.Formal.NormalQuotient
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -584,12 +584,28 @@ run_cmd do
     ``Brent.Formal.OrbitClosure.orbit_trdeg_lower,
     ``Brent.Formal.OrbitClosure.ker_gaugePsi,
     ``Brent.Formal.OrbitClosure.orbit_trdeg_upper,
+    ``Brent.Formal.OrbitClosure.orbitRing_dimension_eq_143,
     ``Brent.Formal.OrbitClosure.orbitClosure_dimension_eq_143,
     ``Brent.Formal.OrbitClosure.orbitClosure_localDimension_eq_143,
     ``Brent.Formal.OrbitClosure.point_mem_orbitClosure,
     ``Brent.Formal.NormalEliminationZ3.coeff_frame_eqAt,
     ``Brent.Formal.NormalEliminationZ3.inverse_in_frame,
     ``Brent.Formal.NormalEliminationZ3.normal_elimination_frozen_frame,
+    ``Brent.Formal.NormalEliminationZ3.residualQuotientEquiv,
+    ``Brent.Formal.NormalEliminationZ3.free_restriction_injective,
+    ``Brent.Formal.NormalEliminationZ3.free_frame_unit,
+    ``Brent.Formal.NormalEliminationZ3.frame_subst_bijective,
+    ``Brent.Formal.NormalEliminationZ3.frozen_residual_map_of_free_bijective,
+    ``Brent.Formal.NormalEliminationZ3.card_unselected,
+    ``Brent.Formal.NormalEliminationZ3.residualIdeal_eq_unselected,
+    ``Brent.Formal.NormalEliminationZ3.normal_elimination_frozen_quotient,
+    ``Brent.Formal.NormalEliminationZ3.frame_subst_bijective_baseChange,
+    ``Brent.Formal.NormalEliminationZ3.map_eqAt_integral,
+    ``Brent.Formal.NormalEliminationZ3.map_newCoord_integral,
+    ``Brent.Formal.NormalEliminationZ3.map_freeFrame_integral,
+    ``Brent.Formal.NormalEliminationZ3.normal_elimination_completion_baseChange,
+    ``Brent.Formal.NormalEliminationZ3.coefficientMap_exists,
+    ``Brent.Formal.NormalEliminationZ3.completion_frozen_residual_quotient,
     ``Brent.Formal.NormalEliminationZ3.weighted_residual_mod_cube,
     ``Brent.Formal.NormalEliminationZ3.actual_residual_initial_quadric,
     ``Brent.Formal.NormalEliminationZ3.liftBilinear_diag,
