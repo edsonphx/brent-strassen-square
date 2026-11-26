@@ -213,12 +213,14 @@ theorem derivative_injective (h2 : (2 : k) ≠ 0) (d : SquareSummand → Mode �
     funext i n
     obtain ⟨h0, h1, h2'⟩ := lemma_base h2 (x i 0) (x i 1) (x i 2) (hx i 0) (hx i 1) (hx i 2)
       (fun m j => (lines i j m).1)
-    fin_cases n <;> simp [h0, h1, h2']
+    fin_cases n
+    exacts [h0, h1, h2']
   have hy0 : y = 0 := by
     funext j n
     obtain ⟨h0, h1, h2'⟩ := lemma_base h2 (y j 0) (y j 1) (y j 2) (hy j 0) (hy j 1) (hy j 2)
       (fun m i => (lines i j m).2)
-    fin_cases n <;> simp [h0, h1, h2']
+    fin_cases n
+    exacts [h0, h1, h2']
   refine ⟨?_, hx0, hy0⟩
   funext s m
   have := h s m
@@ -234,5 +236,161 @@ theorem two_ne_zero_of (hk : CharP k 3 ∨ CharZero k) : (2 : k) ≠ 0 := by
     have : (1 : k) = 0 := by linear_combination h3 - h2
     exact one_ne_zero this
   · exact two_ne_zero
+
+
+/-! ### Lines 289–320: the 27 mixed global directions
+
+`Mat₄ = (kI ⊗ kI) ⊕ (H ⊗ kI) ⊕ (kI ⊗ H) ⊕ (H ⊗ H)`. An element of `H ⊗ H` is `∑ᵥ hᵥ ⊗ eᵥ` with
+`hᵥ ∈ H` and the basis `e₀ = E₁₂`, `e₁ = E₂₁`, `e₂ = diag(1, −1)` of `H` (`KMat`). The global
+action of `(K_u, K_v, K_w)` has the same cyclic form as `act` (`globalDerivative`). -/
+
+/-- The basis `E₁₂, E₂₁, diag(1, −1)` of `H = 𝔰𝔩₂`. -/
+def eB (k : Type) [Field k] : Fin 3 → Matrix (Fin 2) (Fin 2) k :=
+  ![!![0, 1; 0, 0], !![0, 0; 1, 0], !![1, 0; 0, -1]]
+
+/-- `∑ᵥ gᵥ ⊗ eᵥ ∈ Mat₂ ⊗ H`. -/
+def KMat (g : Fin 3 → Matrix (Fin 2) (Fin 2) k) : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) k :=
+  ∑ ν, g ν ⊗ₖ eB k ν
+
+/-- The next mode in the cyclic order `u → v → w → u`. -/
+def Mode.next : Mode → Mode
+  | .u => .v
+  | .v => .w
+  | .w => .u
+
+/-- The derivative of the mixed global generators `K_m = KMat (h m)` at summand `s`, mode `m`:
+`K_m F − F K_{next m}` with `F = F_i ⊗ F_j`. -/
+def globalDerivative (h : Mode → Fin 3 → Matrix (Fin 2) (Fin 2) k) (s : SquareSummand)
+    (m : Mode) : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) k :=
+  KMat (h m) * (fac k m s.1 ⊗ₖ fac k m s.2) - (fac k m s.1 ⊗ₖ fac k m s.2) * KMat (h m.next)
+
+theorem kron_sub' (A B C : Matrix (Fin 2) (Fin 2) k) : (A - B) ⊗ₖ C = A ⊗ₖ C - B ⊗ₖ C := by
+  ext ⟨a, b⟩ ⟨c, d⟩
+  simp [Matrix.kronecker_apply, sub_mul]
+
+theorem KMat_sub (g g' : Fin 3 → Matrix (Fin 2) (Fin 2) k) :
+    KMat g - KMat g' = KMat (g - g') := by
+  unfold KMat
+  rw [← Finset.sum_sub_distrib]
+  refine Finset.sum_congr rfl fun ν _ => ?_
+  rw [Pi.sub_apply, kron_sub']
+
+theorem KMat_comm (g : Fin 3 → Matrix (Fin 2) (Fin 2) k) (F : Matrix (Fin 2) (Fin 2) k) :
+    KMat g * (F ⊗ₖ 1) - (F ⊗ₖ 1) * KMat g = KMat fun ν => g ν * F - F * g ν := by
+  unfold KMat
+  rw [Finset.sum_mul, Finset.mul_sum, ← Finset.sum_sub_distrib]
+  refine Finset.sum_congr rfl fun ν _ => ?_
+  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, mul_one, one_mul, kron_sub']
+
+/-- Projecting the second tensor factor onto the coefficients of `e₀, e₁, e₂` (which vanish on
+`I`): if `∑ᵥ gᵥ ⊗ eᵥ = d F⊗I + F⊗U + V⊗I`, every `gᵥ` is a multiple of `F`. -/
+theorem KMat_line (h2 : (2 : k) ≠ 0) (g : Fin 3 → Matrix (Fin 2) (Fin 2) k) (d : k)
+    (F U V : Matrix (Fin 2) (Fin 2) k)
+    (h : KMat g = d • (F ⊗ₖ 1) + F ⊗ₖ U + V ⊗ₖ 1) : ∀ ν, InLine (g ν) F := by
+  have E : ∀ p r q s, ∑ ν, g ν p q * eB k ν r s =
+      d * (F p q * (1 : Matrix (Fin 2) (Fin 2) k) r s) + F p q * U r s +
+        V p q * (1 : Matrix (Fin 2) (Fin 2) k) r s := by
+    intro p r q s
+    have := congrFun (congrFun h (p, r)) (q, s)
+    simpa only [KMat, Matrix.sum_apply, Matrix.kronecker_apply, Matrix.add_apply,
+      Matrix.smul_apply, smul_eq_mul] using this
+  have b00 : eB k 0 0 0 = 0 := rfl
+  have b01 : eB k 0 0 1 = 1 := rfl
+  have b10 : eB k 0 1 0 = 0 := rfl
+  have b11 : eB k 0 1 1 = 0 := rfl
+  have c00 : eB k 1 0 0 = 0 := rfl
+  have c01 : eB k 1 0 1 = 0 := rfl
+  have c10 : eB k 1 1 0 = 1 := rfl
+  have c11 : eB k 1 1 1 = 0 := rfl
+  have d00 : eB k 2 0 0 = 1 := rfl
+  have d01 : eB k 2 0 1 = 0 := rfl
+  have d10 : eB k 2 1 0 = 0 := rfl
+  have d11 : eB k 2 1 1 = -1 := rfl
+  have o00 : (1 : Matrix (Fin 2) (Fin 2) k) 0 0 = 1 := by simp
+  have o01 : (1 : Matrix (Fin 2) (Fin 2) k) 0 1 = 0 := by simp
+  have o10 : (1 : Matrix (Fin 2) (Fin 2) k) 1 0 = 0 := by simp
+  have o11 : (1 : Matrix (Fin 2) (Fin 2) k) 1 1 = 1 := by simp
+  have hinv : (2 : k) * 2⁻¹ = 1 := mul_inv_cancel₀ h2
+  have g0 : InLine (g 0) F := by
+    refine ⟨U 0 1, ?_⟩
+    ext p q
+    have e := E p 0 q 1
+    simp only [Fin.sum_univ_three, b01, c01, d01, o01] at e
+    rw [Matrix.smul_apply, smul_eq_mul]
+    linear_combination e
+  have g1 : InLine (g 1) F := by
+    refine ⟨U 1 0, ?_⟩
+    ext p q
+    have e := E p 1 q 0
+    simp only [Fin.sum_univ_three, b10, c10, d10, o10] at e
+    rw [Matrix.smul_apply, smul_eq_mul]
+    linear_combination e
+  have g2 : InLine (g 2) F := by
+    refine ⟨(U 0 0 - U 1 1) * 2⁻¹, ?_⟩
+    ext p q
+    have e0 := E p 0 q 0
+    have e1 := E p 1 q 1
+    simp only [Fin.sum_univ_three, b00, c00, d00, o00, b11, c11, d11, o11] at e0 e1
+    rw [Matrix.smul_apply, smul_eq_mul]
+    linear_combination 2⁻¹ * (e0 - e1) - g 2 p q * hinv
+  intro ν
+  fin_cases ν
+  exacts [g0, g1, g2]
+
+/-- Lines 289–320: "the three copies of `H ⊗ H` give 27 independent directions modulo
+`S + L + R'`." If the derivative of mixed generators `K_m = ∑ᵥ h_{m,ν} ⊗ eᵥ ∈ H ⊗ H` equals, at
+every summand and mode, a derivative from rescalings and the two block lists, all `h` vanish. -/
+theorem mixed_independent (h2 : (2 : k) ≠ 0) (h : Mode → Fin 3 → Matrix (Fin 2) (Fin 2) k)
+    (htr : ∀ m ν, (h m ν).trace = 0) (d : SquareSummand → Mode → k)
+    (x y : Fin 7 → Fin 3 → Matrix (Fin 2) (Fin 2) k)
+    (heq : ∀ s m, globalDerivative h s m = derivative d x y s m) : h = 0 := by
+  -- Step 1, at the identity position `(0, 0)`: `K_m = K_{next m}`.
+  have step1 : ∀ m, h m = h m.next := by
+    intro m
+    have L : globalDerivative h (0, 0) m = KMat (h m - h m.next) := by
+      simp only [globalDerivative, fac_zero, Matrix.one_kronecker_one, mul_one, one_mul, KMat_sub]
+    have R : derivative d x y (0, 0) m =
+        d (0, 0) m • ((1 : Matrix (Fin 2) (Fin 2) k) ⊗ₖ 1) +
+          (1 : Matrix (Fin 2) (Fin 2) k) ⊗ₖ act (x 0 0) (x 0 1) (x 0 2) m 1 +
+          act (y 0 0) (y 0 1) (y 0 2) m 1 ⊗ₖ 1 := by
+      simp only [derivative, fac_zero]
+    have e := (L.symm.trans (heq (0, 0) m)).trans R
+    have lines := KMat_line h2 _ _ _ _ _ e
+    funext ν
+    obtain ⟨t, ht⟩ := lines ν
+    have tr := congrArg Matrix.trace ht
+    rw [Pi.sub_apply, Matrix.trace_sub, htr, htr, sub_zero, Matrix.trace_smul, Matrix.trace_one,
+      Fintype.card_fin, smul_eq_mul] at tr
+    have t0 : t = 0 := by
+      have t2 : t * 2 = 0 := by
+        have h' := tr.symm
+        push_cast at h'
+        exact h'
+      exact (mul_eq_zero.mp t2).resolve_right h2
+    rw [t0, zero_smul, Pi.sub_apply] at ht
+    exact sub_eq_zero.mp ht
+  have huv := step1 .u
+  have hvw := step1 .v
+  simp only [Mode.next] at huv hvw
+  -- Step 2, at `(i, 0)` in the first mode with `i = 2, 4`: `[hᵥ, A_i] ∈ k A_i`.
+  have comm : ∀ i : Fin 7, ∀ ν, InLine (h .u ν * fac k .u i - fac k .u i * h .u ν)
+      (fac k .u i) := by
+    intro i
+    have e := heq (i, 0) .u
+    simp only [globalDerivative, derivative, Mode.next, fac_zero, ← huv] at e
+    rw [KMat_comm] at e
+    exact KMat_line h2 _ _ _ _ _ e
+  have hu0 : h .u = 0 := by
+    funext ν
+    exact eq_zero_of_comm h2 (htr .u ν) (comm 2 ν) (comm 4 ν)
+  funext m
+  cases m
+  · exact hu0
+  · rw [← huv, hu0]
+  · rw [← hvw, ← huv, hu0]
+
+/-- The domain `(H ⊗ H)³` has dimension `3 · 3 · 3 = 27`: three modes, three basis vectors `eᵥ`
+and a trace-free `hᵥ ∈ H` (dimension three) for each. -/
+theorem mixed_count : Fintype.card Mode * Fintype.card (Fin 3) * 3 = 27 := by decide
 
 end Brent.Section3

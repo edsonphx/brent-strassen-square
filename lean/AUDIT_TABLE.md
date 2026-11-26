@@ -63,7 +63,7 @@ yet validated), **open** (not formalized; reason given).
 | 200–226 | `D_L`, `D_R` are solutions over any ring; both send the identity to `p`; `g_i = 1` gives the same orbit map | `leftFamily_solves`, `rightFamily_solves`, `leftFamily_at_identity`, `rightFamily_at_identity`, F1 overlap (`value true = value false` at trivial blocks) | compiled | — |
 | 228–252 | Lemma 3.1: the three copies of `𝔰𝔩₂` act injectively on Strassen's factor lines | `Section3.lemma_base` | drafted | Every field with `2 ≠ 0` (`Section3.two_ne_zero_of` for characteristic 3 or 0). |
 | 253–288 | Projection to `Mat₂/kF`; the map from rescalings and the two block lists to the tangent space is injective | `Section3.kron_line`, `Section3.derivative_injective` | drafted | The derivative is written by the formula of lines 262–267 (`Section3.derivative`). |
-| 289–320 | The 27 mixed global directions are independent modulo `S + L + R'` | — | **open** | Not yet formalized. |
+| 289–320 | The 27 mixed global directions are independent modulo `S + L + R'` | `Section3.mixed_independent`, `Section3.KMat_line`, `Section3.mixed_count` | drafted | `H ⊗ H` is written as `∑ᵥ hᵥ ⊗ eᵥ` with trace-free `hᵥ`; the global derivative has the cyclic form of lines 236–240. |
 | 321–328 | Dimension table: `T₀ = 143`, `T₀ + L = T₀ + R' = 197`, `T₀ + L + R' = 251` | `finrank_range_dOrbit`, `chart_independent_derivatives`, `archived_frame_split`, `square_jacobian_nullity` | compiled | The 197 is stated as 197 independent chart derivatives per family. |
 | 329 | The two branch tangent spaces intersect precisely in `T₀` | `TangentData.branchTangent_inf`, `finrank_branchTangent`, `finrank_orbitTangent`, `branchTangent_ne` | drafted | Branch tangent space = span of that family's archived first derivatives (`branchTangent_generators`). |
 | 330–337 | Orbit dimension 143: fibers contain the central kernel (≤ 143) and an invertible 143-minor gives 143 formal coordinates (≥ 143) | `Formal.finrank_range_dOrbit`, `Formal.ringKrullDim_slice` | compiled | — |
@@ -125,6 +125,5 @@ yet validated), **open** (not formalized; reason given).
 
 ## Open rows
 
-1. **The 27 mixed global directions (lines 289–320).** Not yet formalized.
-2. **Gröbner basis, height 54, regular sequence (lines 444–456) and Lemma 4.1 (457–482).** Steps of the paper's upper-bound proof. The bound itself is compiled by another route.
-3. **Splitting over `ℤ₍₃₎` and the regular-sequence lift (lines 505–545).** Steps of the characteristic-zero transfer. The bound itself is compiled by another route.
+1. **Gröbner basis, height 54, regular sequence (lines 444–456) and Lemma 4.1 (457–482).** Steps of the paper's upper-bound proof. The bound itself is compiled by another route.
+2. **Splitting over `ℤ₍₃₎` and the regular-sequence lift (lines 505–545).** Steps of the characteristic-zero transfer. The bound itself is compiled by another route.
