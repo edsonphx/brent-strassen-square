@@ -26,6 +26,9 @@ import Brent.CM.HilbertSamuelPoly
 import Brent.CM.Lemma41
 import Brent.CM.RegularCoprime
 import Brent.CM.LiftInstance
+import Brent.CM.Lemma41Gen
+import Brent.CM.PowerSeriesInstance
+import Brent.CM.LiftedQuadrics
 import Brent.BaseLemma
 import Brent.BranchTangents
 import Brent.SecondOrderLift
@@ -470,7 +473,18 @@ run_cmd do
     ``Brent.CM.LiftInstance.lifted_regular_local,
     ``Brent.CM.LiftInstance.lifted_regular_flat,
     ``Brent.CM.LiftInstance.ker_rho3,
-    ``Brent.CM.LiftInstance.lifted_quadrics_regular
+    ``Brent.CM.LiftInstance.lifted_quadrics_regular,
+    ``Brent.CM.length_le_card,
+    ``Brent.CM.pow_le_span_mono,
+    ``Brent.CM.orderLE_hilbR_zero,
+    ``Brent.CM.lemma41_of_span,
+    ``Brent.CM.PSInstance.Hs_mul,
+    ``Brent.CM.PSInstance.Hs_relI,
+    ``Brent.CM.PSInstance.hreg_q,
+    ``Brent.CM.PSInstance.lemma41_q,
+    ``Brent.CM.LiftedQuadrics.map_qtOf,
+    ``Brent.CM.LiftedQuadrics.qtOf_regular,
+    ``Brent.CM.LiftedQuadrics.qtCanon_regular
   ]
   for name in theorems do
     let axioms ← collectAxioms name
