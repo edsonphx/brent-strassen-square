@@ -156,9 +156,9 @@ mode matrix `M` of `v` (after a summand permutation), then `v'` is dominated by 
 the `GL₄³`-action, term scalings, summand permutations, cyclic mode permutations and the
 transpose symmetry. -/
 theorem dominated_of_formula {v' v : Var → k} (σ : SquareSummand ≃ SquareSummand)
-    (h : ∀ s m, ∃ m' (L R : Matrix SquareVertex SquareVertex k),
+    (h : ∀ s m, ∃ (m' : Mode) (L R : Matrix SquareVertex SquareVertex k),
       modeMat v' s m = L * modeMat v (σ s) m' * R ∨
-        modeMat v' s m = L * (modeMat v (σ s) m')ᵀ * R) :
+        modeMat v' s m = L * (modeMat v (σ s) m').transpose * R) :
     Dominated v' v := by
   refine ⟨σ, fun s m => ?_⟩
   obtain ⟨m', L, R, h | h⟩ := h s m
