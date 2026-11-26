@@ -51,7 +51,7 @@ theorem diffPow_eq_zero_of_le {f : ℕ → ℤ} {a n₀ : ℕ} (h : ∀ n ≥ n�
 /-- On the tail, a function of order `≤ a` is a combination of `C(k, i)` with `i < a`. -/
 theorem eq_sum_of_orderLE {f : ℕ → ℤ} {a n₀ : ℕ} (h : ∀ n ≥ n₀, diffPow a f n = 0) (k : ℕ) :
     f (n₀ + k) = ∑ i ∈ range a, (k.choose i : ℤ) * diffPow i f n₀ := by
-  rw [shift_eq_sum_diffPow]
+  rw [shift_eq_sum_diffPow f n₀ k]
   have e1 : ∑ i ∈ range (k + 1), (k.choose i : ℤ) * diffPow i f n₀ =
       ∑ i ∈ range (max (k + 1) a), (k.choose i : ℤ) * diffPow i f n₀ :=
     Finset.sum_subset (Finset.range_subset_range.mpr (le_max_left _ _)) fun i _ hi => by
@@ -81,8 +81,12 @@ theorem eval_binomPoly (n₀ i k : ℕ) :
 theorem degree_binomPoly_le (n₀ i : ℕ) : (binomPoly n₀ i).degree ≤ i := by
   rw [binomPoly]
   refine (degree_mul_le _ _).trans ?_
-  refine (add_le_add (degree_C_le) (degree_le_of_natDegree_le ?_)).trans (by simp)
-  rw [natDegree_comp, descPochhammer_natDegree, natDegree_sub_C, natDegree_X, mul_one]
+  have h1 : (C ((i.factorial : ℝ)⁻¹)).degree ≤ 0 := degree_C_le
+  have h2 : ((descPochhammer ℝ i).comp (X - C (n₀ : ℝ))).degree ≤ i := by
+    refine degree_le_of_natDegree_le ?_
+    rw [natDegree_comp, descPochhammer_natDegree, natDegree_sub_C, natDegree_X, mul_one]
+  calc _ ≤ (0 : WithBot ℕ) + i := add_le_add h1 h2
+    _ = i := zero_add _
 
 /-- **A function of order `≤ a` agrees on a tail with a real polynomial of degree `< a`.** -/
 theorem exists_poly_of_orderLE {f : ℕ → ℤ} {a : ℕ} (h : OrderLE f a) :
@@ -138,7 +142,7 @@ theorem orderLE_of_poly {f : ℕ → ℤ} {P : ℝ[X]} {a n₀ : ℕ}
 theorem degree_le_of_bound {P : ℝ[X]} {b n₀ : ℕ} {Cb : ℝ}
     (hP : ∀ n ≥ n₀, |P.eval (n : ℝ)| ≤ Cb * ((n : ℝ) + 1) ^ b) : P.degree ≤ b := by
   by_contra hlt
-  push_neg at hlt
+  push Not at hlt
   set Q : ℝ[X] := (X + C 1) ^ b with hQ
   have hQ0 : Q ≠ 0 := pow_ne_zero _ (X_add_C_ne_zero 1)
   have hQdeg : Q.degree = b := by
@@ -191,7 +195,7 @@ theorem bound_of_orderLE {f : ℕ → ℤ} {b : ℕ} (hf : OrderLE f (b + 1)) :
   have hQe : Q.eval (n : ℝ) = ((n : ℝ) + 1) ^ b := by
     rw [hQ, eval_pow, eval_add, eval_X, eval_C]
   simp only [Real.norm_eq_abs] at h1
-  rw [hQe, abs_of_pos (by positivity)] at h1
+  rw [hQe, abs_of_pos (show (0 : ℝ) < ((n : ℝ) + 1) ^ b by positivity)] at h1
   exact h1
 
 end Brent.CM
