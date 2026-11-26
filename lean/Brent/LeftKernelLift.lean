@@ -183,4 +183,138 @@ theorem actual_leftKernel_lift_mod3 (l : E → ZMod 3)
   obtain ⟨L, hL, hr⟩ := leftKernel_lift_mod3 l ((inLeft_iff_jacobian _ l).mpr h)
   exact ⟨L, (inLeft_iff_jacobian _ L).mp hL, hr⟩
 
+/-! ### The full left kernel is a free direct summand -/
+
+/-- The selected-row evaluation map, linear in the covector. -/
+noncomputable def selectedMap : (E → R) →ₗ[R] (P → R) :=
+  Matrix.mulVecLin (fun i e => basisRow R i e)
+
+@[simp] theorem selectedMap_apply (l : E → R) (i : P) :
+    selectedMap R l i = pair R l (basisRow R i) := rfl
+
+/-- The actual left kernel, as a submodule of the equation covectors. -/
+noncomputable def leftKer : Submodule R (E → R) := LinearMap.ker (selectedMap R)
+
+theorem mem_leftKer (l : E → R) : l ∈ leftKer R ↔ InLeft R l := by
+  rw [inLeft_iff_selected, leftKer, LinearMap.mem_ker]
+  constructor
+  · intro h i
+    simpa only [selectedMap_apply, Pi.zero_apply] using congrFun h i
+  · intro h
+    funext i
+    exact h i
+
+noncomputable def insertLin : (P → R) →ₗ[R] (E → R) :=
+  Matrix.mulVecLin (fun e j => if pivot j = e then 1 else 0)
+
+@[simp] theorem insertLin_apply (c : P → R) (e : E) :
+    insertLin R c e = insertPivot R c e := by
+  classical
+  simp [insertLin, Matrix.mulVecLin_apply, Matrix.mulVec, dotProduct, insertPivot, ite_mul]
+
+noncomputable def projectLin : (E → R) →ₗ[R] (E → R) :=
+  LinearMap.id + insertLin R ∘ₗ Matrix.mulVecLin ((D R)⁻¹) ∘ₗ (-selectedMap R)
+
+theorem projectLin_apply (l : E → R) : projectLin R l = project R l := by
+  funext e
+  simp only [projectLin, LinearMap.add_apply, LinearMap.id_apply, LinearMap.comp_apply,
+    LinearMap.neg_apply, Pi.neg_apply, Pi.add_apply, insertLin_apply,
+    Matrix.mulVecLin_apply, project] <;> rfl
+
+/-- Linear retraction, not just an idempotent function on the underlying set. -/
+theorem leftKernel_linear_retraction :
+    (∀ l, projectLin R l ∈ leftKer R) ∧ ∀ l ∈ leftKer R, projectLin R l = l := by
+  constructor
+  · intro l
+    rw [projectLin_apply, mem_leftKer]
+    exact project_inLeft R l
+  · intro l hl
+    rw [projectLin_apply]
+    exact project_eq_self R l ((mem_leftKer R l).mp hl)
+
+/-- The nonpivot equation coordinates. -/
+abbrev FreeCoord := {e : E // e ∉ Set.range pivot}
+
+theorem pivot_injective : Function.Injective pivot := by
+  intro a b h
+  apply (increasing_of_auxiliary checkedAuxiliary).injective
+  exact congrArg Fin.val h
+
+theorem insertPivot_free (c : P → R) (e : FreeCoord) : insertPivot R c e = 0 := by
+  classical
+  apply Finset.sum_eq_zero
+  intro j _
+  exact if_neg (fun h => e.2 ⟨j, h⟩)
+
+theorem insertPivot_pivot (c : P → R) (j : P) : insertPivot R c (pivot j) = c j := by
+  classical
+  unfold insertPivot
+  rw [Finset.sum_eq_single j]
+  · simp
+  · intro b _ hb
+    exact if_neg (fun h => hb (pivot_injective h))
+  · simp
+
+/-- Extending nonpivot coordinates by zero and then projecting leaves the free coordinates unchanged. -/
+noncomputable def freeExtend (c : FreeCoord → R) (e : E) : R := by
+  classical
+  exact if h : e ∉ Set.range pivot then c ⟨e, h⟩ else 0
+
+theorem project_freeExtend (c : FreeCoord → R) (e : FreeCoord) :
+    project R (freeExtend R c) e = c e := by
+  classical
+  rw [project, insertPivot_free, add_zero]
+  simp [freeExtend, e.2]
+
+/-- If a left-kernel vector has no free coordinates, its pivot coordinates vanish by the unit minor. -/
+theorem leftKer_zero_of_free_zero (l : E → R) (hl : InLeft R l)
+    (hf : ∀ e : FreeCoord, l e = 0) : l = 0 := by
+  classical
+  let c : P → R := fun j => l (pivot j)
+  have heq : l = insertPivot R c := by
+    funext e
+    by_cases h : e ∈ Set.range pivot
+    · obtain ⟨j, rfl⟩ := h
+      rw [insertPivot_pivot]
+    · rw [hf ⟨e, h⟩, insertPivot_free R c ⟨e, h⟩]
+  have hD : D R *ᵥ c = 0 := by
+    funext i
+    have h := pair_insertPivot R (0 : E → R) c i
+    simp only [Pi.zero_apply, zero_add] at h
+    have h0 : pair R (0 : E → R) (basisRow R i) = 0 := by simp [pair]
+    rw [h0, zero_add, ← heq, (inLeft_iff_selected R l).mp hl i] at h
+    exact h.symm
+  have hc : c = 0 := by
+    have h := congrArg (fun v => (D R)⁻¹ *ᵥ v) hD
+    simpa only [Matrix.mulVec_mulVec, Matrix.nonsing_inv_mul _ (D_unit R),
+      Matrix.one_mulVec, Matrix.mulVec_zero] using h
+  rw [heq, hc]
+  funext e
+  simp [insertPivot]
+
+/-- The complete left kernel is linearly equivalent to the module of nonpivot coordinates. -/
+noncomputable def leftKernelFreeEquiv : leftKer R ≃ₗ[R] (FreeCoord → R) := by
+  classical
+  let L : leftKer R →ₗ[R] (FreeCoord → R) :=
+    (LinearMap.funLeft R R (fun e : FreeCoord => (e : E))) ∘ₗ (leftKer R).subtype
+  apply LinearEquiv.ofBijective L
+  constructor
+  · intro a b h
+    apply Subtype.ext
+    apply sub_eq_zero.mp
+    apply leftKer_zero_of_free_zero R
+    · exact (mem_leftKer R _).mp ((leftKer R).sub_mem a.2 b.2)
+    · intro e
+      have he := congrFun h e
+      exact sub_eq_zero.mpr he
+  · intro c
+    refine ⟨⟨project R (freeExtend R c), (mem_leftKer R _).mpr (project_inLeft R _)⟩, ?_⟩
+    funext e
+    exact project_freeExtend R c e
+
+/-- Explicit basis of the entire kernel, valid over every coefficient ring. -/
+noncomputable def leftKernelBasis : Basis FreeCoord R (leftKer R) := by
+  classical
+  exact (Pi.basisFun R FreeCoord).map (leftKernelFreeEquiv R).symm
+
 end Brent.LeftKernelLift

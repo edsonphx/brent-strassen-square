@@ -111,6 +111,8 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/venv"
           "$RUNNER_TEMP/venv/bin/pip" install --quiet numpy==2.0.2
           "$RUNNER_TEMP/venv/bin/python" -I tools/catalogue/gen_catalogue_lean.py "$RUNNER_TEMP/catalogue/alphatensor_14236_factorizations.npz" .
+          # Independent coordinate-by-coordinate source binding (not just generated hashes).
+          "$RUNNER_TEMP/venv/bin/python" -I tools/catalogue/verify_source_binding.py "$RUNNER_TEMP/catalogue/alphatensor_14236_factorizations.npz" .
           # The generated files must match the helper's published hashes.
           sed '1s/^\xEF\xBB\xBF//' Brent/Catalogue/GENERATED_SHA256.txt | tr -d '\r' | sha256sum -c --quiet -
       - name: §7 catalogue census (14,236 points)

@@ -37,6 +37,8 @@ import Brent.LeftKernelLift
 import Brent.Catalogue.ExactAnchors
 import Brent.CM.GradedPresentation
 import Brent.PaperDetails
+import Brent.CM.QuadraticHeight
+import Brent.Formal.BaseChange
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -524,7 +526,24 @@ run_cmd do
     ``Brent.PaperDetails.appendix_earlier_zero,
     ``Brent.PaperDetails.appendix_projected_coefficient,
     ``Brent.PaperDetails.int_vanishing_iff_mod,
-    ``Brent.PaperDetails.minor_vanishing_iff_mod_prime
+    ``Brent.PaperDetails.minor_vanishing_iff_mod_prime,
+    ``Brent.LeftKernelLift.mem_leftKer,
+    ``Brent.LeftKernelLift.leftKernel_linear_retraction,
+    ``Brent.LeftKernelLift.leftKernelFreeEquiv,
+    ``Brent.LeftKernelLift.leftKernelBasis,
+    ``Brent.CM.qPrefix_primeHeight_ge,
+    ``Brent.CM.quadraticIdeal_height_eq_54,
+    ``Brent.CM.relI_mul_pow,
+    ``Brent.CM.graded_product_congr,
+    ``Brent.CM.lemma41_product_representatives,
+    ``Brent.Formal.map_subst_centered,
+    ``Brent.Formal.inverse_tuple_baseChange,
+    ``Brent.Formal.normal_substitution_mod3,
+    ``Brent.PaperDetails.det_abs_le_factorial,
+    ``Brent.PaperDetails.censusPrime_isPrime,
+    ``Brent.PaperDetails.censusPrime_hadamard_expression,
+    ``Brent.PaperDetails.censusPrime_leibniz_expression,
+    ``Brent.PaperDetails.censusMinor_vanishing_iff
   ]
   for name in theorems do
     let axioms ← collectAxioms name

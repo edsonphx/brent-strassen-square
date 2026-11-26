@@ -90,7 +90,7 @@ yet validated), **open** (not formalized; reason given).
 | Lines | Claim | Declaration | Status | Difference from the paper |
 |---|---|---|---|---|
 | 500–504 | Rank 2101 over `ℚ` too; 251 integral tangent generators independent over `ℚ` | `square_jacobian_rank`, `square_jacobian_nullity` | compiled | Every field of characteristic 0. |
-| 505–520 | Kernels free direct summands over `ℤ₍₃₎`; modular kernel vectors lift; the 251 vectors are an `R₀`-basis; the 54 rows lift | `Z3.kernel_basis_Z3`, `Z3.kernelBasisZ3`, `Z3.kernel_retract_Z3`, `Z3.kernel_lift_mod3`, `integer_annihilates` | drafted | Right kernel stated; exact lifts of the 54 rows are in `CM.LiftedQuadrics.lamExact_annihilates`. Arbitrary left-kernel lifting and an idempotent projection are drafted in `LeftKernelLift.actual_leftKernel_lift_mod3` and `project_idempotent`. A free-module basis/retraction theorem for the whole left kernel is still open. |
+| 505–520 | Kernels free direct summands over `ℤ₍₃₎`; modular kernel vectors lift; the 251 vectors are an `R₀`-basis; the 54 rows lift | `Z3.kernel_basis_Z3`, `Z3.kernelBasisZ3`, `Z3.kernel_retract_Z3`, `Z3.kernel_lift_mod3`, `integer_annihilates` | drafted | Right kernel stated; exact lifts of the 54 rows are in `CM.LiftedQuadrics.lamExact_annihilates`. Arbitrary left-kernel lifting and an idempotent projection are drafted in `LeftKernelLift.actual_leftKernel_lift_mod3` and `project_idempotent`. A linear retraction and free-coordinate basis are drafted in `LeftKernelLift.leftKernel_linear_retraction`, `leftKernelFreeEquiv`, `leftKernelBasis`. |
 | 521–545 | `3, q̃₁, …, q̃₅₄` regular in `ℤ₍₃₎[z]`; regular in `ℚ⟦z⟧`; upper bound in characteristic 0 | `Transfer.charZero_dim_le`, `CharZeroBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charZero`; lift: `CM.LiftInstance.isWeaklyRegular_q`, `cons_regular_lift`, `lifted_regular_local`, `lifted_regular_flat`, `ker_rho3`, `lifted_quadrics_regular`, `CM.LiftedQuadrics.map_qtOf`, `qtOf_regular` | compiled (conclusion) / **drafted, not compiled** (regular-sequence lift) | The lift avoids unmixedness: `3, q̃₁, …` is regular by `cons` from the regularity of the `qᵢ` mod 3, then by permutation in the local ring and flat base change. `CM.LiftedQuadrics.qtOf` builds `q̃ℓ` from lifted rows `λ̃ℓ` through the integer mixed derivatives, and `map_qtOf` proves its reduction is `qℓ`, so `qtOf_regular` applies to the paper's left-kernel lifts. `lamExact_annihilates`, `map_qtExact`, `qtExact_regular` connect the exact integer left-kernel rows to the lifted quadrics. The conclusion, `dim = 197` in characteristic 0, is compiled by a different route: graded Nakayama transfer of the finite spanning certificate. |
 
 ## §6 Formal branches and Hilbert function (lines 546–605)
@@ -109,7 +109,7 @@ yet validated), **open** (not formalized; reason given).
 
 | Lines | Claim | Declaration | Status | Difference from the paper |
 |---|---|---|---|---|
-| 710–718 | Census input pinned by SHA-256; Hadamard bound makes reduction at the chosen prime faithful | `tools/catalogue/gen_catalogue_lean.py`, CI hash checks | not needed | The Lean census uses exact rank certificates. `PaperDetails.minor_vanishing_iff_mod_prime` drafts the determinant-reduction implication given the strict magnitude bound. Hadamard itself and the concrete Python bound remain open. |
+| 710–718 | Census input pinned by SHA-256; Hadamard bound makes reduction at the chosen prime faithful | `tools/catalogue/gen_catalogue_lean.py`, CI hash checks | not needed | The Lean census uses exact rank certificates. `PaperDetails.minor_vanishing_iff_mod_prime` drafts the determinant-reduction implication given the strict magnitude bound. A separate Leibniz bound and primality certificate are drafted below; exact Hadamard inequality remains open. |
 | 719–721 | The open parameterizations preserve every nonzero factor and keep all 49 summands | `Census.family_factor_ne_zero` | drafted | Every field, every parameter value, both families. |
 | 722–740 | Reproducibility, archives, collaboration note | — | not a claim | — |
 
@@ -133,10 +133,22 @@ yet validated), **open** (not formalized; reason given).
 | Claim | New declaration(s) | Source coverage |
 |---|---|---|
 | Arbitrary left-kernel vector modulo 3 lifts over the localized integers | `LeftKernelLift.actual_leftKernel_lift_mod3` | Draft, using the actual checked integer elimination trace |
-| Left-kernel projection is idempotent | `LeftKernelLift.project_inLeft`, `project_eq_self`, `project_idempotent` | Draft; linear retraction and free basis still need explicit packaging |
+| Left-kernel projection is idempotent | `LeftKernelLift.project_inLeft`, `project_eq_self`, `project_idempotent` | Draft; explicit linear retraction and basis added below |
 | Exact useful-anchor counts in both characteristics | `Catalogue.usefulAnchors_count_2445`, `usefulAnchors_count_5969` | Draft, two-sided finite certificates; generated catalogue absent from the archive used for this patch |
-| Lemma 4.1 graded presentation | `CM.firstIdeal_inf_pow_le_relI`, `toGr_firstIdeal_injective`, `lemma41_gradedPieceEquiv` | Draft of each graded piece; multiplicative graded-ring assembly remains open |
+| Lemma 4.1 graded presentation | `CM.firstIdeal_inf_pow_le_relI`, `toGr_firstIdeal_injective`, `lemma41_gradedPieceEquiv` | Draft of each graded piece and homogeneous product compatibility; direct-sum graded-ring assembly remains open |
 | Appendix A.2 worked example | `PaperDetails.appendix_*` | Draft, directly checking actual sparse mixed entries and covector |
 | Faithful modular reduction of bounded determinants | `PaperDetails.minor_vanishing_iff_mod_prime` | Draft, conditional on the determinant size bound |
 
-**Still open for strict statement-by-statement coverage:** geometric dimension of the algebraic orbit closure (not just differential/formal slice); height of the original quadratic ideal (not only its initial monomial ideal); multiplicative graded-ring isomorphism; full left-kernel free basis and linear retraction; formal normal elimination commuting with reduction over `ℤ₍₃₎`; Hadamard bound and concrete verification of the selected prime; explicit end-to-end catalogue provenance. No claim of 100% coverage or of successful compilation is made by this patch.
+## Further coverage extension (source drafts, not kernel acceptance)
+
+| Target | Declaration / evidence | Residual gap |
+|---|---|---|
+| Original quadratic ideal height 54 | `CM.quadraticIdeal_height_eq_54` | Source proof drafted using regularity and prime chains; compilation not checked. |
+| Full left kernel | `LeftKernelLift.leftKernel_linear_retraction`, `leftKernelFreeEquiv`, `leftKernelBasis` | Source proofs drafted over every commutative ring; compilation not checked. |
+| Multiplication of graded pieces | `CM.relI_mul_pow`, `graded_product_congr`, `lemma41_product_representatives` | Representative-level compatibility; full direct-sum graded ring and bundled ring equivalence still open. |
+| Formal reduction modulo 3 | `Formal.map_subst_centered`, `inverse_tuple_baseChange`, `normal_substitution_mod3` | General centered substitution and inverse-tuple compatibility drafted; instantiation with the actual normal-elimination tuple and proof of its existence over the localized integers still open. |
+| Census modulus | `PaperDetails.censusPrime_isPrime`, `censusPrime_hadamard_expression`, `censusMinor_vanishing_iff` | Concrete faithful reduction by a Leibniz bound; the paper's general Hadamard inequality itself is not formalized. |
+| Catalogue source binding | `tools/catalogue/verify_source_binding.py`, CI invocation | External coordinate-by-coordinate verifier, not a Lean theorem about NPZ parsing or SHA-256. Synthetic positive/negative tests only; original NPZ not included in input archive. |
+| Geometric orbit closure dimension | Existing `Formal.finrank_range_dOrbit`, `Formal.ringKrullDim_slice` | Still open: geometric dimension of the actual algebraic orbit closure. |
+
+No change to paper.tex. No claim of 100% semantic coverage or successful compilation is made. The existing audit entries labelled compiled are inherited from the input archive and have not been independently replayed here.

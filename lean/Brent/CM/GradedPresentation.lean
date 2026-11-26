@@ -88,4 +88,54 @@ noncomputable def lemma41_gradedPieceEquiv (s n : ℕ) :
   LinearEquiv.ofBijective _ ⟨toGr_firstIdeal_injective f d hf hreg s n,
     toGr_surjective f d hf (fun j hj => Ideal.subset_span ⟨j, hj, rfl⟩) n⟩
 
+/-- The relation ideals are stable under multiplication by an element of
+another homogeneous degree. This is the compatibility needed for the
+multiplication of homogeneous representatives in the graded presentation. -/
+theorem relI_mul_pow (s n m : ℕ) {a b : A}
+    (ha : a ∈ relI f d s n) (hb : b ∈ 𝔪 ^ m) :
+    a * b ∈ relI f d s (n + m) := by
+  induction s with
+  | zero =>
+    have h := Ideal.mul_mem_mul ha hb
+    rw [← pow_add, show n + 1 + m = n + m + 1 by omega] at h
+    exact h
+  | succ s ih =>
+    obtain ⟨u, hu, v, hv, rfl⟩ := Submodule.mem_sup.mp ha
+    rw [add_mul]
+    apply Ideal.add_mem _ (Ideal.mem_sup_left (ih hu))
+    by_cases h : d s ≤ n
+    · rw [if_pos h] at hv
+      apply Ideal.mem_sup_right
+      rw [if_pos (by omega : d s ≤ n + m)]
+      have hh := Ideal.mul_mem_mul hv hb
+      rw [mul_assoc, ← pow_add, show n - d s + m = n + m - d s by omega] at hh
+      exact hh
+    · rw [if_neg h, Submodule.mem_bot] at hv
+      simp [hv]
+
+/-- Equality of homogeneous representatives is preserved by multiplication.
+Both arguments may be changed by arbitrary relations, not only generators. -/
+theorem graded_product_congr (s n m : ℕ) {a a' b b' : A}
+    (ha' : a' ∈ 𝔪 ^ n) (hb : b ∈ 𝔪 ^ m)
+    (haa : a - a' ∈ relI f d s n) (hbb : b - b' ∈ relI f d s m) :
+    a * b - a' * b' ∈ relI f d s (n + m) := by
+  have h₁ := relI_mul_pow f d s n m haa hb
+  have h₂ := relI_mul_pow f d s m n hbb ha'
+  rw [Nat.add_comm m n, mul_comm (b - b') a'] at h₂
+  convert Ideal.add_mem _ h₁ h₂ using 1 <;> ring
+
+/-- The canonical graded-piece equivalences preserve products of arbitrary
+homogeneous representatives. The full direct-sum ring instance is separate. -/
+theorem lemma41_product_representatives (s n m : ℕ)
+    (a : (𝔪 ^ n : Ideal A)) (b : (𝔪 ^ m : Ideal A)) :
+    lemma41_gradedPieceEquiv f d hf hreg s (n + m)
+      (Submodule.Quotient.mk (⟨(a : A) * (b : A), by
+        have h := Ideal.mul_mem_mul a.property b.property
+        rwa [← pow_add] at h⟩ : (𝔪 ^ (n + m) : Ideal A))) =
+    Submodule.Quotient.mk (⟨(a : A) * (b : A), by
+      apply Ideal.mem_sup_right
+      have h := Ideal.mul_mem_mul a.property b.property
+      rwa [← pow_add] at h⟩ : filt (firstIdeal f s) (n + m)) := by
+  rfl
+
 end Brent.CM

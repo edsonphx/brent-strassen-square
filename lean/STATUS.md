@@ -182,10 +182,21 @@ kernel batches. The rank and nullity audit permits only Lean's standard
 
 ## Additional paper-coverage drafts (not compiled)
 
-- [~] Arbitrary left-kernel lifting: `Brent.LeftKernelLift.actual_leftKernel_lift_mod3`; uses unit pivots of the integer Jacobian trace. Idempotent projection drafted; linear/free-basis packaging still open.
+- [~] Arbitrary left-kernel lifting: `Brent.LeftKernelLift.actual_leftKernel_lift_mod3`; uses unit pivots of the integer Jacobian trace. Idempotent projection, linear retraction and explicit free-coordinate basis drafted.
 - [~] Exact anchors 2445 and 5969: `Brent.Catalogue.ExactAnchors`; checks both positive and negative finite certificates over the reference fields and transfers to other fields. Generated catalogue data are needed to evaluate these checks.
-- [~] Lemma 4.1 degreewise graded presentation: `Brent.CM.GradedPresentation`; multiplicativity and full graded-ring equivalence still open.
+- [~] Lemma 4.1 degreewise graded presentation: `Brent.CM.GradedPresentation`; homogeneous product compatibility drafted; full direct-sum graded-ring equivalence still open.
 - [~] Appendix A.2 explicit support, coefficient and leading monomial checks: `Brent.PaperDetails`.
 - [~] Modular determinant vanishing equivalence given a strict determinant bound: `Brent.PaperDetails.minor_vanishing_iff_mod_prime`.
 
 All new major declarations are included in `Audit.lean`. Existing compiled/drafted statuses are retained; these new proofs have not been compiled or kernel replayed. Remaining semantic gaps are enumerated in `AUDIT_TABLE.md` (geometric orbit dimension, original quadratic ideal height, graded ring assembly, left-kernel freeness, normal elimination base change, Hadamard bound and catalogue provenance).
+
+### Additional source drafts on top of revision 775319f
+
+- [~] Original quadratic ideal height: `Brent.CM.QuadraticHeight`.
+- [~] Left kernel: `leftKernel_linear_retraction`, `leftKernelFreeEquiv`, `leftKernelBasis`.
+- [~] Homogeneous product compatibility: `Brent.CM.GradedPresentation`.
+- [~] Centered substitution and inverse tuple base change: `Brent.Formal.BaseChange`.
+- [~] Prime 65521 and sufficient determinant bound: `Brent.PaperDetails` (Leibniz, not the general Hadamard inequality).
+- [~] Independent external source binding verifier in CI; tested on synthetic data only.
+
+Still open: geometric orbit closure dimension, full graded ring assembly, actual normal-elimination instantiation over R0, exact Hadamard inequality, and kernel-level catalogue provenance. Original NPZ and generated catalogue absent from the input. No compilation or kernel replay claimed for these new declarations.
