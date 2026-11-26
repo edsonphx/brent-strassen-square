@@ -20,6 +20,8 @@ import Brent.LWH
 import Brent.Theorem11
 import Brent.Section7
 import Brent.Groebner.Paper
+import Brent.Groebner.MonomialHeight
+import Brent.InitialForms
 import Brent.BaseLemma
 import Brent.BranchTangents
 import Brent.SecondOrderLift
@@ -438,7 +440,14 @@ run_cmd do
     ``Brent.Groebner.Paper.coprime_degree,
     ``Brent.Groebner.Paper.q_isGroebnerBasis,
     ``Brent.Groebner.Paper.q_initialIdeal,
-    ``Brent.Groebner.Paper.row11
+    ``Brent.Groebner.Paper.row11,
+    ``Brent.Groebner.MonomialHeight.height_pairIdeal,
+    ``Brent.Groebner.MonomialHeight.prime_contains_pair,
+    ``Brent.Groebner.MonomialHeight.primeHeight_choice,
+    ``Brent.InitialForms.initialRegular_iff,
+    ``Brent.InitialForms.principal_exact,
+    ``Brent.InitialForms.ker_mapPowerPiece_eq_range,
+    ``Brent.InitialForms.firstIdeal_inf_pow_le
   ]
   for name in theorems do
     let axioms ← collectAxioms name

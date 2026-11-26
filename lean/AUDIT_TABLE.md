@@ -81,8 +81,8 @@ yet validated), **open** (not formalized; reason given).
 | 414–426 | The 54 rows `λᵢ` kill `J` and `qᵢ = λᵢ M (x ⊗ y)` | `archived_covectors_annihilate`, `archived_mixed_coefficients` | compiled | — |
 | 427–432 | Leading monomials `xᵢ y_π(i)` form a perfect matching | `quadraticMatching_bijective`, `archived_mixed_pivots`, `archived_mixed_zero_before`, `archived_polar_leading` | compiled | — |
 | 433–443 | How the witnesses were found (bipartite matching) | — | not a claim | Method description. |
-| 444–456 | Buchberger: the `qᵢ` are a Gröbner basis; height 54; regular sequence by Cohen–Macaulayness | Buchberger sentence: `Groebner.Paper.row11` (`q_isGroebnerBasis`, `q_initialIdeal`, `monic_q`, `coprime_degree`; general criterion `Groebner.isGroebnerBasis_of_coprime`) | **open** (Buchberger part drafted; height 54 and regular sequence remain) | Proof step. The Lean upper bound uses the triangular unit-leader tables directly (`triangular_dim_le`, `pow_succ_le_of_triangular`). |
-| 457–482 | Lemma 4.1: `dim A/I ≤ N − s` when the initial forms are a regular sequence; associated graded presentation | — | **open** | Proof step, replaced by `triangular_dim_le` and `localDimension_le_of_power_le_span_sup_pow`. |
+| 444–456 | Buchberger: the `qᵢ` are a Gröbner basis; height 54; regular sequence by Cohen–Macaulayness | Buchberger: `Groebner.isGroebnerBasis_of_coprime`, `Groebner.initialIdeal_span_of_coprime` (quick check passed), `Groebner.Paper.row11` (`q_isGroebnerBasis`, `q_initialIdeal`); height 54: `Groebner.MonomialHeight.height_pairIdeal`, `prime_contains_pair`, `primeHeight_choice` (compiled) | compiled (Gröbner basis, height 54; `Groebner.Paper` pending its Mac build) / **open** (regular sequence) | The step "height 54 ⇒ regular sequence" uses that a polynomial ring is Cohen–Macaulay, which Mathlib at our pin does not have. The paper uses it only to reach `dim ≤ 197`, which is compiled by another route (`triangular_dim_le`, `UpperBound.squareLocalDimension_le_197`). |
+| 457–482 | Lemma 4.1: `dim A/I ≤ N − s` when the initial forms are a regular sequence; associated graded presentation | Associated graded presentation: `InitialForms.firstIdeal_inf_pow_le` (standard-basis property), `initialRegular_iff`, `principal_exact`, `ker_mapPowerPiece_eq_range` | drafted (graded presentation) / **open** (dimension inequality) | The step from `gr(A/I) = gr(A)/in(I)` to `dim A/I ≤ N − s` needs Hilbert–Samuel theory (dimension = degree of the Hilbert–Samuel polynomial), absent from Mathlib at our pin. The paper uses Lemma 4.1 only for `dim ≤ 197`, compiled by `triangular_dim_le` and `localDimension_le_of_power_le_span_sup_pow`. |
 | 483–498 | Normal elimination: `Â = k⟦z⟧/I`, `fᵢ* = qᵢ`, `dim ≤ 251 − 54 = 197` in characteristic three | `UpperBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charThree`, `Formal.H_bijective` | compiled | Same conclusion; different route. |
 
 ## §5 Transfer to characteristic zero (lines 499–545)
@@ -91,7 +91,7 @@ yet validated), **open** (not formalized; reason given).
 |---|---|---|---|---|
 | 500–504 | Rank 2101 over `ℚ` too; 251 integral tangent generators independent over `ℚ` | `square_jacobian_rank`, `square_jacobian_nullity` | compiled | Every field of characteristic 0. |
 | 505–520 | Kernels free direct summands over `ℤ₍₃₎`; modular kernel vectors lift; the 251 vectors are an `R₀`-basis; the 54 rows lift | `Z3.kernel_basis_Z3`, `Z3.kernelBasisZ3`, `Z3.kernel_retract_Z3`, `Z3.kernel_lift_mod3`, `integer_annihilates` | drafted | Right kernel stated; the left kernel is represented by the 54 lifted integer covectors (`integer_annihilates`). |
-| 521–545 | `3, q̃₁, …, q̃₅₄` regular in `ℤ₍₃₎[z]`; regular in `ℚ⟦z⟧`; upper bound in characteristic 0 | `Transfer.charZero_dim_le`, `CharZeroBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charZero` | compiled (conclusion) / **open** (regular-sequence lift) | Different route: graded Nakayama transfer of the finite spanning certificate. |
+| 521–545 | `3, q̃₁, …, q̃₅₄` regular in `ℤ₍₃₎[z]`; regular in `ℚ⟦z⟧`; upper bound in characteristic 0 | `Transfer.charZero_dim_le`, `CharZeroBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charZero` | compiled (conclusion) / **open** (regular-sequence lift) | Regularity of `3, q̃₁, …` again goes through Cohen–Macaulay theory (unmixedness), absent at our pin. The conclusion, `dim = 197` in characteristic 0, is compiled by a different route: graded Nakayama transfer of the finite spanning certificate. |
 
 ## §6 Formal branches and Hilbert function (lines 546–605)
 
@@ -125,5 +125,5 @@ yet validated), **open** (not formalized; reason given).
 
 ## Open rows
 
-1. **Gröbner basis, height 54, regular sequence (lines 444–456) and Lemma 4.1 (457–482).** Steps of the paper's upper-bound proof. The bound itself is compiled by another route.
-2. **Regular-sequence lift over `ℤ₍₃₎` (lines 521–545).** Steps of the characteristic-zero transfer. The bound itself is compiled by another route.
+1. **Regular sequence (lines 444–456) and the dimension step of Lemma 4.1 (457–482).** Need Cohen–Macaulay and Hilbert–Samuel theory, absent from Mathlib at our pin. The Gröbner basis, height 54 and the graded presentation are formalized; the bound they serve is compiled by another route.
+2. **Regular-sequence lift over `ℤ₍₃₎` (lines 521–545).** Same missing Cohen–Macaulay theory. The characteristic-zero bound is compiled by another route.
