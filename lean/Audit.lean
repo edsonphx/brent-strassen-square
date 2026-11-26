@@ -19,6 +19,10 @@ import Brent.Equidim.Equidim
 import Brent.LWH
 import Brent.Theorem11
 import Brent.Section7
+import Brent.BaseLemma
+import Brent.BranchTangents
+import Brent.SecondOrderLift
+import Brent.Z3Basis
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -405,7 +409,25 @@ run_cmd do
     ``Brent.Section7.census,
     ``Brent.Section7.rank_bound_exclusion,
     ``Brent.Section7.anchor_exclusion,
-    ``Brent.Section7.excluded_count
+    ``Brent.Section7.excluded_count,
+    ``Brent.Section3.lemma_base,
+    ``Brent.Section3.kron_line,
+    ``Brent.Section3.derivative_injective,
+    ``Brent.Section3.KMat_line,
+    ``Brent.Section3.mixed_independent,
+    ``Brent.Section3.two_ne_zero_of,
+    ``Brent.TangentData.branchTangent_inf,
+    ``Brent.TangentData.finrank_branchTangent,
+    ``Brent.TangentData.finrank_orbitTangent,
+    ``Brent.TangentData.branchTangent_ne,
+    ``Brent.TangentData.branchTangent_generators,
+    ``Brent.Decomposition.second_order_expansion,
+    ``Brent.Decomposition.liftsToOrderTwo_iff,
+    ``Brent.Census.family_factor_ne_zero,
+    ``Brent.Z3.kernel_basis_Z3,
+    ``Brent.Z3.kernel_retract_Z3,
+    ``Brent.Z3.kernel_lift_mod3,
+    ``Brent.Z3.kernel_span_field
   ]
   for name in theorems do
     let axioms ← collectAxioms name

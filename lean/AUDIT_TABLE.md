@@ -90,7 +90,7 @@ yet validated), **open** (not formalized; reason given).
 | Lines | Claim | Declaration | Status | Difference from the paper |
 |---|---|---|---|---|
 | 500–504 | Rank 2101 over `ℚ` too; 251 integral tangent generators independent over `ℚ` | `square_jacobian_rank`, `square_jacobian_nullity` | compiled | Every field of characteristic 0. |
-| 505–520 | `J` splits over `ℤ₍₃₎`; kernels are free summands; the 251 vectors are an `ℤ₍₃₎`-basis; the 54 rows lift | `integer_annihilates`, `integerEntry_cast` | compiled (partly) | The Lean proof lifts the 54 covectors to integers and checks them; the splitting over `ℤ₍₃₎` is not stated. |
+| 505–520 | Kernels free direct summands over `ℤ₍₃₎`; modular kernel vectors lift; the 251 vectors are an `R₀`-basis; the 54 rows lift | `Z3.kernel_basis_Z3`, `Z3.kernelBasisZ3`, `Z3.kernel_retract_Z3`, `Z3.kernel_lift_mod3`, `integer_annihilates` | drafted | Right kernel stated; the left kernel is represented by the 54 lifted integer covectors (`integer_annihilates`). |
 | 521–545 | `3, q̃₁, …, q̃₅₄` regular in `ℤ₍₃₎[z]`; regular in `ℚ⟦z⟧`; upper bound in characteristic 0 | `Transfer.charZero_dim_le`, `CharZeroBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charZero` | compiled (conclusion) / **open** (regular-sequence lift) | Different route: graded Nakayama transfer of the finite spanning certificate. |
 
 ## §6 Formal branches and Hilbert function (lines 546–605)
@@ -126,4 +126,4 @@ yet validated), **open** (not formalized; reason given).
 ## Open rows
 
 1. **Gröbner basis, height 54, regular sequence (lines 444–456) and Lemma 4.1 (457–482).** Steps of the paper's upper-bound proof. The bound itself is compiled by another route.
-2. **Splitting over `ℤ₍₃₎` and the regular-sequence lift (lines 505–545).** Steps of the characteristic-zero transfer. The bound itself is compiled by another route.
+2. **Regular-sequence lift over `ℤ₍₃₎` (lines 521–545).** Steps of the characteristic-zero transfer. The bound itself is compiled by another route.
