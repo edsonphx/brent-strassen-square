@@ -9,6 +9,8 @@ namespace Brent.CM.GradedPolynomial
 open IsLocalRing InitialForms GradedRingAssembly
 open scoped DirectSum BigOperators
 
+attribute [local instance] Classical.propDecidable
+
 variable {σ k : Type} [Fintype σ] [Field k]
 local notation "A" => MvPowerSeries σ k
 local notation "P" => MvPolynomial σ k

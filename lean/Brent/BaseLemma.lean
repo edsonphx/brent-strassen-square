@@ -29,7 +29,7 @@ variable {k : Type} [Field k]
 def fac (k : Type) [Field k] : Mode → Fin 7 → Matrix (Fin 2) (Fin 2) k
   | .u, i => sMat k i .u
   | .v, i => sMat k i .v
-  | .w, i => (sMat k i .w)ᵀ
+  | .w, i => Matrix.transpose (sMat k i .w)
 
 /-- `X` lies on the line through `F`. -/
 def InLine (X F : Matrix (Fin 2) (Fin 2) k) : Prop := ∃ t : k, X = t • F
@@ -63,7 +63,7 @@ theorem fac_ne_zero (m : Mode) (i : Fin 7) : fac k m i ≠ 0 := by
   · exact key
   · exact key
   · intro h
-    change (sMat k i .w)ᵀ = 0 at h
+    change Matrix.transpose (sMat k i .w) = 0 at h
     apply key
     rw [← Matrix.transpose_transpose (sMat k i .w), h, Matrix.transpose_zero]
 
@@ -71,7 +71,7 @@ theorem fac_zero (m : Mode) : fac k m 0 = 1 := by
   cases m
   · exact sMat_zero (k := k) _
   · exact sMat_zero (k := k) _
-  · change (sMat k 0 .w)ᵀ = 1
+  · change Matrix.transpose (sMat k 0 .w) = 1
     rw [sMat_zero (k := k), Matrix.transpose_one]
 
 /-! The first-mode factors `E₁₁` (summand 2) and `E₁₁ + E₁₂` (summand 4). -/
@@ -262,7 +262,7 @@ def Mode.next : Mode → Mode
 `K_m F − F K_{next m}` with `F = F_i ⊗ F_j`. -/
 def globalDerivative (h : Mode → Fin 3 → Matrix (Fin 2) (Fin 2) k) (s : SquareSummand)
     (m : Mode) : Matrix (Fin 2 × Fin 2) (Fin 2 × Fin 2) k :=
-  KMat (h m) * (fac k m s.1 ⊗ₖ fac k m s.2) - (fac k m s.1 ⊗ₖ fac k m s.2) * KMat (h m.next)
+  KMat (h m) * (fac k m s.1 ⊗ₖ fac k m s.2) - (fac k m s.1 ⊗ₖ fac k m s.2) * KMat (h (Mode.next m))
 
 theorem kron_sub' (A B C : Matrix (Fin 2) (Fin 2) k) : (A - B) ⊗ₖ C = A ⊗ₖ C - B ⊗ₖ C := by
   ext ⟨a, b⟩ ⟨c, d⟩
@@ -345,9 +345,9 @@ theorem mixed_independent (h2 : (2 : k) ≠ 0) (h : Mode → Fin 3 → Matrix (F
     (x y : Fin 7 → Fin 3 → Matrix (Fin 2) (Fin 2) k)
     (heq : ∀ s m, globalDerivative h s m = derivative d x y s m) : h = 0 := by
   -- Step 1, at the identity position `(0, 0)`: `K_m = K_{next m}`.
-  have step1 : ∀ m, h m = h m.next := by
+  have step1 : ∀ m, h m = h (Mode.next m) := by
     intro m
-    have L : globalDerivative h (0, 0) m = KMat (h m - h m.next) := by
+    have L : globalDerivative h (0, 0) m = KMat (h m - h (Mode.next m)) := by
       simp only [globalDerivative, fac_zero, Matrix.one_kronecker_one, mul_one, one_mul, KMat_sub]
     have R : derivative d x y (0, 0) m =
         d (0, 0) m • ((1 : Matrix (Fin 2) (Fin 2) k) ⊗ₖ 1) +
@@ -386,8 +386,8 @@ theorem mixed_independent (h2 : (2 : k) ≠ 0) (h : Mode → Fin 3 → Matrix (F
   funext m
   cases m
   · exact hu0
-  · rw [← huv, hu0]
-  · rw [← hvw, ← huv, hu0]
+  · exact huv.symm.trans hu0
+  · exact hvw.symm.trans (huv.symm.trans hu0)
 
 /-- The domain `(H ⊗ H)³` has dimension `3 · 3 · 3 = 27`: three modes, three basis vectors `eᵥ`
 and a trace-free `hᵥ ∈ H` (dimension three) for each. -/
