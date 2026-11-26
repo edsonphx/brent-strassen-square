@@ -238,6 +238,39 @@ noncomputable def principalPieceEquivBelow (m : Ideal R) (f : R) {d j : ℕ}
   LinearEquiv.ofInjective (principalPieceMap m f j)
     (LinearMap.ker_eq_bot.mp (ker_principalPieceMap_eq_bot_of_lt m f hf hj))
 
+/-! ### The initial form as a nonzerodivisor on the graded pieces -/
+
+/-- `InitialRegular` makes multiplication by the initial form injective in every degree. -/
+theorem mulPowerPiece_injective (m : Ideal R) (f : R) {d : ℕ} (hf : f ∈ m ^ d)
+    (hreg : InitialRegular m f d) (n : ℕ) : Function.Injective (mulPowerPiece m f hf n) := by
+  rw [← LinearMap.ker_eq_bot, LinearMap.ker_eq_bot']
+  intro u hu
+  obtain ⟨a, rfl⟩ := (nextStep m n).mkQ_surjective u
+  rw [mulPowerPiece_mkQ, Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero] at hu
+  rw [Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
+  exact hreg n a.val a.property hu
+
+/-- **`InitialRegular` is exactly regularity of the initial form**: multiplication by the
+degree-`d` class of `f` is injective on every graded piece of the `m`-adic filtration. -/
+theorem initialRegular_iff (m : Ideal R) (f : R) {d : ℕ} (hf : f ∈ m ^ d) :
+    InitialRegular m f d ↔ ∀ n, Function.Injective (mulPowerPiece m f hf n) := by
+  refine ⟨fun h n => mulPowerPiece_injective m f hf h n, fun h n a ha hmul => ?_⟩
+  have h0 : mulPowerPiece m f hf n ((nextStep m n).mkQ ⟨a, ha⟩) = 0 := by
+    rw [mulPowerPiece_mkQ, Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
+    exact hmul
+  have h1 := h n (h0.trans (map_zero (mulPowerPiece m f hf n)).symm)
+  rw [Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero] at h1
+  exact h1
+
+/-- **Exactness in degree `n + d`**: `0 → grₙ → gr_{n+d} → (degree `n + d` piece of the
+quotient by `f`) → 0`, with the first map multiplication by the initial form. -/
+theorem principal_exact (m : Ideal R) (f : R) {d : ℕ} (hf : f ∈ m ^ d)
+    (hreg : InitialRegular m f d) (n : ℕ) :
+    Function.Injective (mulPowerPiece m f hf n) ∧
+      LinearMap.range (mulPowerPiece m f hf n) =
+        LinearMap.ker (principalPieceMap m f (n + d)) :=
+  ⟨mulPowerPiece_injective m f hf hreg n, (ker_principalPieceMap_eq_range m f hf hreg n).symm⟩
+
 /-! ### Multiplication of homogeneous classes -/
 
 def productRepresentative (m : Ideal R) (i j : ℕ) :
