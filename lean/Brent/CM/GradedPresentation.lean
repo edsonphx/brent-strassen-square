@@ -94,7 +94,7 @@ multiplication of homogeneous representatives in the graded presentation. -/
 theorem relI_mul_pow (s n m : ℕ) {a b : A}
     (ha : a ∈ relI f d s n) (hb : b ∈ 𝔪 ^ m) :
     a * b ∈ relI f d s (n + m) := by
-  induction s with
+  induction s generalizing a with
   | zero =>
     have h := Ideal.mul_mem_mul ha hb
     rw [← pow_add, show n + 1 + m = n + m + 1 by omega] at h

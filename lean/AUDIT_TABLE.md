@@ -109,7 +109,7 @@ yet validated), **open** (not formalized; reason given).
 
 | Lines | Claim | Declaration | Status | Difference from the paper |
 |---|---|---|---|---|
-| 710–718 | Census input pinned by SHA-256; Hadamard bound makes reduction at the chosen prime faithful | `tools/catalogue/gen_catalogue_lean.py`, CI hash checks | not needed | The Lean census uses exact rank certificates. `PaperDetails.minor_vanishing_iff_mod_prime` drafts the determinant-reduction implication given the strict magnitude bound. A separate Leibniz bound and primality certificate are drafted below; exact Hadamard inequality remains open. |
+| 710–718 | Census input pinned by SHA-256; Hadamard bound makes reduction at the chosen prime faithful | `tools/catalogue/gen_catalogue_lean.py`, CI hash checks | not needed | The Lean census uses exact rank certificates. `PaperDetails.minor_vanishing_iff_mod_prime` drafts the determinant-reduction implication given the strict magnitude bound. A separate Leibniz bound and primality certificate are drafted below; the exact squared Hadamard inequality for all minor sizes 0–4 is drafted in `HadamardSmall.squared_hadamard`. |
 | 719–721 | The open parameterizations preserve every nonzero factor and keep all 49 summands | `Census.family_factor_ne_zero` | drafted | Every field, every parameter value, both families. |
 | 722–740 | Reproducibility, archives, collaboration note | — | not a claim | — |
 
@@ -145,10 +145,19 @@ yet validated), **open** (not formalized; reason given).
 |---|---|---|
 | Original quadratic ideal height 54 | `CM.quadraticIdeal_height_eq_54` | Source proof drafted using regularity and prime chains; compilation not checked. |
 | Full left kernel | `LeftKernelLift.leftKernel_linear_retraction`, `leftKernelFreeEquiv`, `leftKernelBasis` | Source proofs drafted over every commutative ring; compilation not checked. |
-| Multiplication of graded pieces | `CM.relI_mul_pow`, `graded_product_congr`, `lemma41_product_representatives` | Representative-level compatibility; full direct-sum graded ring and bundled ring equivalence still open. |
-| Formal reduction modulo 3 | `Formal.map_subst_centered`, `inverse_tuple_baseChange`, `normal_substitution_mod3` | General centered substitution and inverse-tuple compatibility drafted; instantiation with the actual normal-elimination tuple and proof of its existence over the localized integers still open. |
-| Census modulus | `PaperDetails.censusPrime_isPrime`, `censusPrime_hadamard_expression`, `censusMinor_vanishing_iff` | Concrete faithful reduction by a Leibniz bound; the paper's general Hadamard inequality itself is not formalized. |
+| Multiplication of graded pieces | `CM.relI_mul_pow`, `graded_product_congr`, `lemma41_product_representatives` | Full external direct-sum ring equivalence drafted in `CM.GradedRingAssembly.lemma41_ringEquiv`; identification of the source with the polynomial quotient by the ideal of initial forms still needs a bundled proof. |
+| Formal reduction modulo 3 | `Formal.map_subst_centered`, `inverse_tuple_baseChange`, `normal_substitution_mod3` | Actual selected Jacobian minor, inverse over R0, and all residual-equation base change drafted in `Formal.NormalEliminationZ3.normal_elimination_exists`. Explicit transport to the paper’s fixed tangent frame and quadratic initial-form identification not completed here. |
+| Census modulus | `PaperDetails.censusPrime_isPrime`, `censusPrime_hadamard_expression`, `censusMinor_vanishing_iff` | Exact squared Hadamard bound for arbitrary integer matrices of every relevant size (≤4) drafted in `PaperDetails.HadamardSmall.squared_hadamard`; faithful reduction using that bound in `censusMinor_vanishing_iff_hadamard`. |
 | Catalogue source binding | `tools/catalogue/verify_source_binding.py`, CI invocation | External coordinate-by-coordinate verifier, not a Lean theorem about NPZ parsing or SHA-256. Synthetic positive/negative tests only; original NPZ not included in input archive. |
 | Geometric orbit closure dimension | Existing `Formal.finrank_range_dOrbit`, `Formal.ringKrullDim_slice` | Still open: geometric dimension of the actual algebraic orbit closure. |
 
 No change to paper.tex. No claim of 100% semantic coverage or successful compilation is made. The existing audit entries labelled compiled are inherited from the input archive and have not been independently replayed here.
+
+### Third coverage extension (source drafts, not kernel acceptance)
+
+- `NormalEliminationZ3.normal_elimination_exists`: actual 2101-equation unit-minor chart over R0, 251 free coordinates, centered inverse, reduction of both inverse identities and every residual equation; selected equations vanish. No assumed minor or assumed inverse. Explicit comparison to the frozen tangent-frame coordinates and its quadratic initial forms remains separate.
+- `HadamardSmall.squared_hadamard`: exact squared bound for every integer entry bound and each order 0–4, including stacked minors. Finite sign-corner checks independently enumerated in Python (66,067 cases; maxima 1, 1, 4, 16, 256). This is not a Lean kernel result. The argument uses endpoint convexity from determinant multilinearity, not the earlier factorial estimate.
+- `GradedRingAssembly.lemma41_ringEquiv` and `_of`: direct-sum commutative ring structures built independently from bilinear representative multiplication, inverse ring maps, and preservation of the grading. A separate bundled identification of the source with the polynomial quotient by the initial forms is still needed for the literal paper statement.
+- Geometric orbit closure dimension and kernel-level source catalogue provenance still open. The NPZ was not included and could not be retrieved in this environment.
+
+The new declarations are registered in `Audit.lean`. No compilation or kernel acceptance is claimed.

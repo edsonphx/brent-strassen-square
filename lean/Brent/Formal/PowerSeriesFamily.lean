@@ -36,9 +36,9 @@ instance (i : Fin 251) (left : Bool) : Decidable (InChart i left) := by
 
 section Jet
 
-variable {k} {W : Type} [DecidableEq W]
+variable {R : Type} [CommRing R] [Nontrivial R] {W : Type} [DecidableEq W]
 
-theorem coeff_single_mul (w : W) (f g : MvPowerSeries W k) :
+theorem coeff_single_mul (w : W) (f g : MvPowerSeries W R) :
     coeff (single w 1) (f * g) =
       constantCoeff f * coeff (single w 1) g + coeff (single w 1) f * constantCoeff g := by
   rw [coeff_mul, Finsupp.antidiagonal_single]
@@ -48,12 +48,12 @@ theorem coeff_single_mul (w : W) (f g : MvPowerSeries W k) :
     ← coeff_zero_eq_constantCoeff_apply, Finset.map_singleton]
 
 /-- The first-order jet along the variable `w`. -/
-noncomputable def jetAt (w : W) : MvPowerSeries W k →+* DualNumber k where
+noncomputable def jetAt (w : W) : MvPowerSeries W R →+* DualNumber R where
   toFun f := (constantCoeff f, coeff (single w 1) f)
   map_one' := by
     apply TrivSqZeroExt.ext
     · simp
-    · change coeff (single w 1) (1 : MvPowerSeries W k) = 0
+    · change coeff (single w 1) (1 : MvPowerSeries W R) = 0
       rw [coeff_one, if_neg (by simp)]
   map_mul' f g := by
     apply TrivSqZeroExt.ext
@@ -65,17 +65,17 @@ noncomputable def jetAt (w : W) : MvPowerSeries W k →+* DualNumber k where
   map_zero' := by apply TrivSqZeroExt.ext <;> simp
   map_add' f g := by apply TrivSqZeroExt.ext <;> simp
 
-theorem jetAt_fst (w : W) (f : MvPowerSeries W k) : (jetAt w f).fst = constantCoeff f := rfl
+theorem jetAt_fst (w : W) (f : MvPowerSeries W R) : (jetAt w f).fst = constantCoeff f := rfl
 
-theorem jetAt_snd (w : W) (f : MvPowerSeries W k) : (jetAt w f).snd = coeff (single w 1) f :=
+theorem jetAt_snd (w : W) (f : MvPowerSeries W R) : (jetAt w f).snd = coeff (single w 1) f :=
   rfl
 
-theorem jetAt_C (w : W) (r : k) : jetAt w (C r) = TrivSqZeroExt.inl r := by
+theorem jetAt_C (w : W) (r : R) : jetAt w (C r) = TrivSqZeroExt.inl r := by
   apply TrivSqZeroExt.ext
   · simp [jetAt_fst]
   · rw [jetAt_snd, coeff_C, if_neg (by simp)]; rfl
 
-theorem jetAt_X (w v : W) : jetAt w (X v : MvPowerSeries W k) = if v = w then DualNumber.eps else 0 := by
+theorem jetAt_X (w v : W) : jetAt w (X v : MvPowerSeries W R) = if v = w then DualNumber.eps else 0 := by
   apply TrivSqZeroExt.ext
   · rw [jetAt_fst, constantCoeff_X]; split_ifs <;> simp
   · rw [jetAt_snd, coeff_X]

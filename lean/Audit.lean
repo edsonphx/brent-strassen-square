@@ -39,6 +39,9 @@ import Brent.CM.GradedPresentation
 import Brent.PaperDetails
 import Brent.CM.QuadraticHeight
 import Brent.Formal.BaseChange
+import Brent.Formal.NormalEliminationZ3
+import Brent.HadamardSmall
+import Brent.CM.GradedRingAssembly
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -543,7 +546,23 @@ run_cmd do
     ``Brent.PaperDetails.censusPrime_isPrime,
     ``Brent.PaperDetails.censusPrime_hadamard_expression,
     ``Brent.PaperDetails.censusPrime_leibniz_expression,
-    ``Brent.PaperDetails.censusMinor_vanishing_iff
+    ``Brent.PaperDetails.censusMinor_vanishing_iff,
+    ``Brent.Formal.NormalEliminationZ3.exists_unit_minor,
+    ``Brent.Formal.NormalEliminationZ3.map_eqAt_square,
+    ``Brent.Formal.NormalEliminationZ3.map_newCoord,
+    ``Brent.Formal.NormalEliminationZ3.exists_centered_inverse,
+    ``Brent.Formal.NormalEliminationZ3.normal_elimination_for_minor,
+    ``Brent.Formal.NormalEliminationZ3.card_free,
+    ``Brent.Formal.NormalEliminationZ3.normal_elimination_exists,
+    ``Brent.PaperDetails.HadamardSmall.entry_endpoint,
+    ``Brent.PaperDetails.HadamardSmall.corner_dominates_aux,
+    ``Brent.PaperDetails.HadamardSmall.sign_bound,
+    ``Brent.PaperDetails.HadamardSmall.squared_hadamard,
+    ``Brent.PaperDetails.HadamardSmall.censusMinor_vanishing_iff_hadamard,
+    ``Brent.CM.GradedRingAssembly.product_mk,
+    ``Brent.CM.GradedRingAssembly.pieceEquiv_mul,
+    ``Brent.CM.GradedRingAssembly.lemma41_ringEquiv,
+    ``Brent.CM.GradedRingAssembly.lemma41_ringEquiv_of
   ]
   for name in theorems do
     let axioms ← collectAxioms name

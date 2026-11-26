@@ -199,4 +199,10 @@ All new major declarations are included in `Audit.lean`. Existing compiled/draft
 - [~] Prime 65521 and sufficient determinant bound: `Brent.PaperDetails` (Leibniz, not the general Hadamard inequality).
 - [~] Independent external source binding verifier in CI; tested on synthetic data only.
 
-Still open: geometric orbit closure dimension, full graded ring assembly, actual normal-elimination instantiation over R0, exact Hadamard inequality, and kernel-level catalogue provenance. Original NPZ and generated catalogue absent from the input. No compilation or kernel replay claimed for these new declarations.
+### Third coverage extension (not compiled)
+
+- [~] Actual normal elimination over R0 and naturality of every residual equation: `Brent.Formal.NormalEliminationZ3.normal_elimination_exists`. The explicit bridge to the paper's frozen tangent frame and its quadratic initial forms is not complete.
+- [~] Exact squared Hadamard inequality for every relevant minor order (≤4): `Brent.PaperDetails.HadamardSmall.squared_hadamard`, `censusMinor_vanishing_iff_hadamard`. Independent finite arithmetic enumeration passed; not a kernel replay.
+- [~] Full direct-sum graded ring assembly: `Brent.CM.GradedRingAssembly.lemma41_ringEquiv`, `lemma41_ringEquiv_of`. The separate bundled identification of its source as the polynomial quotient by the ideal of initial forms remains open.
+
+Still open: geometric orbit closure dimension, polynomial quotient identification, tangent-frame comparison noted above, and kernel-level catalogue provenance. Original NPZ and generated catalogue absent from the input. No compilation or kernel replay claimed for these new declarations.

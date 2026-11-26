@@ -22,7 +22,6 @@ open MvPowerSeries
 
 set_option linter.unusedSectionVars false
 
-variable {k : Type} [Field k]
 
 /-! ### Surjective endomorphisms of Noetherian rings -/
 
@@ -74,6 +73,10 @@ theorem injective_of_surjective_endo [IsNoetherianRing R] (f : R →+* R)
   exact hy
 
 end Noetherian
+
+section RingCoordinates
+
+variable {k : Type} [CommRing k] [Nontrivial k]
 
 /-! ### Centered equations at a solution -/
 
@@ -189,7 +192,7 @@ noncomputable def minorAt : Matrix (Fin n) (Fin n) k :=
   Matrix.of fun i j => q.jacobianColumn (col j) (eqn i).1 (eqn i).2.1 (eqn i).2.2
 
 include hq in
-theorem isUnit_linear (hdet : (minorAt q col eqn).det ≠ 0) :
+theorem isUnit_linear_of_unit (hdet : IsUnit (minorAt q col eqn).det) :
     IsUnit (Matrix.of fun x v => coeff (Finsupp.single ((Equiv.refl Var).symm v) 1)
       (newCoord q col hcol eqn x)) := by
   rw [Matrix.isUnit_iff_isUnit_det, ← Matrix.det_submatrix_equiv_self (splitEquiv' col hcol)]
@@ -215,13 +218,35 @@ theorem isUnit_linear (hdet : (minorAt q col eqn).det ≠ 0) :
         intro h'
         exact h (Subtype.ext (Finsupp.single_left_injective one_ne_zero h').symm)
   rw [hblock, Matrix.det_fromBlocks_zero₂₁, Matrix.det_one, mul_one]
-  exact hdet.isUnit
+  exact hdet
+
+include hq in
+theorem newCoord_bijective_of_unit (hdet : IsUnit (minorAt q col eqn).det) :
+    Function.Bijective (subst (R := k) (newCoord q col hcol eqn)) :=
+  subst_bijective_equiv (Equiv.refl Var) (constantCoeff_newCoord q hq col hcol eqn)
+    (isUnit_linear_of_unit q hq col hcol eqn hdet)
+
+end Inverse
+end RingCoordinates
+
+section Inverse
+
+attribute [local instance] Classical.propDecidable
+
+variable {k : Type} [Field k]
+  (q : Decomposition k SquareVertex SquareSummand) (hq : q.Solves) {n : ℕ}
+  (col : Fin n → Var) (hcol : Function.Injective col) (eqn : Fin n → EquationIndex SquareVertex)
+
+include hq in
+theorem isUnit_linear (hdet : (minorAt q col eqn).det ≠ 0) :
+    IsUnit (Matrix.of fun x v => coeff (Finsupp.single ((Equiv.refl Var).symm v) 1)
+      (newCoord q col hcol eqn x)) :=
+  isUnit_linear_of_unit q hq col hcol eqn hdet.isUnit
 
 include hq in
 theorem newCoord_bijective (hdet : (minorAt q col eqn).det ≠ 0) :
     Function.Bijective (subst (R := k) (newCoord q col hcol eqn)) :=
-  subst_bijective_equiv (Equiv.refl Var) (constantCoeff_newCoord q hq col hcol eqn)
-    (isUnit_linear q hq col hcol eqn hdet)
+  newCoord_bijective_of_unit q hq col hcol eqn hdet.isUnit
 
 include hq in
 theorem hasSubst_newCoord : HasSubst (newCoord q col hcol eqn) :=
