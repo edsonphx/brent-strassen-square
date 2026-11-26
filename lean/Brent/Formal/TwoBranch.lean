@@ -298,6 +298,7 @@ noncomputable def evT : TwoBranch k →ₐ[k] k :=
 /-- Ordered non-mixed pairs: the degree-two monomials surviving on the reduced union. -/
 abbrev QIdx := {p : Fin 251 × Fin 251 // p.1 ≤ p.2 ∧ ¬ Mixed p.1 p.2}
 
+set_option maxRecDepth 100000 in
 /-- `binom(252, 2) − 54 · 54 = 28710`. -/
 theorem card_QIdx : Fintype.card QIdx = 28710 := by
   rw [Fintype.card_subtype]
