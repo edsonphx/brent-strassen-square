@@ -103,7 +103,7 @@ jobs:
           pip install numpy
           python3 -I tools/catalogue/gen_catalogue_lean.py "$RUNNER_TEMP/catalogue/alphatensor_14236_factorizations.npz" .
           # The generated files must match the helper's published hashes.
-          sed '1s/^\xEF\xBB\xBF//' Brent/Catalogue/GENERATED_SHA256.txt | sha256sum -c --quiet -
+          sed '1s/^\xEF\xBB\xBF//' Brent/Catalogue/GENERATED_SHA256.txt | tr -d '\r' | sha256sum -c --quiet -
       - name: §7 catalogue census (14,236 points)
         run: |
           lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)

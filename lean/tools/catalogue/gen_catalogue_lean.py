@@ -444,23 +444,33 @@ structure Wit where
     for c in range(nd):
         lo, hi = c * CHUNK, min(NPOINTS, (c + 1) * CHUNK)
         # one declaration per SUB points: the kernel's evaluation cache is per declaration
-        parts, expr = [], None
+        # Chaining uses `rangeOK_join` with every size a literal and two `rfl` side conditions,
+        # so elaboration never has to solve `?n + ?n' = N` or unfold `rangeOK`.
+        parts, expr, acc = [], None, 0
         for k, a in enumerate(range(lo, hi, SUB)):
             n = min(SUB, hi - a)
             parts.append(f"set_option maxHeartbeats 0 in\nset_option maxRecDepth 100000 in\n"
                          f"theorem chunk{c:03d}_{k:02d} : rangeOK {a} {n} = true := by decide +kernel\n")
-            expr = f"chunk{c:03d}_{k:02d}" if expr is None else f"(rangeOK_append {expr}\n    chunk{c:03d}_{k:02d})"
+            name = f"chunk{c:03d}_{k:02d}"
+            expr = name if expr is None else \
+                f"(rangeOK_join {lo} {acc} {a} {n} {acc + n} rfl rfl {expr}\n    {name})"
+            acc += n
         write(cat / "Check" / f"K{c:03d}.lean", HEADER + "import Brent.Catalogue.Point\n\n"
               "namespace Brent.Catalogue\n\n" + "\n".join(parts) +
-              f"\ntheorem chunk{c:03d} : rangeOK {lo} {hi - lo} = true :=\n  {expr}\n\nend Brent.Catalogue\n")
+              f"\nset_option maxHeartbeats 0 in\nset_option maxRecDepth 100000 in\n"
+              f"theorem chunk{c:03d} : rangeOK {lo} {hi - lo} = true :=\n  {expr}\n\nend Brent.Catalogue\n")
     imports = "".join(f"import Brent.Catalogue.Check.K{c:03d}\n" for c in range(nd))
-    expr = "chunk000"
+    expr, acc = "chunk000", min(NPOINTS, CHUNK)
     for c in range(1, nd):
-        expr = f"(rangeOK_append {expr}\n    chunk{c:03d})"
+        lo, hi = c * CHUNK, min(NPOINTS, (c + 1) * CHUNK)
+        expr = f"(rangeOK_join 0 {acc} {lo} {hi - lo} {acc + hi - lo} rfl rfl {expr}\n    chunk{c:03d})"
+        acc += hi - lo
     write(cat / "Checks.lean", HEADER + imports + f"""
 namespace Brent.Catalogue
 
 /-- All {NPOINTS} points pass `pointOK`. -/
+set_option maxHeartbeats 0 in
+set_option maxRecDepth 100000 in
 theorem all_points : rangeOK 0 {NPOINTS} = true :=
   {expr}
 

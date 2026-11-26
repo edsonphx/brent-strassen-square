@@ -56,4 +56,11 @@ theorem rangeOK_append {lo n n' : Nat} (h1 : rangeOK lo n = true)
   · have := h2 (k - n) (by omega)
     rwa [show lo + n + (k - n) = lo + k by omega] at this
 
+/-- `rangeOK_append` with every size given explicitly: the side conditions are closed by `rfl` on
+numerals, so no unification of `lo + n` or `n + n'` is needed. -/
+theorem rangeOK_join (lo n mid n' tot : Nat) (hmid : lo + n = mid) (htot : n + n' = tot)
+    (h1 : rangeOK lo n = true) (h2 : rangeOK mid n' = true) : rangeOK lo tot = true := by
+  subst hmid htot
+  exact rangeOK_append h1 h2
+
 end Brent.Catalogue

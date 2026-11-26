@@ -193,4 +193,21 @@ theorem family_profile (pq : FamilyParameters k) (left : Bool) :
   obtain ⟨i, j⟩ := s
   simp only [rank_value_eq]
 
+
+theorem budget_pos (i : Fin 7) : 0 < budget i := by
+  unfold budget
+  split <;> norm_num
+
+/-- Lines 719–720: "The open parameterizations preserve every nonzero factor and retain all 49
+summands." For every parameter value of either family, over every field, each of the three factor
+matrices of each of the 49 summands is nonzero (so every summand is a nonzero rank-one tensor). -/
+theorem family_factor_ne_zero (pq : FamilyParameters k) (left : Bool) (s : SquareSummand)
+    (m : Mode) : modeMat (pq.value left).coordinates s m ≠ 0 := by
+  obtain ⟨i, j⟩ := s
+  intro h
+  have hr := rank_value_eq pq left i j m
+  rw [h, Matrix.rank_zero] at hr
+  have := Nat.mul_pos (budget_pos i) (budget_pos j)
+  omega
+
 end Brent.Census
