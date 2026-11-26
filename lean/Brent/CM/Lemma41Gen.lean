@@ -234,7 +234,7 @@ theorem lemma41_of_span {b s : ℕ} (g : Fin (b + 1) → A) (hg : Ideal.span (Se
     (f : ℕ → A) (d : ℕ → ℕ) (hf : ∀ i, f i ∈ 𝔪 ^ d i)
     (hreg : ∀ (i n : ℕ) (a : A), a ∈ 𝔪 ^ n → f i * a ∈ relI f d i (n + d i) →
       a ∈ relI f d i n)
-    {I : Ideal A} (hI : ∀ j, f j ∈ I) :
+    {I : Ideal A} (hI : ∀ j < s, f j ∈ I) :
     ringKrullDim (A ⧸ I) ≤ ((b + 1 - s : ℕ) : WithBot ℕ∞) :=
   lemma41 (s := s) f d hf hreg (orderLE_hilbR_zero f d g hg) hI
 

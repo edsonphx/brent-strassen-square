@@ -72,15 +72,15 @@ theorem relI_le_pow (i n : ℕ) : relI f d i n ≤ 𝔪 ^ n := by
     · exact bot_le
 
 include hf in
-theorem relI_le_of_mem {I : Ideal A} (hI : ∀ j, f j ∈ I) (i n : ℕ) :
+theorem relI_le_of_mem {I : Ideal A} (i n : ℕ) (hI : ∀ j < i, f j ∈ I) :
     relI f d i n ≤ I ⊔ 𝔪 ^ (n + 1) := by
   induction i with
   | zero => exact le_sup_right
   | succ i ih =>
-    refine sup_le ih ?_
+    refine sup_le (ih fun j hj => hI j (by omega)) ?_
     split_ifs
     · exact le_sup_of_le_left (Ideal.mul_le_right.trans
-        ((Ideal.span_singleton_le_iff_mem _).mpr (hI i)))
+        ((Ideal.span_singleton_le_iff_mem _).mpr (hI i (by omega))))
     · exact bot_le
 
 include hf in
@@ -243,18 +243,18 @@ theorem orderLE_R {N : ℕ} (hA : OrderLE (hilbR f d 0) N) (i : ℕ) :
 
 /-! ### The graded surjection onto `gr (A ⧸ I)` -/
 
-variable {I : Ideal A} (hI : ∀ j, f j ∈ I)
+variable {I : Ideal A} {s : ℕ} (hI : ∀ j < s, f j ∈ I)
 
 include hf hI in
 /-- `R s n ↠ gr_n (A ⧸ I)`. -/
-noncomputable def toGr (s n : ℕ) : RPiece f d s n →ₗ[A] grFam I n :=
+noncomputable def toGr (n : ℕ) : RPiece f d s n →ₗ[A] grFam I n :=
   Submodule.mapQ _ _
     ((Submodule.inclusion (le_sup_right : (𝔪 ^ n : Ideal A) ≤ I ⊔ 𝔪 ^ n)))
     fun b hb => by
       show (b : A) ∈ I ⊔ 𝔪 ^ (n + 1)
-      exact relI_le_of_mem hf hI s n hb
+      exact relI_le_of_mem hf s n hI hb
 
-theorem toGr_surjective (s n : ℕ) : Function.Surjective (toGr f d hf hI s n) := by
+theorem toGr_surjective (n : ℕ) : Function.Surjective (toGr f d hf hI n) := by
   intro q
   induction q using Submodule.Quotient.induction_on with
   | H b =>
@@ -267,9 +267,9 @@ theorem toGr_surjective (s n : ℕ) : Function.Surjective (toGr f d hf hI s n) :
     exact Submodule.neg_mem _ (Submodule.mem_sup_left hj)
 
 include hf hI in
-theorem length_gr_le (s n : ℕ) :
+theorem length_gr_le (n : ℕ) :
     lenZ (A := A) (grFam I n) ≤ hilbR f d s n := by
-  have h := Module.length_le_of_surjective _ (toGr_surjective f d hf hI s n)
+  have h := Module.length_le_of_surjective _ (toGr_surjective f d hf hI n)
   unfold hilbR lenZ
   exact_mod_cast toNat_le_toNat' (length_R_ne_top f d s n) h
 
@@ -286,7 +286,7 @@ include hf hreg in
 variables, `I` contains `f₁, …, f_s` whose initial forms are a regular sequence, then every chain
 of primes containing `I` has length `≤ N − s`. -/
 theorem lemma41_chain {N s : ℕ} (hA : OrderLE (hilbR f d 0) N) {I : Ideal A}
-    (hI : ∀ j, f j ∈ I) (q : LTSeries (PrimeSpectrum A)) (hq : I ≤ (q 0).asIdeal) :
+    (hI : ∀ j < s, f j ∈ I) (q : LTSeries (PrimeSpectrum A)) (hq : I ≤ (q 0).asIdeal) :
     q.length ≤ N - s := by
   have hR := orderLE_R f d hf hreg hA s
   -- `χ_I = Σ gr_j (A ⧸ I) ≤ Σ R_s`, of order `≤ N − s + 1`
@@ -294,14 +294,14 @@ theorem lemma41_chain {N s : ℕ} (hA : OrderLE (hilbR f d 0) N) {I : Ideal A}
   have hchi : OrderLE (chi I) (N - s + 1) := by
     refine orderLE_of_le hsum (orderLE_chi I) (chi_nonneg I) fun n => ?_
     rw [chi_eq_partialSum]
-    exact Finset.sum_le_sum fun j _ => length_gr_le f d hf hI s j
+    exact Finset.sum_le_sum fun j _ => length_gr_le f d hf hI j
   have h := chain_bound length_quot_pow_ne_top orderLE_chi q.length q rfl I hq _ hchi
   omega
 
 include hf hreg in
 /-- **Lemma 4.1.** `dim (A ⧸ I) ≤ N − s`. -/
 theorem lemma41 {N s : ℕ} (hA : OrderLE (hilbR f d 0) N) {I : Ideal A}
-    (hI : ∀ j, f j ∈ I) : ringKrullDim (A ⧸ I) ≤ ((N - s : ℕ) : WithBot ℕ∞) := by
+    (hI : ∀ j < s, f j ∈ I) : ringKrullDim (A ⧸ I) ≤ ((N - s : ℕ) : WithBot ℕ∞) := by
   rw [ringKrullDim_quotient]
   unfold Order.krullDim
   refine iSup_le fun q => ?_
