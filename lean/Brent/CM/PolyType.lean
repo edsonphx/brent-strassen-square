@@ -90,17 +90,17 @@ theorem exists_poly_of_orderLE {f : ℕ → ℤ} {a : ℕ} (h : OrderLE f a) :
   obtain ⟨n₀, hn₀⟩ := h
   refine ⟨∑ i ∈ range a, C ((diffPow i f n₀ : ℤ) : ℝ) * binomPoly n₀ i, ?_, n₀, fun n hn => ?_⟩
   · refine lt_of_le_of_lt (degree_sum_le _ _) ?_
-    rw [Finset.sup_lt_iff (WithBot.bot_lt_coe a)]
+    rw [Finset.sup_lt_iff (WithBot.bot_lt_natCast a)]
     intro i hi
     refine lt_of_le_of_lt (degree_mul_le _ _) ?_
     refine lt_of_le_of_lt (add_le_add degree_C_le (degree_binomPoly_le n₀ i)) ?_
     rw [zero_add]
     exact_mod_cast Finset.mem_range.mp hi
   · obtain ⟨k, rfl⟩ : ∃ k, n = n₀ + k := ⟨n - n₀, by omega⟩
-    rw [eq_sum_of_orderLE hn₀ k, eval_finset_sum]
-    push_cast
+    rw [eq_sum_of_orderLE hn₀ k, eval_finset_sum, Int.cast_sum]
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [eval_mul, eval_C, eval_binomPoly]
+    push_cast
     ring
 
 /-- Differences of `n ↦ P (n)` are the polynomial differences. -/
@@ -113,36 +113,26 @@ theorem cast_diffPow_poly {f : ℕ → ℤ} {P : ℝ[X]} {n₀ : ℕ}
     intro n hn
     rw [diffPow_succ, Function.iterate_succ_apply']
     simp only [diff]
-    push_cast
-    rw [ih n hn, ih (n + 1) (by omega)]
+    rw [Int.cast_sub, ih n hn, ih (n + 1) (by omega)]
     simp [fwdDiff]
 
 /-- **Agreeing on a tail with a polynomial of degree `< a` gives order `≤ a`.** -/
 theorem orderLE_of_poly {f : ℕ → ℤ} {P : ℝ[X]} {a n₀ : ℕ}
     (hf : ∀ n ≥ n₀, (f n : ℝ) = P.eval (n : ℝ)) (hP : P.degree < a) : OrderLE f a := by
-  refine ⟨n₀, fun n hn => ?_⟩
-  have hnat : P.natDegree < a ∨ P = 0 := by
+  have hlt : 0 < a → P.natDegree < a := fun ha => by
     by_cases h0 : P = 0
-    · exact Or.inr h0
-    · left
-      rwa [degree_eq_natDegree h0, Nat.cast_lt] at hP
+    · simpa [h0] using ha
+    · rwa [degree_eq_natDegree h0, Nat.cast_lt] at hP
+  refine ⟨n₀, fun n hn => ?_⟩
   have h := cast_diffPow_poly hf a n hn
-  rcases hnat with hlt | h0
-  · rw [Polynomial.fwdDiff_iter_eq_zero_of_degree_lt hlt] at h
-    exact_mod_cast h
-  · subst h0
-    have hz : (fwdDiff (1 : ℝ))^[a] (eval · (0 : ℝ[X])) = 0 := by
-      have : (eval · (0 : ℝ[X])) = (0 : ℝ → ℝ) := by funext x; simp
-      rw [this]
-      induction a with
-      | zero => rfl
-      | succ a iha =>
-        rw [Function.iterate_succ_apply', iha (by simp at hP; exact WithBot.bot_lt_coe a)]
-        funext x
-        simp [fwdDiff]
-    rw [show (eval · (0 : ℝ[X])) = (0 : ℝ[X]).eval from rfl] at hz
-    rw [hz] at h
-    exact_mod_cast h
+  rcases Nat.eq_zero_or_pos a with rfl | ha
+  · have hP0 : P = 0 := by
+      by_contra h0
+      rw [degree_eq_natDegree h0, Nat.cast_lt] at hP
+      exact Nat.not_lt_zero _ hP
+    simpa [hP0] using h
+  · rw [Polynomial.fwdDiff_iter_eq_zero_of_degree_lt (hlt ha)] at h
+    simpa using h
 
 /-- **A polynomial bounded by `C (n + 1)ᵇ` on the naturals has degree `≤ b`.** -/
 theorem degree_le_of_bound {P : ℝ[X]} {b n₀ : ℕ} {Cb : ℝ}
@@ -153,8 +143,7 @@ theorem degree_le_of_bound {P : ℝ[X]} {b n₀ : ℕ} {Cb : ℝ}
   have hQ0 : Q ≠ 0 := pow_ne_zero _ (X_add_C_ne_zero 1)
   have hQdeg : Q.degree = b := by
     rw [hQ, degree_pow, degree_X_add_C, nsmul_one]
-    rfl
-  have hlim := (abs_div_tendsto_atTop_atTop_of_degree_gt P Q (hQdeg ▸ hlt) hQ0).comp
+  have hlim := (abs_div_tendsto_atTop_atTop_of_degree_gt P Q (by rw [hQdeg]; exact hlt) hQ0).comp
     tendsto_natCast_atTop_atTop
   have hev := (hlim.eventually_gt_atTop Cb).and (eventually_ge_atTop n₀)
   obtain ⟨n, hgt, hn⟩ := hev.exists
@@ -187,10 +176,12 @@ theorem bound_of_orderLE {f : ℕ → ℤ} {b : ℕ} (hf : OrderLE f (b + 1)) :
   set Q : ℝ[X] := (X + C 1) ^ b with hQ
   have hQdeg : Q.degree = b := by
     rw [hQ, degree_pow, degree_X_add_C, nsmul_one]
-    rfl
   have hle : P.degree ≤ Q.degree := by
     rw [hQdeg]
-    exact Order.le_of_lt_succ (by exact_mod_cast hPdeg)
+    by_cases h0 : P = 0
+    · simp [h0]
+    · rw [degree_eq_natDegree h0] at hPdeg ⊢
+      exact_mod_cast Nat.lt_succ_iff.mp (by exact_mod_cast hPdeg)
   obtain ⟨c, hc⟩ := (Polynomial.isBigO_atTop_of_degree_le P Q hle).bound
   have hev := (tendsto_natCast_atTop_atTop.eventually hc).and (eventually_ge_atTop n₀)
   obtain ⟨n₁, hn₁⟩ := eventually_atTop.mp hev
