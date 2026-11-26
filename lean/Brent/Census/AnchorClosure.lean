@@ -1,3 +1,4 @@
+import Mathlib.Data.Matrix.ColumnRowPartitioned
 import Brent.Census.RankBound
 import Brent.Census.Minors
 
@@ -187,13 +188,11 @@ theorem base_rel_left (P Q T : Fin 7 → (Matrix (Fin 2) (Fin 2) k)ˣ) (t : Squa
   obtain ⟨i, j⟩ := t
   obtain ⟨L, R, ⟨uL, rfl⟩, ⟨uR, rfl⟩, h⟩ := modeMat_leftFamily_units P Q T i m
   simp only [anchor, if_true]
-  refine ⟨⟨1 ⊗ₖ (↑uL * sMat k j m * ↑uL⁻¹), ?_⟩, ⟨1 ⊗ₖ (↑uR⁻¹ * sMat k j m * ↑uR), ?_⟩⟩
-  · rw [h j, h 0, sMat_zero, ← Matrix.mul_kronecker_mul, Matrix.one_mul]
-    congr 1
-    simp only [Matrix.mul_one, Matrix.mul_assoc, Units.inv_mul_cancel_left]
-  · rw [h j, h 0, sMat_zero, ← Matrix.mul_kronecker_mul, Matrix.mul_one]
-    congr 1
-    simp only [Matrix.mul_one, Matrix.mul_assoc, Units.mul_inv_cancel_left]
+  refine ⟨⟨1 ⊗ₖ (uL.val * sMat k j m * (uL⁻¹).val), ?_⟩, ⟨1 ⊗ₖ ((uR⁻¹).val * sMat k j m * uR.val), ?_⟩⟩
+  · rw [h j, h 0, sMat_zero, ← Matrix.mul_kronecker_mul]
+    simp only [Matrix.one_mul, Matrix.mul_one, Matrix.mul_assoc, Units.inv_mul_cancel_left]
+  · rw [h j, h 0, sMat_zero, ← Matrix.mul_kronecker_mul]
+    simp only [Matrix.one_mul, Matrix.mul_one, Matrix.mul_assoc, Units.mul_inv_cancel_left]
 
 theorem base_rel_right (P Q T : Fin 7 → (Matrix (Fin 2) (Fin 2) k)ˣ) (t : SquareSummand)
     (m : Mode) :
@@ -202,13 +201,11 @@ theorem base_rel_right (P Q T : Fin 7 → (Matrix (Fin 2) (Fin 2) k)ˣ) (t : Squ
   obtain ⟨i, j⟩ := t
   obtain ⟨L, R, ⟨uL, rfl⟩, ⟨uR, rfl⟩, h⟩ := modeMat_rightFamily_units P Q T j m
   simp only [anchor, Bool.false_eq_true, if_false]
-  refine ⟨⟨(↑uL * sMat k i m * ↑uL⁻¹) ⊗ₖ 1, ?_⟩, ⟨(↑uR⁻¹ * sMat k i m * ↑uR) ⊗ₖ 1, ?_⟩⟩
-  · rw [h i, h 0, sMat_zero, ← Matrix.mul_kronecker_mul, Matrix.one_mul]
-    congr 1
-    simp only [Matrix.mul_one, Matrix.mul_assoc, Units.inv_mul_cancel_left]
-  · rw [h i, h 0, sMat_zero, ← Matrix.mul_kronecker_mul, Matrix.mul_one]
-    congr 1
-    simp only [Matrix.mul_one, Matrix.mul_assoc, Units.mul_inv_cancel_left]
+  refine ⟨⟨(uL.val * sMat k i m * (uL⁻¹).val) ⊗ₖ 1, ?_⟩, ⟨((uR⁻¹).val * sMat k i m * uR.val) ⊗ₖ 1, ?_⟩⟩
+  · rw [h i, h 0, sMat_zero, ← Matrix.mul_kronecker_mul]
+    simp only [Matrix.one_mul, Matrix.mul_one, Matrix.mul_assoc, Units.inv_mul_cancel_left]
+  · rw [h i, h 0, sMat_zero, ← Matrix.mul_kronecker_mul]
+    simp only [Matrix.one_mul, Matrix.mul_one, Matrix.mul_assoc, Units.mul_inv_cancel_left]
 
 /-- Changes of basis act on every summand by the same invertible `L`, `R`. -/
 theorem modeMat_changeBasis_units {α ι : Type*} [Fintype α] [DecidableEq α] [Fintype ι]
@@ -240,7 +237,7 @@ theorem rowRel_changeBasis {α ι : Type*} [Fintype α] [DecidableEq α] [Fintyp
       Z * modeMat (d.changeBasis P Q T).coordinates a m := by
   obtain ⟨L, R, ⟨uL, rfl⟩, -, hs⟩ := modeMat_changeBasis_units d P Q T m
   obtain ⟨Z, hZ⟩ := h
-  refine ⟨↑uL * Z * ↑uL⁻¹, ?_⟩
+  refine ⟨uL.val * Z * (uL⁻¹).val, ?_⟩
   rw [hs t, hs a, hZ]
   simp only [Matrix.mul_assoc, Units.inv_mul_cancel_left]
 
@@ -251,7 +248,7 @@ theorem colRel_changeBasis {α ι : Type*} [Fintype α] [DecidableEq α] [Fintyp
       modeMat (d.changeBasis P Q T).coordinates a m * Z := by
   obtain ⟨L, R, -, ⟨uR, rfl⟩, hs⟩ := modeMat_changeBasis_units d P Q T m
   obtain ⟨Z, hZ⟩ := h
-  refine ⟨↑uR⁻¹ * Z * ↑uR, ?_⟩
+  refine ⟨(uR⁻¹).val * Z * uR.val, ?_⟩
   rw [hs t, hs a, hZ]
   simp only [Matrix.mul_assoc, Units.mul_inv_cancel_left]
 
@@ -262,10 +259,10 @@ theorem rowRel_rescale {α ι : Type*} [Fintype α] [DecidableEq α] [Fintype ι
       Z * modeMat (d.rescale l m').coordinates a m := by
   obtain ⟨c, hc⟩ := modeMat_rescale_smul d l m' m
   obtain ⟨Z, hZ⟩ := h
-  refine ⟨(((c t : kˣ) : k) * (((c a)⁻¹ : kˣ) : k)) • Z, ?_⟩
-  rw [hc t, hc a, hZ, Matrix.smul_mul, Matrix.mul_smul, smul_smul, smul_smul, Matrix.smul_mul]
-  congr 1
-  rw [mul_assoc, Units.inv_mul, mul_one]
+  refine ⟨((c t).val * (c a).inv) • Z, ?_⟩
+  have hscalar : (c t).val * (c a).inv * (c a).val = (c t).val := by
+    rw [mul_assoc, (c a).inv_val, mul_one]
+  simp only [hc t, hc a, hZ, Matrix.smul_mul, Matrix.mul_smul, smul_smul, hscalar]
 
 theorem colRel_rescale {α ι : Type*} [Fintype α] [DecidableEq α] [Fintype ι]
     (d : Decomposition k α ι) (l m' : ι → kˣ) {t a : ι} {m : Mode}
@@ -274,10 +271,12 @@ theorem colRel_rescale {α ι : Type*} [Fintype α] [DecidableEq α] [Fintype ι
       modeMat (d.rescale l m').coordinates a m * Z := by
   obtain ⟨c, hc⟩ := modeMat_rescale_smul d l m' m
   obtain ⟨Z, hZ⟩ := h
-  refine ⟨(((c t : kˣ) : k) * (((c a)⁻¹ : kˣ) : k)) • Z, ?_⟩
-  rw [hc t, hc a, hZ, Matrix.mul_smul, Matrix.smul_mul, smul_smul, smul_smul, Matrix.mul_smul]
-  congr 1
-  rw [mul_comm (((c a : kˣ) : k)), mul_assoc, Units.inv_mul, mul_one]
+  refine ⟨((c t).val * (c a).inv) • Z, ?_⟩
+  have hscalar : (c t).val * (c a).inv * (c a).val = (c t).val := by
+    rw [mul_assoc, (c a).inv_val, mul_one]
+  have hscalar' : (c a).val * ((c t).val * (c a).inv) = (c t).val := by
+    rw [mul_comm (c a).val, hscalar]
+  simp only [hc t, hc a, hZ, Matrix.mul_smul, Matrix.smul_mul, smul_smul, hscalar, hscalar']
 
 /-- **The relations on every family point.** -/
 theorem family_rel (pq : FamilyParameters k) (left : Bool) (t : SquareSummand) (m : Mode) :
@@ -301,6 +300,7 @@ theorem budget_anchor (left : Bool) (t : SquareSummand) (ht : InGroup left t) :
 
 theorem family_stackOK (pq : FamilyParameters k) (left : Bool) (t : SquareSummand)
     (ht : InGroup left t) : StackOK (pq.value left).coordinates t (anchor left t) := by
+  unfold StackOK
   intro m
   obtain ⟨⟨Z, hZ⟩, ⟨Z', hZ'⟩⟩ := family_rel pq left t m
   have hA : (modeMat (pq.value left).coordinates (anchor left t) m).rank ≤ 2 := by
@@ -339,7 +339,7 @@ theorem rank_le_fromRows {β : Type} [Fintype β] [DecidableEq β] (A B : Matrix
 theorem rowSpan_le_of_stack {β : Type} [Fintype β] [DecidableEq β] (A B : Matrix β β k)
     (hB : B.rank = 2) (h : (Matrix.fromRows A B).rank ≤ 2) :
     Submodule.span k (Set.range A.row) ≤ Submodule.span k (Set.range B.row) := by
-  have heq : (Matrix.fromRows A B).rank = B.rank := le_antisymm (hB ▸ h) (rank_le_fromRows A B)
+  have heq : (Matrix.fromRows A B).rank = B.rank := le_antisymm (by simpa only [hB] using h) (rank_le_fromRows A B)
   rw [Matrix.rank_eq_finrank_span_row, Matrix.rank_eq_finrank_span_row] at heq
   have hsup : Submodule.span k (Set.range (Matrix.fromRows A B).row) =
       Submodule.span k (Set.range A.row) ⊔ Submodule.span k (Set.range B.row) := by

@@ -1,3 +1,4 @@
+import Mathlib.Data.Matrix.ColumnRowPartitioned
 import Brent.Catalogue.Main
 import Brent.Census.FieldTransfer
 
