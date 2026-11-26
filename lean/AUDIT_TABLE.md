@@ -61,10 +61,11 @@ yet validated), **open** (not formalized; reason given).
 | 178–196 | The `GL₄³` action and term scalings preserve solutions | `solves_changeBasis`, `solves_rescale` | compiled | — |
 | 197–199 | Scalar `P, Q, R` are compensated by scalings: three-dimensional kernel in the 146-parameter group | `Formal.finrank_ker_dOrbit` | compiled | — |
 | 200–226 | `D_L`, `D_R` are solutions over any ring; both send the identity to `p`; `g_i = 1` gives the same orbit map | `leftFamily_solves`, `rightFamily_solves`, `leftFamily_at_identity`, `rightFamily_at_identity`, F1 overlap (`value true = value false` at trivial blocks) | compiled | — |
-| 228–252 | Lemma 3.1: the three copies of `𝔰𝔩₂` act injectively on Strassen's factor lines | — | **open** | Proof step. The Lean proof does not use it: the dimensions 143, 197, 251 and the split are certified directly (`archived_frame_rank`, `archived_frame_split`, `chart_independent_derivatives`, `finrank_range_dOrbit`). |
-| 253–320 | The rescaling and block derivatives are injective (98, 63, 63); the 27 mixed global directions are independent modulo `S + L + R'` | — | **open** | Proof step, replaced by the same certified ranks. |
+| 228–252 | Lemma 3.1: the three copies of `𝔰𝔩₂` act injectively on Strassen's factor lines | `Section3.lemma_base` | drafted | Every field with `2 ≠ 0` (`Section3.two_ne_zero_of` for characteristic 3 or 0). |
+| 253–288 | Projection to `Mat₂/kF`; the map from rescalings and the two block lists to the tangent space is injective | `Section3.kron_line`, `Section3.derivative_injective` | drafted | The derivative is written by the formula of lines 262–267 (`Section3.derivative`). |
+| 289–320 | The 27 mixed global directions are independent modulo `S + L + R'` | — | **open** | Not yet formalized. |
 | 321–328 | Dimension table: `T₀ = 143`, `T₀ + L = T₀ + R' = 197`, `T₀ + L + R' = 251` | `finrank_range_dOrbit`, `chart_independent_derivatives`, `archived_frame_split`, `square_jacobian_nullity` | compiled | The 197 is stated as 197 independent chart derivatives per family. |
-| 329 | The two branch tangent spaces intersect precisely in `T₀` | `archived_frame_split` (block independence) | **open** | Follows from the direct sum `T₀ ⊕ X ⊕ Y`, but no theorem states the intersection. |
+| 329 | The two branch tangent spaces intersect precisely in `T₀` | `TangentData.branchTangent_inf`, `finrank_branchTangent`, `finrank_orbitTangent`, `branchTangent_ne` | drafted | Branch tangent space = span of that family's archived first derivatives (`branchTangent_generators`). |
 | 330–337 | Orbit dimension 143: fibers contain the central kernel (≤ 143) and an invertible 143-minor gives 143 formal coordinates (≥ 143) | `Formal.finrank_range_dOrbit`, `Formal.ringKrullDim_slice` | compiled | — |
 | 338–343 | Group and block directions lie in `ker J`; a nonzero 2101-minor mod 3 gives tangent ≤ 251 in both characteristics | `tangent_satisfies_differential`, `square_jacobian_rank`, `square_jacobian_nullity` | compiled | Rank proved exactly over every field. |
 | 344–356 | `ker J = T₀ ⊕ X ⊕ Y` with dimensions `(143, 54, 54)` | `archived_frame_rank`, `archived_frame_split`, `archived_origin` | compiled | — |
@@ -75,7 +76,7 @@ yet validated), **open** (not formalized; reason given).
 
 | Lines | Claim | Declaration | Status | Difference from the paper |
 |---|---|---|---|---|
-| 392–405 | Second-order lifting: `v` lifts to order two iff `Q₂(v) ∈ im J` | `Decomposition.entry_line`, `equation_eq_expansion` | compiled | Expansion formula; the lifting criterion itself is not stated as an iff. |
+| 392–405 | Coefficients of `t`, `t²` are `Jv`, `Jh + Q₂(v)`; `v ∈ ker J` lifts to order two iff `Q₂(v) ∈ im J` | `Decomposition.second_order_expansion`, `Decomposition.liftsToOrderTwo_iff` | drafted | Every commutative ring; lifting is over `R[X]` modulo `X³`. |
 | 405–413 | `λQ₂` vanishes on `T₀ + X` and `T₀ + Y`, leaving only the mixed monomials `xᵢyⱼ` | `archived_nonmixed_zero`, `archived_square_zero`, `same_family_polar_zero` | compiled | — |
 | 414–426 | The 54 rows `λᵢ` kill `J` and `qᵢ = λᵢ M (x ⊗ y)` | `archived_covectors_annihilate`, `archived_mixed_coefficients` | compiled | — |
 | 427–432 | Leading monomials `xᵢ y_π(i)` form a perfect matching | `quadraticMatching_bijective`, `archived_mixed_pivots`, `archived_mixed_zero_before`, `archived_polar_leading` | compiled | — |
@@ -109,7 +110,7 @@ yet validated), **open** (not formalized; reason given).
 | Lines | Claim | Declaration | Status | Difference from the paper |
 |---|---|---|---|---|
 | 710–718 | Census input pinned by SHA-256; Hadamard bound makes reduction at the chosen prime faithful | `tools/catalogue/gen_catalogue_lean.py`, CI hash checks | not needed | The Lean census works exactly over `ℚ` and `ZMod 3` and transfers to every field; no prime-reduction argument is used. |
-| 719–721 | The open parameterizations preserve every nonzero factor and keep all 49 summands | — | **open** | Not stated in Lean. |
+| 719–721 | The open parameterizations preserve every nonzero factor and keep all 49 summands | `Census.family_factor_ne_zero` | drafted | Every field, every parameter value, both families. |
 | 722–740 | Reproducibility, archives, collaboration note | — | not a claim | — |
 
 ## Appendix A (lines 760–900)
@@ -124,9 +125,6 @@ yet validated), **open** (not formalized; reason given).
 
 ## Open rows
 
-1. **Lemma 3.1 and the injectivity argument (lines 228–320).** Intermediate steps of the paper's hand computation of the dimensions. The dimensions themselves are compiled.
-2. **Branch tangent spaces intersect in `T₀` (line 329).** Follows from the compiled direct sum; needs a one-line theorem.
-3. **Gröbner basis, height 54, regular sequence (lines 444–456) and Lemma 4.1 (457–482).** Intermediate steps of the paper's upper-bound proof. The bound is compiled by another route.
-4. **Splitting over `ℤ₍₃₎` and the regular-sequence lift (lines 505–545).** Intermediate steps of the characteristic-zero transfer. The bound is compiled by another route.
-5. **Second-order lifting criterion as an iff (lines 392–405).** Only the expansion is compiled.
-6. **Parameterizations keep every nonzero factor (lines 719–721).** Not stated.
+1. **The 27 mixed global directions (lines 289–320).** Not yet formalized.
+2. **Gröbner basis, height 54, regular sequence (lines 444–456) and Lemma 4.1 (457–482).** Steps of the paper's upper-bound proof. The bound itself is compiled by another route.
+3. **Splitting over `ℤ₍₃₎` and the regular-sequence lift (lines 505–545).** Steps of the characteristic-zero transfer. The bound itself is compiled by another route.
