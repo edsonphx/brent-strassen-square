@@ -76,15 +76,13 @@ theorem second_order_expansion (p v h : Decomposition R α ι) (t : R) (a b c : 
         t ^ 3 * p.tail v h t a b c := by
   unfold entry jacobianEntry quadraticEntry tail quadJet
   simp only [cubic_jet, Finset.mul_sum, ← Finset.sum_add_distrib]
-  refine Finset.sum_congr rfl fun s _ => ?_
-  ring
 
 /-- Constant coefficients over `R[X]`. -/
-def constX (d : Decomposition R α ι) : Decomposition R[X] α ι :=
+noncomputable def constX (d : Decomposition R α ι) : Decomposition R[X] α ι :=
   ⟨fun s a => C (d.u s a), fun s a => C (d.v s a), fun s a => C (d.w s a)⟩
 
 /-- `p + X v + X² h` over `R[X]`. -/
-def jet (p v h : Decomposition R α ι) : Decomposition R[X] α ι :=
+noncomputable def jet (p v h : Decomposition R α ι) : Decomposition R[X] α ι :=
   (constX p).quadJet (constX v) (constX h) X
 
 theorem entry_constX (d : Decomposition R α ι) (a b c : α × α) :

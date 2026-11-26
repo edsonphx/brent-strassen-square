@@ -30,7 +30,7 @@ theorem exists_independent_subfamily {V ι : Type*} [AddCommGroup V] [Module K V
   have hbfin : b.Finite := (Set.finite_range v).subset hbsub
   letI : Fintype b := hbfin.fintype
   have hcard : Module.finrank K (Submodule.span K b) = Fintype.card b :=
-    finrank_span_set_eq_card hbind
+    (finrank_span_set_eq_card hbind).trans (Set.toFinset_card b)
   rw [← hbspan, hcard] at hn
   obtain ⟨e⟩ : Nonempty (Fin n ↪ b) := Function.Embedding.nonempty_of_card_le (by simpa using hn)
   have hpre : ∀ x : b, ∃ i, v i = x := fun x => hbsub x.2
@@ -76,9 +76,7 @@ theorem det_submatrix_eq_zero {m p : Type*} [Fintype m] [Fintype p] [DecidableEq
   have h2 : (M.submatrix f g).rank ≤ M.rank := by
     rw [e]
     refine (Matrix.rank_mul_le_left _ _).trans ?_
-    rw [show M.submatrix f id = (1 : Matrix (Fin n) m K).submatrix f id * M by
-      ext i j; simp [Matrix.mul_apply, Matrix.one_apply]]
-    exact Matrix.rank_mul_le_right _ _
+    exact Matrix.rank_submatrix_le f (Equiv.refl p) M
   omega
 
 /-- **Rank at most `r` iff all `(r + 1)`-minors vanish.** -/
