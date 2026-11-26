@@ -63,13 +63,21 @@ jobs:
           auto-config: "false"
           use-mathlib-cache: "false"
           use-github-cache: "false"
-      - name: §7 Li–Wang–Hu certificates
+      - name: §7 Li–Wang–Hu certificates (Mac build, kernel replay)
+        # The LWH certificates need more memory than a hosted runner has, so they are compiled
+        # on a local machine and published as a release asset (tools/lwh/pack_build.sh). CI checks
+        # the asset's hash, checks that it was built from exactly these sources
+        # (`lake build --no-build` fails if any source or dependency changed), then replays every
+        # proof through the kernel with leanchecker.
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
-          for b in 0 1 2 3 4 5; do lake build Brent.Generated.LWHBlocks.L$b; done
-          lake build Brent.Generated.LWHKernelChecks
-          lake build Brent.Generated.LWHSolves
-          lake build Brent.LWH
+          . tools/lwh/BUILD.txt
+          gh release download "$tag" --repo "$GITHUB_REPOSITORY" --pattern "$asset" --dir "$RUNNER_TEMP"
+          echo "$sha256  $RUNNER_TEMP/$asset" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/$asset"
+          lake build --no-build Brent.LWH
           for file in Brent/LWH.lean Brent/LWH/*.lean Brent/Generated/LWH{Data,Checks,KernelChecks,Solves}.lean \
             Brent/Generated/LWHBlocks/*.lean; do
             module=${file%.lean}
