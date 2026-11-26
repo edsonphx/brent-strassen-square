@@ -17,6 +17,8 @@ import Brent.Formal.SwapSymmetry
 import Brent.Formal.SmoothPoints
 import Brent.Equidim.Equidim
 import Brent.LWH
+import Brent.Theorem11
+import Brent.Section7
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -314,3 +316,100 @@ run_cmd do
 #print axioms Brent.Equidim.ringKrullDim_localization_eq
 #print axioms Brent.Equidim.ringKrullDim_ne_top
 #print axioms Brent.LWH.lwh_point
+
+run_cmd do
+  let theorems := [
+    ``Brent.Formal.Component.ringKrullDim_locQ_le,
+    ``Brent.Formal.Component.ringKrullDim_locQ_succ_le,
+    ``Brent.Formal.Component.generic_map_evS,
+    ``Brent.Formal.Component.family_kills,
+    ``Brent.Formal.Component.derivD_independent,
+    ``Brent.Formal.Component.localDim_closure,
+    ``Brent.Formal.Component.prime_eq_ker,
+    ``Brent.Formal.Component.vanishingIdeal_isPrime,
+    ``Brent.Formal.Component.familyClosure_maximal,
+    ``Brent.Formal.Component.familyClosure_isComponent,
+    ``Brent.Formal.Component.ker_mem_minimalPrimes,
+    ``Brent.Formal.Component.ringKrullDim_closure,
+    ``Brent.Census.isClosed_rankBound,
+    ``Brent.Census.det_submatrix_eq_zero_of_rank_lt,
+    ``Brent.Census.mem_rankBound_of_profileBound,
+    ``Brent.Census.dominated_of_formula,
+    ``Brent.Census.profileBound_of_dominated,
+    ``Brent.Census.strassen_factor,
+    ``Brent.Census.rank_value_le,
+    ``Brent.Census.profileBound_family,
+    ``Brent.Census.closure_saturation_subset_rankBound,
+    ``Brent.Census.BoundW.not_mem_rankBound,
+    ``Brent.Census.BoundW.not_mem_closure,
+    ``Brent.Census.boundWitnesses_check,
+    ``Brent.Census.boundWitnesses_indices,
+    ``Brent.Census.alphaTensor_bound_excluded,
+    ``Brent.squareLocalDimension_eq_197,
+    ``Brent.reduced_localDimension_eq_197,
+    ``Brent.sqBranchPrime_minimal,
+    ``Brent.hilbert_initial_values,
+    ``Brent.main_theorem,
+    ``Brent.Census.FieldTransfer.rank_map_algebraMap,
+    ``Brent.Census.FieldTransfer.rank_intCast_eq,
+    ``Brent.Census.Minors.rank_le_iff_minors,
+    ``Brent.Census.isClosed_stackOK,
+    ``Brent.Census.isClosed_budgetOK,
+    ``Brent.Census.family_stackOK,
+    ``Brent.Census.closure_stackOK,
+    ``Brent.Census.closure_budgetOK,
+    ``Brent.Census.rank_modeMat_catPoint,
+    ``Brent.Census.rankBounds_of_mem,
+    ``Brent.Census.rank_eq_budget,
+    ``Brent.Census.canAnchor_of_stack,
+    ``Brent.Census.anchorTest_of_mem,
+    ``Brent.Census.catalogue_excluded,
+    ``Brent.Census.card_excluded,
+    ``Brent.Census.catPoint_not_mem_rankBound,
+    ``Brent.Census.catPoint_not_mem_saturated,
+    ``Brent.Census.rank_bound_exclusions,
+    ``Brent.Census.equivalent_changeBasis,
+    ``Brent.Census.equivalent_rescale,
+    ``Brent.Census.shape_of_equivalent,
+    ``Brent.Census.closure_eqClosed_subset,
+    ``Brent.Census.anchorTest_of_shape,
+    ``Brent.Census.anchor_excluded_eqClosed,
+    ``Brent.Census.not_mem_familyClosure,
+    ``Brent.Census.excluded_card,
+    ``Brent.Catalogue.anchorTest_transfer,
+    ``Brent.Catalogue.facts_allFields,
+    ``Brent.Catalogue.AllFields.card_fullProfile,
+    ``Brent.Catalogue.AllFields.fullProfile_iff_rankBounds,
+    ``Brent.Catalogue.AllFields.card_not_rankBounds,
+    ``Brent.Catalogue.AllFields.anchor_excluded,
+    ``Brent.Catalogue.AllFields.card_pass_both,
+    ``Brent.Catalogue.Q.card_fullProfile,
+    ``Brent.Catalogue.Q.anchor_excluded,
+    ``Brent.Catalogue.F3.card_fullProfile,
+    ``Brent.Catalogue.F3.anchor_excluded,
+    ``Brent.Section7.closure_dimension,
+    ``Brent.Section7.closure_component,
+    ``Brent.Section7.closure_minimalPrime,
+    ``Brent.Section7.closure_dimension_algClosed,
+    ``Brent.Section7.closure_component_algClosed,
+    ``Brent.Section7.curve_matrices,
+    ``Brent.Section7.smooth_points,
+    ``Brent.Section7.swap_symmetry,
+    ``Brent.Section7.lwh_point,
+    ``Brent.Section7.rank_bounds_closed,
+    ``Brent.Section7.anchor_structure_closed,
+    ``Brent.Section7.census,
+    ``Brent.Section7.rank_bound_exclusion,
+    ``Brent.Section7.anchor_exclusion,
+    ``Brent.Section7.excluded_count
+  ]
+  for name in theorems do
+    let axioms ← collectAxioms name
+    let unexpected := axioms.filter (fun dependency =>
+      !([``propext, ``Classical.choice, ``Quot.sound].contains dependency))
+    unless unexpected.isEmpty do
+      throwError m!"{name} depends on unexpected axioms {unexpected}"
+    logInfo m!"{name}: {axioms.toList}"
+
+#print axioms Brent.main_theorem
+#print axioms Brent.Section7.anchor_exclusion

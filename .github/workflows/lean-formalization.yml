@@ -2,7 +2,7 @@ name: Lean formalization
 
 on:
   push:
-    branches: [formalization/lean4]
+    branches: [formalization/lean4, compilation-pending]
     paths: ["lean/**", ".github/workflows/lean-formalization.yml"]
   pull_request:
     paths: ["lean/**", ".github/workflows/lean-formalization.yml"]
@@ -10,8 +10,16 @@ on:
 permissions:
   contents: read
 
+# The kernel certificates do not fit in one 6-hour job. Three jobs build and replay them
+# (one Lean process at a time, several GB each) and hand their build directories to `verify`,
+# which builds everything else, runs the single audit and replays the remaining modules.
+
+env:
+  CATALOGUE_URL: https://raw.githubusercontent.com/google-deepmind/alphatensor/1949163da3bef7e3eb268a3ac015fd1c2dbfc767/nonequivalence/alphatensor_14236_factorizations.npz
+  CATALOGUE_SHA256: 15d27e300a68868710c2f5824f7987b10e004c6d7de6a3e65ae35caf42ed06a3
+
 jobs:
-  verify:
+  smooth:
     runs-on: ubuntu-latest
     timeout-minutes: 360
     defaults:
@@ -25,7 +33,120 @@ jobs:
           auto-config: "false"
           use-mathlib-cache: "false"
           use-github-cache: "false"
-      - name: Fetch dependencies and check proofs
+      - name: §7 smooth-point certificate (six blocks)
+        run: |
+          lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
+          for b in 0 1 2 3 4 5; do lake build Brent.Generated.SmoothBlocks.L$b; done
+          lake build Brent.Generated.SmoothLChecks
+          for m in Brent.Generated.SmoothLData Brent.Generated.SmoothBlocks.L0 Brent.Generated.SmoothBlocks.L1 \
+            Brent.Generated.SmoothBlocks.L2 Brent.Generated.SmoothBlocks.L3 Brent.Generated.SmoothBlocks.L4 \
+            Brent.Generated.SmoothBlocks.L5 Brent.Generated.SmoothLChecks; do
+            lake env leanchecker -v "$m"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-smooth
+          path: lean/.lake/build
+          retention-days: 3
+
+  lwh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    defaults:
+      run:
+        working-directory: lean
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: leanprover/lean-action@c544e89643240c6b398f14a431bcdc6309e36b3e # v1.4.0
+        with:
+          lake-package-directory: lean
+          auto-config: "false"
+          use-mathlib-cache: "false"
+          use-github-cache: "false"
+      - name: §7 Li–Wang–Hu certificates
+        run: |
+          lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
+          for b in 0 1 2 3 4 5; do lake build Brent.Generated.LWHBlocks.L$b; done
+          lake build Brent.Generated.LWHKernelChecks
+          lake build Brent.Generated.LWHSolves
+          lake build Brent.LWH
+          for file in Brent/LWH.lean Brent/LWH/*.lean Brent/Generated/LWH{Data,Checks,KernelChecks,Solves}.lean \
+            Brent/Generated/LWHBlocks/*.lean; do
+            module=${file%.lean}
+            lake env leanchecker -v "${module//\//.}"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-lwh
+          path: lean/.lake/build
+          retention-days: 3
+
+  catalogue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    defaults:
+      run:
+        working-directory: lean
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: leanprover/lean-action@c544e89643240c6b398f14a431bcdc6309e36b3e # v1.4.0
+        with:
+          lake-package-directory: lean
+          auto-config: "false"
+          use-mathlib-cache: "false"
+          use-github-cache: "false"
+      - name: Generate the catalogue data from the pinned DeepMind revision
+        run: |
+          mkdir -p "$RUNNER_TEMP/catalogue"
+          curl -fLsS "$CATALOGUE_URL" -o "$RUNNER_TEMP/catalogue/alphatensor_14236_factorizations.npz"
+          echo "$CATALOGUE_SHA256  $RUNNER_TEMP/catalogue/alphatensor_14236_factorizations.npz" | sha256sum -c -
+          pip install numpy
+          python3 -I tools/catalogue/gen_catalogue_lean.py "$RUNNER_TEMP/catalogue/alphatensor_14236_factorizations.npz" .
+          # The generated files must match the helper's published hashes.
+          sed '1s/^\xEF\xBB\xBF//' Brent/Catalogue/GENERATED_SHA256.txt | sha256sum -c --quiet -
+      - name: §7 catalogue census (14,236 points)
+        run: |
+          lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
+          lake build Brent.Catalogue.Checks
+          lake build Brent.Catalogue.Main
+          for file in Brent/Catalogue/*.lean Brent/Catalogue/Check/*.lean; do
+            module=${file%.lean}
+            lake env leanchecker -v "${module//\//.}"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-catalogue
+          path: |
+            lean/.lake/build
+            lean/Brent/Catalogue
+          retention-days: 3
+
+  verify:
+    needs: [smooth, lwh, catalogue]
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    defaults:
+      run:
+        working-directory: lean
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: leanprover/lean-action@c544e89643240c6b398f14a431bcdc6309e36b3e # v1.4.0
+        with:
+          lake-package-directory: lean
+          auto-config: "false"
+          use-mathlib-cache: "false"
+          use-github-cache: "false"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: build-*
+          path: ${{ runner.temp }}/builds
+      - name: Merge the certificate builds
+        run: |
+          mkdir -p .lake/build
+          for d in smooth lwh; do cp -r "$RUNNER_TEMP/builds/build-$d/." .lake/build/; done
+          cp -r "$RUNNER_TEMP/builds/build-catalogue/.lake/build/." .lake/build/
+          cp -rn "$RUNNER_TEMP/builds/build-catalogue/Brent/Catalogue/." Brent/Catalogue/
+      - name: Build, audit and replay
         run: |
           lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
           lake build Brent
@@ -44,21 +165,20 @@ jobs:
           lake build Brent.Formal.OrbitDimension
           lake build Brent.Formal.SliceIndependence
           lake build Brent.Formal.SwapSymmetry
-          # §7 smooth points: the six kernel blocks need several GB each, so build them one at a time.
-          for b in 0 1 2 3 4 5; do lake build Brent.Generated.SmoothBlocks.L$b; done
           lake build Brent.Formal.SmoothPoints
           lake build Brent.Equidim.Equidim
-          lake build Brent.Formal.FamilyClosure Brent.Formal.GermQuotLower
-          # §7 Li–Wang–Hu point: six trace blocks, then the kernel vectors and the identities.
-          for b in 0 1 2 3 4 5; do lake build Brent.Generated.LWHBlocks.L$b; done
-          lake build Brent.Generated.LWHKernelChecks
-          lake build Brent.Generated.LWHSolves
-          lake build Brent.LWH
+          lake build Brent.Formal.FamilyClosure Brent.Formal.GermQuotLower Brent.Formal.Component
+          for b in 0 1 2 3 4 5; do lake build Brent.Generated.AlphaTensorBound$b; done
+          lake build Brent.Census.AlphaTensor Brent.Census.Exclusion Brent.Census.FieldTransfer
+          lake build Brent.Catalogue.AllFields
+          lake build Brent.Census.Minors Brent.Census.AnchorClosure Brent.Census.CatalogueLink
+          lake build Brent.Census.RankBoundLink Brent.Census.Equivalences
+          lake build Brent.Theorem11 Brent.Section7
           lake env lean Audit.lean
           for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
             Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean \
-            Brent/Generated/SmoothL{Data,Checks}.lean Brent/Generated/SmoothBlocks/*.lean Brent/Equidim/*.lean \
-            Brent/LWH/*.lean Brent/Generated/LWH{Data,Checks,KernelChecks,Solves}.lean Brent/Generated/LWHBlocks/*.lean; do
+            Brent/Equidim/*.lean Brent/Census/*.lean Brent/Generated/AlphaTensorBound*.lean \
+            Brent/Catalogue/AllFields.lean; do
             module=${file%.lean}
             lake env leanchecker -v "${module//\//.}"
           done

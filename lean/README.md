@@ -75,23 +75,39 @@ lake build Brent.Formal.SwapSymmetry
 for b in 0 1 2 3 4 5; do lake build Brent.Generated.SmoothBlocks.L$b; done
 lake build Brent.Formal.SmoothPoints
 lake build Brent.Equidim.Equidim
-lake build Brent.Formal.FamilyClosure Brent.Formal.GermQuotLower
+lake build Brent.Formal.FamilyClosure Brent.Formal.GermQuotLower Brent.Formal.Component
 for b in 0 1 2 3 4 5; do lake build Brent.Generated.LWHBlocks.L$b; done
 lake build Brent.Generated.LWHKernelChecks
 lake build Brent.Generated.LWHSolves
 lake build Brent.LWH
+# §7 catalogue census: generate the data from the pinned DeepMind catalogue, then check it.
+curl -fLsS https://raw.githubusercontent.com/google-deepmind/alphatensor/1949163da3bef7e3eb268a3ac015fd1c2dbfc767/nonequivalence/alphatensor_14236_factorizations.npz -o /tmp/alphatensor_14236_factorizations.npz
+echo "15d27e300a68868710c2f5824f7987b10e004c6d7de6a3e65ae35caf42ed06a3  /tmp/alphatensor_14236_factorizations.npz" | shasum -a 256 -c -
+python3 -I tools/catalogue/gen_catalogue_lean.py /tmp/alphatensor_14236_factorizations.npz .
+sed '1s/^\xEF\xBB\xBF//' Brent/Catalogue/GENERATED_SHA256.txt | shasum -a 256 -c --quiet -
+lake build Brent.Catalogue.Checks
+lake build Brent.Catalogue.Main
+for b in 0 1 2 3 4 5; do lake build Brent.Generated.AlphaTensorBound$b; done
+lake build Brent.Census.AlphaTensor Brent.Census.Exclusion Brent.Census.FieldTransfer
+lake build Brent.Catalogue.AllFields
+lake build Brent.Census.Minors Brent.Census.AnchorClosure Brent.Census.CatalogueLink
+lake build Brent.Census.RankBoundLink Brent.Census.Equivalences
+lake build Brent.Theorem11 Brent.Section7
 lake env lean Audit.lean
 for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
     Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean \
     Brent/Generated/SmoothL{Data,Checks}.lean Brent/Generated/SmoothBlocks/*.lean Brent/Equidim/*.lean \
-    Brent/LWH/*.lean Brent/Generated/LWH{Data,Checks,KernelChecks,Solves}.lean Brent/Generated/LWHBlocks/*.lean; do
+    Brent/LWH/*.lean Brent/Generated/LWH{Data,Checks,KernelChecks,Solves}.lean Brent/Generated/LWHBlocks/*.lean \
+    Brent/Census/*.lean Brent/Generated/AlphaTensorBound*.lean Brent/Catalogue/*.lean \
+    Brent/Catalogue/Check/*.lean; do
   module=${file%.lean}
   lake env leanchecker -v "${module//\//.}"
 done
 ```
 
 The cache step is optional when building the dependencies from source. The
-branch CI runs the same commands.
+branch CI runs the same commands, split into four jobs (`smooth`, `lwh`, `catalogue`,
+`verify`) so that each fits the six-hour limit.
 
 `Audit.lean` checks the transitive axioms of the listed theorems against
 Lean's standard `propext`, `Classical.choice`, and `Quot.sound`.
