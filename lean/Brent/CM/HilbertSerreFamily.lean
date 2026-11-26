@@ -208,7 +208,10 @@ theorem cokVars_gnoeth (hc : Commutes X) (hN : GNoeth X) : GNoeth (cokVars X hc)
     induction i using Fin.lastCases with
     | last =>
       show (imFam X (n + 1)).mkQ (X (Fin.last s) n g) ∈ S (n + 1)
-      rw [(Submodule.Quotient.mk_eq_zero _).mpr (LinearMap.mem_range_self _ g)]
+      have hz : (imFam X (n + 1)).mkQ (X (Fin.last s) n g) = 0 := by
+        rw [Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
+        exact LinearMap.mem_range_self (lastVar X n) g
+      rw [hz]
       exact Submodule.zero_mem _
     | cast i =>
       show (imFam X (n + 1)).mkQ (X i.castSucc n g) ∈ S (n + 1)
@@ -226,7 +229,10 @@ theorem cokVars_gnoeth (hc : Commutes X) (hN : GNoeth X) : GNoeth (cokVars X hc)
   · rintro _ ⟨_, ⟨g, hg, rfl⟩, rfl⟩
     exact ⟨(imFam X n).mkQ g, hg, rfl⟩
   · rintro _ ⟨_, ⟨g, -, rfl⟩, rfl⟩
-    rw [(Submodule.Quotient.mk_eq_zero _).mpr (LinearMap.mem_range_self _ g)]
+    have hz : (imFam X (n + 1)).mkQ (X (Fin.last s) n g) = 0 := by
+      rw [Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero]
+      exact LinearMap.mem_range_self (lastVar X n) g
+    rw [hz]
     exact Submodule.zero_mem _
 
 /-! ### Lengths along the exact sequence -/
