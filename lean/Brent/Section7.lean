@@ -2,6 +2,7 @@ import Brent.Formal.SmoothPoints
 import Brent.Formal.SwapSymmetry
 import Brent.Formal.Component
 import Brent.Census.Equivalences
+import Brent.Census.FamilyProfile
 import Brent.LWH
 
 /-!
@@ -85,6 +86,12 @@ theorem lwh_point (hk : CharP k 3 ∨ CharZero k) : type_of% (LWH.lwh_point k hk
   LWH.lwh_point k hk
 
 /-! ### Lines 659–705: exclusions using factor ranks and subspaces -/
+
+/-- Lines 661–663: "Throughout either displayed family, the multiset of triples of ordinary
+matrix ranks is 36(1,1,1), 12(2,2,2), 1(4,4,4)." Every field. -/
+theorem family_rank_profile (pq : FamilyParameters k) (left : Bool) :
+    rankProfile (pq.value left).coordinates = fullProfile :=
+  family_profile pq left
 
 /-- Lines 669–674: on the closure of the saturated families (closed under all equivalences) at
 most 13 summands have a mode of rank above one and at most one summand has a mode of rank above
