@@ -91,7 +91,7 @@ yet validated), **open** (not formalized; reason given).
 |---|---|---|---|---|
 | 500–504 | Rank 2101 over `ℚ` too; 251 integral tangent generators independent over `ℚ` | `square_jacobian_rank`, `square_jacobian_nullity` | compiled | Every field of characteristic 0. |
 | 505–520 | Kernels free direct summands over `ℤ₍₃₎`; modular kernel vectors lift; the 251 vectors are an `R₀`-basis; the 54 rows lift | `Z3.kernel_basis_Z3`, `Z3.kernelBasisZ3`, `Z3.kernel_retract_Z3`, `Z3.kernel_lift_mod3`, `integer_annihilates` | drafted | Right kernel stated; the left kernel is represented by the 54 lifted integer covectors (`integer_annihilates`). |
-| 521–545 | `3, q̃₁, …, q̃₅₄` regular in `ℤ₍₃₎[z]`; regular in `ℚ⟦z⟧`; upper bound in characteristic 0 | `Transfer.charZero_dim_le`, `CharZeroBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charZero` | compiled (conclusion) / **open** (regular-sequence lift, roadmap step E not yet written) | Regularity of `3, q̃₁, …` again goes through Cohen–Macaulay theory (unmixedness), absent at our pin. The conclusion, `dim = 197` in characteristic 0, is compiled by a different route: graded Nakayama transfer of the finite spanning certificate. |
+| 521–545 | `3, q̃₁, …, q̃₅₄` regular in `ℤ₍₃₎[z]`; regular in `ℚ⟦z⟧`; upper bound in characteristic 0 | `Transfer.charZero_dim_le`, `CharZeroBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charZero`; lift: `CM.LiftInstance.isWeaklyRegular_q`, `cons_regular_lift`, `lifted_regular_local`, `lifted_regular_flat`, `ker_rho3`, `lifted_quadrics_regular` | compiled (conclusion) / **drafted, not compiled** (regular-sequence lift) | The lift avoids unmixedness: `3, q̃₁, …` is regular by `cons` from the regularity of the `qᵢ` mod 3, then by permutation in the local ring and flat base change. `lifted_quadrics_regular` holds for any lift `q̃ᵢ` reducing to `qᵢ`; the specific `q̃ᵢ` from the lifted elimination are not yet written. The conclusion, `dim = 197` in characteristic 0, is compiled by a different route: graded Nakayama transfer of the finite spanning certificate. |
 
 ## §6 Formal branches and Hilbert function (lines 546–605)
 
@@ -126,4 +126,4 @@ yet validated), **open** (not formalized; reason given).
 ## Open rows
 
 1. **Regular sequence (lines 444–456) and the dimension step of Lemma 4.1 (457–482).** Need Cohen–Macaulay and Hilbert–Samuel theory, absent from Mathlib at our pin. The Gröbner basis, height 54 and the graded presentation are formalized; the bound they serve is compiled by another route.
-2. **Regular-sequence lift over `ℤ₍₃₎` (lines 521–545).** Same missing Cohen–Macaulay theory. The characteristic-zero bound is compiled by another route.
+2. **Regular-sequence lift over `ℤ₍₃₎` (lines 521–545).** Drafted in `CM/LiftInstance.lean` for any lift of the `qᵢ`; the specific lifted quadrics are still missing. The characteristic-zero bound is compiled by another route.

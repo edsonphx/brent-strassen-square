@@ -25,6 +25,7 @@ import Brent.InitialForms
 import Brent.CM.HilbertSamuelPoly
 import Brent.CM.Lemma41
 import Brent.CM.RegularCoprime
+import Brent.CM.LiftInstance
 import Brent.BaseLemma
 import Brent.BranchTangents
 import Brent.SecondOrderLift
@@ -463,7 +464,13 @@ run_cmd do
     ``Brent.CM.lemma41_chain,
     ``Brent.CM.lemma41,
     ``Brent.CM.mem_of_mul_mem_of_coprime,
-    ``Brent.CM.q_regular
+    ``Brent.CM.q_regular,
+    ``Brent.CM.LiftInstance.isWeaklyRegular_q,
+    ``Brent.CM.LiftInstance.cons_regular_lift,
+    ``Brent.CM.LiftInstance.lifted_regular_local,
+    ``Brent.CM.LiftInstance.lifted_regular_flat,
+    ``Brent.CM.LiftInstance.ker_rho3,
+    ``Brent.CM.LiftInstance.lifted_quadrics_regular
   ]
   for name in theorems do
     let axioms ← collectAxioms name
