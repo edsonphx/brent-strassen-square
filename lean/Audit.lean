@@ -22,6 +22,9 @@ import Brent.Section7
 import Brent.Groebner.Paper
 import Brent.Groebner.MonomialHeight
 import Brent.InitialForms
+import Brent.CM.HilbertSamuelPoly
+import Brent.CM.Lemma41
+import Brent.CM.RegularCoprime
 import Brent.BaseLemma
 import Brent.BranchTangents
 import Brent.SecondOrderLift
@@ -447,7 +450,20 @@ run_cmd do
     ``Brent.InitialForms.initialRegular_iff,
     ``Brent.InitialForms.principal_exact,
     ``Brent.InitialForms.ker_mapPowerPiece_eq_range,
-    ``Brent.InitialForms.firstIdeal_inf_pow_le
+    ``Brent.InitialForms.firstIdeal_inf_pow_le,
+    ``Brent.CM.orderLE_length_fam,
+    ``Brent.CM.length_quot_add_le_rel,
+    ``Brent.CM.chain_bound,
+    ``Brent.CM.length_quot_pow_ne_top,
+    ``Brent.CM.gnoeth_grFam,
+    ``Brent.CM.orderLE_chi,
+    ``Brent.CM.ringKrullDim_le_of_orderLE_chi,
+    ``Brent.CM.orderLE_R,
+    ``Brent.CM.length_gr_le,
+    ``Brent.CM.lemma41_chain,
+    ``Brent.CM.lemma41,
+    ``Brent.CM.mem_of_mul_mem_of_coprime,
+    ``Brent.CM.q_regular
   ]
   for name in theorems do
     let axioms ← collectAxioms name
