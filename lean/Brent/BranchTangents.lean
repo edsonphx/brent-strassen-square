@@ -18,7 +18,7 @@ open scoped BigOperators
 
 namespace Brent.TangentData
 
-variable (k : Type*) [Field k]
+variable (k : Type) [Field k]
 
 /-- For an independent family, spans of images of index sets meet in the span of the image of the
 intersection. -/
@@ -69,7 +69,7 @@ private theorem finrank_image {P : Fin 251 → Prop} [DecidablePred P] :
 
 theorem finrank_orbitTangent : Module.finrank k (orbitTangent k) = 143 := by
   rw [orbitTangent, finrank_image]
-  decide
+  decide +kernel
 
 private theorem inChart_true (i : Fin 251) : InChart i true ↔ i.val < 197 := Iff.rfl
 
@@ -80,10 +80,10 @@ theorem finrank_branchTangent (left : Bool) : Module.finrank k (branchTangent k 
   cases left
   · rw [branchTangent, show {i : Fin 251 | InChart i false} = {i | i.val < 143 ∨ 197 ≤ i.val} from
       Set.ext inChart_false, finrank_image]
-    decide
+    decide +kernel
   · rw [branchTangent, show {i : Fin 251 | InChart i true} = {i | i.val < 197} from
       Set.ext inChart_true, finrank_image]
-    decide
+    decide +kernel
 
 /-- Line 329: "The two branch tangent spaces intersect precisely in `T₀`." -/
 theorem branchTangent_inf : branchTangent k true ⊓ branchTangent k false = orbitTangent k := by
@@ -97,7 +97,8 @@ theorem branchTangent_inf : branchTangent k true ⊓ branchTangent k false = orb
 /-- The two branch tangent spaces are different (`T₀ + X ≠ T₀ + Y`). -/
 theorem branchTangent_ne : branchTangent k true ≠ branchTangent k false := by
   intro h
-  have := congrArg (Module.finrank k) (inf_idem (branchTangent k true))
+  have := congrArg (fun W : Submodule k (Fin 2352 → k) => Module.finrank k W) (inf_idem (branchTangent k true))
+  dsimp only at this
   rw [show branchTangent k true ⊓ branchTangent k true =
       branchTangent k true ⊓ branchTangent k false by rw [← h], branchTangent_inf,
     finrank_orbitTangent, finrank_branchTangent] at this

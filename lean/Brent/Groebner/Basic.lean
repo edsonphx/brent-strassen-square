@@ -231,14 +231,16 @@ theorem exchange (hmon : ∀ l, m.Monic (g l))
       rw [coeff_mul_of_add_of_degree_le (f := h i) (g := g i) (a := a) (b := m.degree (g i))
         hai le_rfl, hgi, mul_one]
     have e2 : (monomial a ((h i).coeff a) * g i).coeff (a + m.degree (g i)) = (h i).coeff a := by
+      classical
       rw [coeff_mul_of_add_of_degree_le (f := monomial a ((h i).coeff a)) (g := g i) (a := a)
         (b := m.degree (g i)) (degree_monomial_le _) le_rfl, hgi, mul_one, coeff_monomial,
         if_pos rfl]
     have e4 : (monomial c ((h i).coeff a) * (g j - monomial (m.degree (g j)) (1 : R))).coeff
         (c + m.degree (g j)) = 0 := by
+      classical
       rw [coeff_mul_of_add_of_degree_le (f := monomial c ((h i).coeff a))
         (g := g j - monomial (m.degree (g j)) (1 : R)) (a := c) (b := m.degree (g j))
-        (degree_monomial_le _) htail, coeff_sub, hgj, coeff_monomial, if_pos rfl, sub_self,
+        (degree_monomial_le _) htail, coeff_sub, hgj, coeff_monomial, if_pos rfl, coeff_monomial, if_pos rfl, sub_self,
         mul_zero]
     have e3 : (monomial c ((h i).coeff a) * (g j - monomial (m.degree (g j)) (1 : R)) * g i).coeff
         (a + m.degree (g i)) = 0 := by
@@ -254,6 +256,7 @@ theorem exchange (hmon : ∀ l, m.Monic (g l))
     rw [hsplit, ← ha, coeff_sub, coeff_sub, e1, e2, e3, sub_self, sub_zero]
 
 variable (g) in
+open Classical in
 /-- The indices whose term reaches `δ`. -/
 noncomputable def topSet (δ : σ →₀ ℕ) (h : ι → MvPolynomial σ R) : Finset ι :=
   Finset.univ.filter fun l => (h l * g l).coeff δ ≠ 0
@@ -267,6 +270,7 @@ theorem clear_top (hmon : ∀ l, m.Monic (g l))
       (topSet g δ h).card ≤ n →
       ∃ h' : ι → MvPolynomial σ R, Bnd m g δ h' ∧ ∑ l, h' l * g l = f ∧
         ∀ l, (h' l * g l).coeff δ = 0 := by
+  classical
   intro n
   induction n with
   | zero =>
