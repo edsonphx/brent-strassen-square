@@ -417,6 +417,25 @@ theorem mapPowerPiece_mkQ_eq_zero_iff (π : R →+* S) (hπ : Function.Surjectiv
   rw [hker, sup_comm (m ^ (j + 1))]
   exact ⟨fun h => ⟨h, a.property⟩, fun h => h.1⟩
 
+/-- **The graded pieces of `R ⧸ (f)`.** The map `grⱼ(R) → grⱼ(R ⧸ (f))` has the same kernel
+as `principalPieceMap`; with `ker_principalPieceMap_eq_range`, in degree `n + d` that kernel is
+the image of multiplication by the initial form of `f`. -/
+theorem ker_mapPowerPiece (π : R →+* S) (hπ : Function.Surjective π)
+    (m : Ideal R) (f : R) (hker : RingHom.ker π = Ideal.span ({f} : Set R)) (j : ℕ) :
+    LinearMap.ker (mapPowerPiece π m j) = LinearMap.ker (principalPieceMap m f j) := by
+  ext u
+  obtain ⟨a, rfl⟩ := (nextStep m j).mkQ_surjective u
+  rw [LinearMap.mem_ker]
+  exact mapPowerPiece_mkQ_eq_zero_iff π hπ m f hker j a
+
+/-- In degree `n + d`, an element of `gr_{n+d}(R)` dies in `R ⧸ (f)` iff it is the initial form
+of `f` times an element of `grₙ(R)`. -/
+theorem ker_mapPowerPiece_eq_range (π : R →+* S) (hπ : Function.Surjective π)
+    (m : Ideal R) (f : R) {d : ℕ} (hf : f ∈ m ^ d) (hreg : InitialRegular m f d)
+    (hker : RingHom.ker π = Ideal.span ({f} : Set R)) (n : ℕ) :
+    LinearMap.ker (mapPowerPiece π m (n + d)) = LinearMap.range (mulPowerPiece m f hf n) := by
+  rw [ker_mapPowerPiece π hπ m f hker, ker_principalPieceMap_eq_range m f hf hreg n]
+
 end Map
 
 end Brent.InitialForms
