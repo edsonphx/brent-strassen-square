@@ -33,6 +33,10 @@ import Brent.BaseLemma
 import Brent.BranchTangents
 import Brent.SecondOrderLift
 import Brent.Z3Basis
+import Brent.LeftKernelLift
+import Brent.Catalogue.ExactAnchors
+import Brent.CM.GradedPresentation
+import Brent.PaperDetails
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -490,7 +494,37 @@ run_cmd do
     ``Brent.CM.LiftedQuadrics.lamExact_annihilates,
     ``Brent.CM.LiftedQuadrics.map_qtExact,
     ``Brent.CM.LiftedQuadrics.qtExact_regular,
-    ``Brent.CM.LiftedQuadrics.qtCanon_regular
+    ``Brent.CM.LiftedQuadrics.qtCanon_regular,
+    ``Brent.LeftKernelLift.span_trace,
+    ``Brent.LeftKernelLift.span_selected,
+    ``Brent.LeftKernelLift.inLeft_iff_selected,
+    ``Brent.LeftKernelLift.D_unit,
+    ``Brent.LeftKernelLift.project_inLeft,
+    ``Brent.LeftKernelLift.project_eq_self,
+    ``Brent.LeftKernelLift.project_idempotent,
+    ``Brent.LeftKernelLift.leftKernel_lift_mod3,
+    ``Brent.LeftKernelLift.inLeft_iff_jacobian,
+    ``Brent.LeftKernelLift.actual_leftKernel_lift_mod3,
+    ``Brent.Catalogue.useful_card_le_possible,
+    ``Brent.Catalogue.positiveRank_sound,
+    ``Brent.Catalogue.positiveUseful_sound,
+    ``Brent.Catalogue.exact_usefulAnchors,
+    ``Brent.Catalogue.usefulAnchors_2445_Q,
+    ``Brent.Catalogue.usefulAnchors_2445_F,
+    ``Brent.Catalogue.usefulAnchors_5969_Q,
+    ``Brent.Catalogue.usefulAnchors_5969_F,
+    ``Brent.Catalogue.usefulAnchors_count_2445,
+    ``Brent.Catalogue.usefulAnchors_count_5969,
+    ``Brent.CM.firstIdeal_inf_pow_le_relI,
+    ``Brent.CM.toGr_firstIdeal_injective,
+    ``Brent.CM.lemma41_gradedPieceEquiv,
+    ``Brent.PaperDetails.appendix_mixed_entry,
+    ``Brent.PaperDetails.appendix_covector_entry,
+    ``Brent.PaperDetails.appendix_unique_support,
+    ``Brent.PaperDetails.appendix_earlier_zero,
+    ``Brent.PaperDetails.appendix_projected_coefficient,
+    ``Brent.PaperDetails.int_vanishing_iff_mod,
+    ``Brent.PaperDetails.minor_vanishing_iff_mod_prime
   ]
   for name in theorems do
     let axioms ← collectAxioms name

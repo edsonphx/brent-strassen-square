@@ -179,3 +179,13 @@ additions in that order. The kernel proves the implication from a checked trace 
 The row identities, pivot checks, and coverage are replayed in separate
 kernel batches. The rank and nullity audit permits only Lean's standard
 `propext`, `Classical.choice`, and `Quot.sound`.
+
+## Additional paper-coverage drafts (not compiled)
+
+- [~] Arbitrary left-kernel lifting: `Brent.LeftKernelLift.actual_leftKernel_lift_mod3`; uses unit pivots of the integer Jacobian trace. Idempotent projection drafted; linear/free-basis packaging still open.
+- [~] Exact anchors 2445 and 5969: `Brent.Catalogue.ExactAnchors`; checks both positive and negative finite certificates over the reference fields and transfers to other fields. Generated catalogue data are needed to evaluate these checks.
+- [~] Lemma 4.1 degreewise graded presentation: `Brent.CM.GradedPresentation`; multiplicativity and full graded-ring equivalence still open.
+- [~] Appendix A.2 explicit support, coefficient and leading monomial checks: `Brent.PaperDetails`.
+- [~] Modular determinant vanishing equivalence given a strict determinant bound: `Brent.PaperDetails.minor_vanishing_iff_mod_prime`.
+
+All new major declarations are included in `Audit.lean`. Existing compiled/drafted statuses are retained; these new proofs have not been compiled or kernel replayed. Remaining semantic gaps are enumerated in `AUDIT_TABLE.md` (geometric orbit dimension, original quadratic ideal height, graded ring assembly, left-kernel freeness, normal elimination base change, Hadamard bound and catalogue provenance).

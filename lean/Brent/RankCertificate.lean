@@ -8,7 +8,7 @@ open scoped BigOperators
 namespace Brent
 
 section RowSpan
-variable {K κ : Type*} [Field K] {n : ℕ}
+variable {K κ : Type*} [CommRing K] {n : ℕ}
 
 /-- Subtracting earlier reduced rows leaves the span unchanged, even when
 a reduced row is zero. The earlier-row predicate is part of the certificate
@@ -44,6 +44,11 @@ theorem rowSpan_eq_of_elimination (original reduced : Fin n → (κ → K))
           (sum_mem _ i fun a ha => ih a.1 (earlier i a ha))
     rintro _ ⟨i, rfl⟩
     exact h i
+
+end RowSpan
+
+section FieldRank
+variable {K κ : Type*} [Field K] {n : ℕ}
 
 /-- Evaluating the rows at ordered pivot coordinates certifies independence
 when the resulting matrix is triangular with nonzero diagonal. -/
@@ -91,5 +96,5 @@ theorem rowRank_eq_of_elimination {r : ℕ}
   exact (finrank_span_eq_card (linearIndependent_of_pivots (reduced ∘ select) pivot diag zero)).trans
     (Fintype.card_fin r)
 
-end RowSpan
+end FieldRank
 end Brent

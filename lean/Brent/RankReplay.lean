@@ -4,10 +4,10 @@ import Mathlib.Data.Int.Cast.Lemmas
 namespace Brent.SparseRow
 
 /-- Decode a sparse row into a vector over the field used for the rank theorem. -/
-def decode {K κ : Type*} [Field K] (coord : κ → Nat) (r : Row) (i : κ) : K :=
+def decode {K κ : Type*} [CommRing K] (coord : κ → Nat) (r : Row) (i : κ) : K :=
   coefficient (coord i) r
 
-private theorem decode_reduce {K κ : Type*} [Field K] {ι : Type*}
+theorem decode_reduce {K κ : Type*} [CommRing K] {ι : Type*}
     (coord : κ → Nat) (prior : ι → Row) (r : Row) (trace : List (ι × ℤ)) :
     (decode (K := K) coord (reduce prior r trace)) =
       decode coord r - (trace.map fun (i, a) => (a : K) • decode coord (prior i)).sum := by
@@ -28,7 +28,7 @@ def checkStep {n : ℕ} (original reduced : Fin n → Row)
   (steps i).all (fun a => decide (a.1 < i)) &&
     decide (reduce reduced (original i) (steps i) = reduced i)
 
-private theorem coeff_zero_below (r : Row) (pivot k : Nat) (hk : k < pivot)
+theorem coeff_zero_below (r : Row) (pivot k : Nat) (hk : k < pivot)
     (h : r.all (fun a => decide (pivot ≤ a.1)) = true) : coefficient k r = 0 := by
   induction r with
   | nil => rfl
