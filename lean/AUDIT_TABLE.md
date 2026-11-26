@@ -33,7 +33,100 @@ yet validated), **open** (not formalized; reason given).
 | 704–705 | All 14,147 points passing both tests have the full profile | `Section7.census` (5) | drafted | — |
 | 705–707 | Their membership remains open; other components through `p` possible | — | not a claim | Statement of an open problem. |
 
-## §1–§6
+## Abstract and §1 Introduction (lines 1–95)
 
-Mapped in `STATUS.md` (rows for Theorem 1.1, §2–§6). A full line-by-line pass over lines 1–605
-is still to be done; it will be added here before the merge.
+| Lines | Claim | Declaration | Status | Difference from the paper |
+|---|---|---|---|---|
+| abstract | Local dimension 197 over `F̄₃` and in characteristic 0; tangent dimension 251 | `main_theorem` | compiled | Every field of characteristic 3 or 0, not only `F̄₃`. |
+| abstract | Two smooth formal branches of dimension 197 with intersection dimension 143; Hilbert function `(1, 251, 30978)` | `main_theorem` | compiled | — |
+| abstract | Explicit deformations reach smooth points on both families | `Section7.smooth_points` | compiled | — |
+| abstract | The catalogue comparison rules out membership for 89 of 14,236 schemes | `Section7.excluded_count`, `Section7.rank_bound_exclusion`, `Section7.anchor_exclusion` | drafted | — |
+| 20–58 | Background, related work (Li–Bao–Zhang, Li–Zhang–Ke, Brysiewicz–Sinn) | — | not a claim | Citations of other papers' results. |
+| 50–53 | Li–Wang–Hu's selected example: nullity 197, orbit tangent 143, 54 directions modulo the orbit | `Section7.lwh_point` | drafted | 197 − 143 = 54 is arithmetic. |
+| 54–60 | At `p` the orbit has dimension 143 and the tangent quotient 108; each family gives 54 directions modulo the orbit and together they span the quotient | `Formal.finrank_range_dOrbit`, `archived_frame_split`, `square_jacobian_nullity` | compiled | 108 = 251 − 143. |
+
+## §2 The Brent scheme and the recursive point (lines 96–175)
+
+| Lines | Claim | Declaration | Status | Difference from the paper |
+|---|---|---|---|---|
+| 100–110 | `M_n`, the Brent map with 2352 variables and 4096 equations | `matrixMultiplicationEntry`, `equation`, `square_variable_count`, `square_equation_count` | compiled | — |
+| 111–115 | `V = Br_red`; local Krull dimensions agree because reduction preserves primes | `quotient_dimension_of_le_nilradical`, `reduced_localDimension_eq_197` | compiled | — |
+| 118–140 | The integral point `p` (Strassen table, Kronecker shuffle) lies in `Br(ℤ)` | `strassen_solves`, `strassenSquare_solves` | compiled | Over every commutative ring. |
+| 141–152 | Theorem 1.1: rank 2101, tangent 251, local dimension 197, orbit 143, two smooth branches of dimension 197 with intersection 143, Hilbert function `(1, 251, 30978)` | `main_theorem` | compiled | `k` any field of characteristic 3 or 0 (the paper: `F̄₃` or characteristic 0). "At least two distinct smooth branches" is stated as two distinct minimal primes `𝔭_L ≠ 𝔭_R` of `Â` with `Â ⧸ 𝔭 ≃ k⟦197⟧`. |
+
+## §3 Two exact families and the tangent split (lines 176–390)
+
+| Lines | Claim | Declaration | Status | Difference from the paper |
+|---|---|---|---|---|
+| 178–196 | The `GL₄³` action and term scalings preserve solutions | `solves_changeBasis`, `solves_rescale` | compiled | — |
+| 197–199 | Scalar `P, Q, R` are compensated by scalings: three-dimensional kernel in the 146-parameter group | `Formal.finrank_ker_dOrbit` | compiled | — |
+| 200–226 | `D_L`, `D_R` are solutions over any ring; both send the identity to `p`; `g_i = 1` gives the same orbit map | `leftFamily_solves`, `rightFamily_solves`, `leftFamily_at_identity`, `rightFamily_at_identity`, F1 overlap (`value true = value false` at trivial blocks) | compiled | — |
+| 228–252 | Lemma 3.1: the three copies of `𝔰𝔩₂` act injectively on Strassen's factor lines | — | **open** | Proof step. The Lean proof does not use it: the dimensions 143, 197, 251 and the split are certified directly (`archived_frame_rank`, `archived_frame_split`, `chart_independent_derivatives`, `finrank_range_dOrbit`). |
+| 253–320 | The rescaling and block derivatives are injective (98, 63, 63); the 27 mixed global directions are independent modulo `S + L + R'` | — | **open** | Proof step, replaced by the same certified ranks. |
+| 321–328 | Dimension table: `T₀ = 143`, `T₀ + L = T₀ + R' = 197`, `T₀ + L + R' = 251` | `finrank_range_dOrbit`, `chart_independent_derivatives`, `archived_frame_split`, `square_jacobian_nullity` | compiled | The 197 is stated as 197 independent chart derivatives per family. |
+| 329 | The two branch tangent spaces intersect precisely in `T₀` | `archived_frame_split` (block independence) | **open** | Follows from the direct sum `T₀ ⊕ X ⊕ Y`, but no theorem states the intersection. |
+| 330–337 | Orbit dimension 143: fibers contain the central kernel (≤ 143) and an invertible 143-minor gives 143 formal coordinates (≥ 143) | `Formal.finrank_range_dOrbit`, `Formal.ringKrullDim_slice` | compiled | — |
+| 338–343 | Group and block directions lie in `ker J`; a nonzero 2101-minor mod 3 gives tangent ≤ 251 in both characteristics | `tangent_satisfies_differential`, `square_jacobian_rank`, `square_jacobian_nullity` | compiled | Rank proved exactly over every field. |
+| 344–356 | `ker J = T₀ ⊕ X ⊕ Y` with dimensions `(143, 54, 54)` | `archived_frame_rank`, `archived_frame_split`, `archived_origin` | compiled | — |
+| 357–378 | Lower bound `dim ≥ 197` via slices, formal inversion and completion | `LowerBound.le_squareLocalDimension` | compiled | Different proof: an exact family over `k[t]_(t)` and a system-of-parameters argument, without completion. Same statement. |
+| 375–378 | The two surjections define embedded smooth formal subgerms with distinct tangent images | `Formal.branchQuotEquiv`, `Formal.branchPrime_ne` | compiled | — |
+
+## §4 The quadratic certificate in characteristic three (lines 391–498)
+
+| Lines | Claim | Declaration | Status | Difference from the paper |
+|---|---|---|---|---|
+| 392–405 | Second-order lifting: `v` lifts to order two iff `Q₂(v) ∈ im J` | `Decomposition.entry_line`, `equation_eq_expansion` | compiled | Expansion formula; the lifting criterion itself is not stated as an iff. |
+| 405–413 | `λQ₂` vanishes on `T₀ + X` and `T₀ + Y`, leaving only the mixed monomials `xᵢyⱼ` | `archived_nonmixed_zero`, `archived_square_zero`, `same_family_polar_zero` | compiled | — |
+| 414–426 | The 54 rows `λᵢ` kill `J` and `qᵢ = λᵢ M (x ⊗ y)` | `archived_covectors_annihilate`, `archived_mixed_coefficients` | compiled | — |
+| 427–432 | Leading monomials `xᵢ y_π(i)` form a perfect matching | `quadraticMatching_bijective`, `archived_mixed_pivots`, `archived_mixed_zero_before`, `archived_polar_leading` | compiled | — |
+| 433–443 | How the witnesses were found (bipartite matching) | — | not a claim | Method description. |
+| 444–456 | Buchberger: the `qᵢ` are a Gröbner basis; height 54; regular sequence by Cohen–Macaulayness | — | **open** | Proof step. The Lean upper bound uses the triangular unit-leader tables directly (`triangular_dim_le`, `pow_succ_le_of_triangular`). |
+| 457–482 | Lemma 4.1: `dim A/I ≤ N − s` when the initial forms are a regular sequence; associated graded presentation | — | **open** | Proof step, replaced by `triangular_dim_le` and `localDimension_le_of_power_le_span_sup_pow`. |
+| 483–498 | Normal elimination: `Â = k⟦z⟧/I`, `fᵢ* = qᵢ`, `dim ≤ 251 − 54 = 197` in characteristic three | `UpperBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charThree`, `Formal.H_bijective` | compiled | Same conclusion; different route. |
+
+## §5 Transfer to characteristic zero (lines 499–545)
+
+| Lines | Claim | Declaration | Status | Difference from the paper |
+|---|---|---|---|---|
+| 500–504 | Rank 2101 over `ℚ` too; 251 integral tangent generators independent over `ℚ` | `square_jacobian_rank`, `square_jacobian_nullity` | compiled | Every field of characteristic 0. |
+| 505–520 | `J` splits over `ℤ₍₃₎`; kernels are free summands; the 251 vectors are an `ℤ₍₃₎`-basis; the 54 rows lift | `integer_annihilates`, `integerEntry_cast` | compiled (partly) | The Lean proof lifts the 54 covectors to integers and checks them; the splitting over `ℤ₍₃₎` is not stated. |
+| 521–545 | `3, q̃₁, …, q̃₅₄` regular in `ℤ₍₃₎[z]`; regular in `ℚ⟦z⟧`; upper bound in characteristic 0 | `Transfer.charZero_dim_le`, `CharZeroBound.squareLocalDimension_le_197`, `squareLocalDimension_eq_197_of_charZero` | compiled (conclusion) / **open** (regular-sequence lift) | Different route: graded Nakayama transfer of the finite spanning certificate. |
+
+## §6 Formal branches and Hilbert function (lines 546–605)
+
+| Lines | Claim | Declaration | Status | Difference from the paper |
+|---|---|---|---|---|
+| 547–555 | `𝔭_L`, `𝔭_R` are prime, minimal and distinct | `Formal.branchPrime_minimal_charThree`, `_charZero`, `Formal.branchPrime_ne`, `sqBranchPrime_*` | compiled | — |
+| 556–562 | Slice independence: the full-parameter kernel equals the slice kernel | `Formal.slice_independent`, `Formal.ker_fullHat_charThree`, `_charZero` | compiled | — |
+| 563–575 | `H(c, x, y)` is a formal coordinate change; branch ideals `(y)`, `(x)`; intersection `k⟦c⟧` of dimension 143, the orbit subgerm | `Formal.intersectionEquiv`, `Formal.ringKrullDim_intersection`, `Formal.orbitSubgermEquiv`, `Formal.sqIntersectionEquiv` | compiled | — |
+| 576–582 | Branch maps kill the nilradical; the reduced variety has tangent dimension 251 and is singular | `Formal.hilbertValue_reduced_one`, `Formal.not_isRegularLocalRing_Ared_charThree`, `_charZero` | compiled | — |
+| 583–597 | The 1995 residual combinations; rank of `[J | M]` is 2749 over `ℚ` and `F₃`; quadratic initial space 648; `H(2) = 31626 − 648 = 30978` | `AugmentedTrace.augmented_rank`, `MixedRank.finrank_Rel`, `HilbertTwo.hilbertValue_two_add`, `HilbertValues.hilbert_initial` | compiled | Over every field with `2 ≠ 0`, so in particular characteristic 3 and 0. |
+| 598–604 | The reduced two-branch union has `H(2) = 28710`, so `Â` is nonreduced or has another minimal prime | `Formal.hilbertValue_two_twoBranch`, `Formal.not_isReduced_or_extra_minimalPrime` | compiled | — |
+| 604–605 | Full Hilbert series and number of branches remain open | — | not a claim | Open problem. |
+
+## §7 tail and Reproducibility (lines 706–740)
+
+| Lines | Claim | Declaration | Status | Difference from the paper |
+|---|---|---|---|---|
+| 710–718 | Census input pinned by SHA-256; Hadamard bound makes reduction at the chosen prime faithful | `tools/catalogue/gen_catalogue_lean.py`, CI hash checks | not needed | The Lean census works exactly over `ℚ` and `ZMod 3` and transfers to every field; no prime-reduction argument is used. |
+| 719–721 | The open parameterizations preserve every nonzero factor and keep all 49 summands | — | **open** | Not stated in Lean. |
+| 722–740 | Reproducibility, archives, collaboration note | — | not a claim | — |
+
+## Appendix A (lines 760–900)
+
+| Lines | Claim | Declaration | Status | Difference from the paper |
+|---|---|---|---|---|
+| 765–780 | Index conventions; Jacobian columns as tensors | `squareVariableNumber`, `Decomposition.jacobianColumn` | compiled | — |
+| 781–795 | `tangent_bases.npz`: 143, 54, 54 retained vectors | `archived_frame_rank`, `archived_frame_split` | compiled | Data pinned by SHA-256 in the repository manifest. |
+| 796–806 | The column of `M` is the cross coefficient of `Q₂` | `archived_mixed_coefficients`, `archived_polar_leading` | compiled | — |
+| 807–830 | The matching permutation `π`; the sample coefficient `M₀,₁₉` | `quadraticMatching_bijective`, `archived_mixed_pivots` | compiled | — |
+| 831–900 | Independent replay specification | — | not a claim | Verifier description; the Lean kernel checks replace it. |
+
+## Open rows
+
+1. **Lemma 3.1 and the injectivity argument (lines 228–320).** Intermediate steps of the paper's hand computation of the dimensions. The dimensions themselves are compiled.
+2. **Branch tangent spaces intersect in `T₀` (line 329).** Follows from the compiled direct sum; needs a one-line theorem.
+3. **Gröbner basis, height 54, regular sequence (lines 444–456) and Lemma 4.1 (457–482).** Intermediate steps of the paper's upper-bound proof. The bound is compiled by another route.
+4. **Splitting over `ℤ₍₃₎` and the regular-sequence lift (lines 505–545).** Intermediate steps of the characteristic-zero transfer. The bound is compiled by another route.
+5. **Second-order lifting criterion as an iff (lines 392–405).** Only the expansion is compiled.
+6. **Parameterizations keep every nonzero factor (lines 719–721).** Not stated.
