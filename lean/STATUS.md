@@ -152,6 +152,8 @@ in `Brent/Formal/`, which does not import the `AugmentedBlocks` chain.
   characteristic three and zero, Jacobian rank 2155, tangent dimension 197, local dimension 197,
   regular local ring, and `Â_q ≃ k⟦197⟧` (`SmoothPoints.smooth_points`). Equidimensionality of
   finitely generated domains (`Equidim.height_eq_ringKrullDim_of_isMaximal`) is in place for F17.
+  The local `leanchecker` replay passed for all eight certificate modules: `SmoothLData`,
+  `SmoothBlocks.L0` through `L5`, and `SmoothLChecks` (5,060 seconds total).
 - [ ] F17. §7 components: each family closure is irreducible of dimension 197, contains `p`, and
   is an irreducible component of `V(4,4,4|49)` over algebraically closed `k`.
 - [ ] F18. §7 rank-profile exclusions and the AlphaTensor catalogue census (14,149 / 87 / 2 / 89).
