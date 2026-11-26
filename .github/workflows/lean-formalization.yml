@@ -49,10 +49,16 @@ jobs:
           lake build Brent.Formal.SmoothPoints
           lake build Brent.Equidim.Equidim
           lake build Brent.Formal.FamilyClosure Brent.Formal.GermQuotLower
+          # §7 Li–Wang–Hu point: six trace blocks, then the kernel vectors and the identities.
+          for b in 0 1 2 3 4 5; do lake build Brent.Generated.LWHBlocks.L$b; done
+          lake build Brent.Generated.LWHKernelChecks
+          lake build Brent.Generated.LWHSolves
+          lake build Brent.LWH
           lake env lean Audit.lean
           for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
             Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean \
-            Brent/Generated/SmoothL{Data,Checks}.lean Brent/Generated/SmoothBlocks/*.lean Brent/Equidim/*.lean; do
+            Brent/Generated/SmoothL{Data,Checks}.lean Brent/Generated/SmoothBlocks/*.lean Brent/Equidim/*.lean \
+            Brent/LWH/*.lean Brent/Generated/LWH{Data,Checks,KernelChecks,Solves}.lean Brent/Generated/LWHBlocks/*.lean; do
             module=${file%.lean}
             lake env leanchecker -v "${module//\//.}"
           done

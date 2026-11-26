@@ -16,6 +16,7 @@ import Brent.Formal.SliceIndependence
 import Brent.Formal.SwapSymmetry
 import Brent.Formal.SmoothPoints
 import Brent.Equidim.Equidim
+import Brent.LWH
 import Lean.Util.CollectAxioms
 
 open Lean Elab Command
@@ -241,7 +242,21 @@ run_cmd do
     ``Brent.Equidim.height_eq_ringKrullDim_of_isMaximal,
     ``Brent.Equidim.ringKrullDim_localization_eq,
     ``Brent.Equidim.ringKrullDim_ne_top,
-    ``Brent.Equidim.eq_zero_of_eval_eq_zero_of_eval_ne_zero
+    ``Brent.Equidim.eq_zero_of_eval_eq_zero_of_eval_ne_zero,
+    ``Brent.LWH.pointDec_solves,
+    ``Brent.LWH.checked,
+    ``Brent.LWH.kerChecked,
+    ``Brent.LWH.det_minor_ne_zero,
+    ``Brent.LWH.kvec_free,
+    ``Brent.LWH.orbitGens_tangent,
+    ``Brent.LWH.kept_independent,
+    ``Brent.LWH.orbit_finrank,
+    ``Brent.LWH.solves,
+    ``Brent.LWH.jacobian_rank,
+    ``Brent.LWH.tangent_dimension,
+    ``Brent.LWH.orbit_in_tangent,
+    ``Brent.LWH.orbit_tangent_dimension,
+    ``Brent.LWH.lwh_point
   ]
   for name in theorems do
     let axioms ← collectAxioms name
@@ -298,3 +313,4 @@ run_cmd do
 #print axioms Brent.Equidim.height_eq_ringKrullDim_of_isMaximal
 #print axioms Brent.Equidim.ringKrullDim_localization_eq
 #print axioms Brent.Equidim.ringKrullDim_ne_top
+#print axioms Brent.LWH.lwh_point
