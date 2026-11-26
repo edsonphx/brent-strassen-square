@@ -1,6 +1,29 @@
 # Proof status
 
-Proved in Lean:
+## Current combined source — verification pending
+
+This document preserves evidence from earlier revisions, not a certification of
+this checkout. Recent mathematical extensions are source drafts until the local
+build succeeds. No complete current-revision compilation, transitive axiom audit,
+or independent kernel replay has been recorded here.
+
+| Verification layer | Current status |
+| --- | --- |
+| Mathematical source coverage | See `AUDIT_TABLE.md`; all latest targeted extensions have source declarations, not a guarantee of complete semantic coverage. |
+| Original finite certificate replay | Previously reproduced independently with `verify.sh --full`. |
+| Pinned AlphaTensor source binding | Externally validated on real NPZ: 33,483,072 coordinates, 341 generated hashes; see `Brent/Catalogue/SOURCE_REPLAY.md`. |
+| Complete current Lean build | Pending recorded successful local run. |
+| Current transitive axiom audit | Pending recorded successful local run. |
+| Current independent kernel replay | Pending recorded successful local run. |
+| Hosted CI | Separate memory-constrained workflow; not used as evidence for the local run. |
+
+Use `python3 lean/tools/verify_all.py` from the repository root (see README).
+The driver includes all source modules and pinned generated modules, not just
+`lake build Brent`; local LWH uses sources and requires no CI release artifact.
+
+## Historical proof results (earlier revisions)
+
+The following results were reported as proved in earlier revisions:
 
 - over every field `k : Type`, `197 ≤ squareLocalDimension k ≤ 251`;
 - over every field of characteristic three,
@@ -63,7 +86,7 @@ Proved in Lean:
   `Formal.comap_swapHat_right_charThree`, `Formal.comap_swapHat_right_charZero`,
   `Formal.comap_swapHat_sup`).
 
-No §6 rows remain open.
+The earlier §6 roadmap reported these results complete; this is historical evidence.
 
 | Paper dependency | Lean declaration | Status |
 | --- | --- | --- |
@@ -101,11 +124,13 @@ No §6 rows remain open.
 | §7, one theorem per claim (whole section) | `Brent.Section7` | Drafted. Each theorem quotes its lines; `Audit.lean` (single file) lists them with `Theorem11.main_theorem`. |
 | §6, reduced tangent dimension 251 | `Formal.hilbertValue_reduced_one` | Kernel-verified over every field. The 251 tangent coordinates bound `dim 𝔪/𝔪²` of `A_red` above. The two branch maps `A → k⟦c,x⟧`, `A → k⟦c,y⟧` land in domains, so they kill the nilradical. Their linear coefficients along the 197 + 197 chart variables take the translated coordinates to the 251 independent frame vectors. |
 
-## Remaining proof graph
+## Remaining validation graph
 
-None. Every row above is kernel-verified.
+The current combined build, axiom audit and replay remain pending. Historical
+rows above include both compiled and drafted results; the latter are not kernel
+acceptance evidence.
 
-## §6 roadmap
+## Historical §6 / §7 roadmap
 
 Each step is done only when it builds with no `sorry`, `#print axioms` lists only `propext`,
 `Classical.choice` and `Quot.sound`, it does not use `native_decide`, and `leanchecker` exits 0.
@@ -207,7 +232,7 @@ All new major declarations are included in `Audit.lean`. Existing compiled/draft
 
 Still open: geometric orbit closure dimension, polynomial quotient identification, tangent-frame comparison noted above, and kernel-level catalogue provenance. Original NPZ and generated catalogue absent from the input. No compilation or kernel replay claimed for these new declarations.
 
-## Fourth coverage extension — current source status
+## Fourth coverage extension — historical source snapshot
 
 All entries below are **drafted, not compiled**. This supersedes earlier
 open-row descriptions for these specific targets; it does not certify Lean
@@ -227,7 +252,7 @@ The remaining catalogue provenance issue is not closed by the mathematical
 drafts. No original-data validation or complete kernel replay is claimed.
 The paper is unchanged. All major new declarations are registered in Audit.lean.
 
-## Final three follow-up items — current status
+## Final three follow-up items — latest mathematical source status
 
 - [~] `Brent.main_theorem` now includes the scheme-theoretic orbit closure dimension
   and the actual geometric closure dimension over infinite fields, in addition to the

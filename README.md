@@ -83,6 +83,26 @@ curl -fLsS https://raw.githubusercontent.com/google-deepmind/alphatensor/1949163
 python3 alphatensor_rank_profiles.py alphatensor-catalog.npz
 ```
 
+## Lean 4 formalization
+
+The [Lean source and verification instructions](lean/README.md) include the
+main theorem, the local geometry, and the catalogue comparison. For a full
+local build, transitive axiom audit and independent kernel replay, use the
+local driver instead of the lightweight `lake build Brent` target:
+
+Install Elan and Python 3.10 or newer with NumPy, then run from the repository root:
+
+```sh
+python3 lean/tools/verify_all.py --cache
+```
+
+Use `python` instead of `python3` on systems where that is the Python 3
+command. The driver is platform-independent and builds all certificates from
+source, without a precompiled LWH release. The current combined source is awaiting a full
+recorded Lean run; the [claim audit](lean/AUDIT_TABLE.md) distinguishes earlier
+compiled results, recent source drafts, and external catalogue validation.
+The hosted CI is separate and has different memory constraints.
+
 ## Citation
 
 Edson Soares de Souza. *Exact Local Dimension of the Brent Variety V(4,4,4 | 49)

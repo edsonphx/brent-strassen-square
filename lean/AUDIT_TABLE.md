@@ -1,7 +1,27 @@
 # Faithfulness audit: `paper.tex` claim by claim
 
-Status values: **compiled** (built, audited, replayed), **drafted** (on `compilation-pending`, not
-yet validated), **open** (not formalized; reason given).
+This is a source-coverage map, with **historical** verification labels. The
+combined current revision has not yet passed a recorded complete local build,
+axiom audit and independent kernel replay. `compiled` below means reported
+compiled in an earlier revision, not necessarily accepted in the current tree;
+`drafted` means proof source exists but has no recorded current validation.
+`partial` / `open` describe historical missing pieces unless superseded by the
+latest source entries below. The catalogue source binding is externally verified,
+not a Lean theorem about the binary input. See [STATUS.md](STATUS.md) for the
+current verification status and [README.md](README.md) for the local command.
+
+## Latest source additions (pending kernel validation)
+
+| Paper target | Declaration(s) | Current evidence |
+| --- | --- | --- |
+| Theorem 1.1 / §3 geometric orbit dimension 143 | `main_theorem`, `Formal.OrbitClosure.orbitClosure_dimension_eq_143` | Source draft including geometric dimension, not just the differential. |
+| §4 height of quadratic ideal and Lemma 4.1 graded polynomial quotient | `CM.quadraticIdeal_height_eq_54`, `CM.GradedRingAssembly.lemma41_ringEquiv`, `CM.GradedPolynomial.lemma41_finite_polynomialQuotientEquiv` | Source drafts; current build pending. |
+| §5 full kernel basis, retraction and lift | `LeftKernelLift.leftKernelBasis`, `leftKernel_linear_retraction`, `actual_leftKernel_lift_mod3` | Source drafts; current build pending. |
+| §§4–6 frozen-frame elimination and completion by residual equations | `NormalEliminationZ3.normal_elimination_frozen_frame`, `normal_elimination_completion_baseChange`, `completion_frozen_residual_quotient` | Source drafts; current build pending. |
+| §7 Hadamard and modulus | `HadamardSmall.squared_hadamard`, `PaperDetails.censusPrime_isPrime`, `censusMinor_vanishing_iff_hadamard` | Source drafts; current build pending. |
+| §7 exact useful anchors and original catalogue | `Catalogue.usefulAnchors_count_2445`, `usefulAnchors_count_5969`, `Brent/Catalogue/SOURCE_REPLAY.md` | Source drafts for the theorems; external pinned NPZ replay passed. |
+
+The historical tables and extension logs below preserve the earlier audit trail.
 
 ## §7 Relation to the AlphaTensor schemes (lines 606–705)
 
@@ -66,7 +86,7 @@ yet validated), **open** (not formalized; reason given).
 | 289–320 | The 27 mixed global directions are independent modulo `S + L + R'` | `Section3.mixed_independent`, `Section3.KMat_line`, `Section3.mixed_count` | drafted | `H ⊗ H` is written as `∑ᵥ hᵥ ⊗ eᵥ` with trace-free `hᵥ`; the global derivative has the cyclic form of lines 236–240. |
 | 321–328 | Dimension table: `T₀ = 143`, `T₀ + L = T₀ + R' = 197`, `T₀ + L + R' = 251` | `finrank_range_dOrbit`, `chart_independent_derivatives`, `archived_frame_split`, `square_jacobian_nullity` | compiled | The 197 is stated as 197 independent chart derivatives per family. |
 | 329 | The two branch tangent spaces intersect precisely in `T₀` | `TangentData.branchTangent_inf`, `finrank_branchTangent`, `finrank_orbitTangent`, `branchTangent_ne` | drafted | Branch tangent space = span of that family's archived first derivatives (`branchTangent_generators`). |
-| 330–337 | Orbit dimension 143: fibers contain the central kernel (≤ 143) and an invertible 143-minor gives 143 formal coordinates (≥ 143) | `Formal.finrank_range_dOrbit`, `Formal.ringKrullDim_slice` | partial | Formal slice and differential covered; algebraic orbit closure dimension is not yet a separate theorem. |
+| 330–337 | Orbit dimension 143: fibers contain the central kernel (≤ 143) and an invertible 143-minor gives 143 formal coordinates (≥ 143) | `Formal.finrank_range_dOrbit`, `Formal.ringKrullDim_slice`, `Formal.OrbitClosure.orbitClosure_dimension_eq_143` | drafted (geometric extension) | The formal slice and differential are historically compiled; the geometric closure theorem is a current source draft. |
 | 338–343 | Group and block directions lie in `ker J`; a nonzero 2101-minor mod 3 gives tangent ≤ 251 in both characteristics | `tangent_satisfies_differential`, `square_jacobian_rank`, `square_jacobian_nullity` | compiled | Rank proved exactly over every field. |
 | 344–356 | `ker J = T₀ ⊕ X ⊕ Y` with dimensions `(143, 54, 54)` | `archived_frame_rank`, `archived_frame_split`, `archived_origin` | compiled | — |
 | 357–378 | Lower bound `dim ≥ 197` via slices, formal inversion and completion | `LowerBound.le_squareLocalDimension` | compiled | Different proof: an exact family over `k[t]_(t)` and a system-of-parameters argument, without completion. Same statement. |
@@ -162,7 +182,7 @@ No change to paper.tex. No claim of 100% semantic coverage or successful compila
 
 The new declarations are registered in `Audit.lean`. No compilation or kernel acceptance is claimed.
 
-## Fourth coverage extension — current source status
+## Fourth coverage extension — historical source snapshot
 
 All entries below are **drafted, not compiled**. This supersedes earlier
 open-row descriptions for these specific targets; it does not certify Lean

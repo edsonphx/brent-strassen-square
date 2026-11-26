@@ -4,33 +4,33 @@ The formalization targets the ordered Brent scheme in *Exact Local Dimension of
 the Brent Variety V(4,4,4 | 49) at the Recursive Strassen-Square Point via
 Quadratic Obstructions* by Edson Soares de Souza.
 
-The source revision is `00f45dc3ec9aaaaf2e7bae0a09a1a8623f18e300`.
-Lean proves that `Brent.squareLocalDimension k = 197` for every field
+The original proof baseline was `00f45dc3ec9aaaaf2e7bae0a09a1a8623f18e300`.
+The source states and supplies proof code for the assertion that `Brent.squareLocalDimension k = 197` for every field
 `k : Type` of characteristic three or zero. This is the Krull dimension
 of the localization of the ordered Brent coordinate ring at the maximal
 ideal of the signed recursive point. The two main theorems are
 `Brent.squareLocalDimension_eq_197_of_charThree` and
 `Brent.squareLocalDimension_eq_197_of_charZero`.
 
-The characteristic-zero proof uses kernel-verified integral lifts of
+The characteristic-zero proof uses integral lifts (historically kernel-verified) of
 the 54 covectors. Their reductions modulo three give the degree-55
 spanning certificate used in characteristic three. Graded Nakayama
 transfer takes that spanning certificate to characteristic zero, where
 Krull's height theorem gives the upper bound. In both cases the lower
 bound comes from the exact family with 197 independent first derivatives.
 
-Over every field with `2 ≠ 0`, Lean also proves that the local Hilbert
+Over every field with `2 ≠ 0`, the source also formalizes that the local Hilbert
 function starts `(1, 251, 30978)` (`Brent.HilbertValues.hilbert_initial`).
-The degree-two value uses second-order jets and the kernel-checked rank
+The degree-two value uses second-order jets and the historically kernel-checked rank
 2,749 of the augmented matrix `[J ∣ M]`.
 
-Lean also proves the §6 branch structure. The formal local ring
+The source also formalizes the §6 branch structure. The formal local ring
 `Â = k⟦z⟧ ⧸ (Brent equations)` has two distinct minimal primes `𝔭_L`, `𝔭_R`
 in characteristics three and zero, with `Â ⧸ 𝔭_L ≃ k⟦c, x⟧`,
 `Â ⧸ 𝔭_R ≃ k⟦c, y⟧` (dimension 197 each), and `Â ⧸ (𝔭_L + 𝔭_R) ≃ k⟦c⟧`
 (dimension 143). The reduced local ring has tangent dimension 251.
 
-Lean proves the §7 smooth-point statements. The one-parameter curves through
+The source formalizes the §7 smooth-point statements. The one-parameter curves through
 `p` reach the points `q_L`, `q_R` (blocks 4 and 5 at `t = 1`). In
 characteristics three and zero, both points have Jacobian rank exactly 2155,
 tangent and local dimension 197, a regular local ring, and formal
@@ -48,73 +48,80 @@ Build the six trace blocks `Brent/Generated/LWHBlocks` one at a time, as for the
 
 [STATUS.md](STATUS.md) records the proof dependencies.
 
-## Build and audit
+## Current coverage and verification status
 
-Install [Elan](https://lean-lang.org/install/). The toolchain and Mathlib
-revision are pinned in this directory.
+`Brent.Theorem11` bundles the main theorem, including geometric orbit closure
+dimension 143. `Brent.Section7` states the family-component and catalogue
+results. Recent extensions supply source proof code for the full localized
+integer kernels, regular sequences, graded polynomial quotient (Lemma 4.1),
+Hadamard bound, frozen-frame formal elimination and its residual quotient,
+and exact anchor counts. See [AUDIT_TABLE.md](AUDIT_TABLE.md) for the
+claim-to-declaration mapping and [STATUS.md](STATUS.md) for historical evidence.
 
-```bash
-cd lean
-lake exe cache get $(find Brent -name '*.lean' -exec sed -n '/^import Mathlib/s/^import //p' {} + | sort -u)
-lake build Brent
-lake build Brent.KernelCheck.SquareJacobianRank
-lake build Brent.KernelCheck.QuadraticCertificates
-lake build Brent.KernelCheck.TangentFrame
-lake build Brent.KernelCheck.FamilyQuadratics
-lake build Brent.KernelCheck.EmbeddingBound
-lake build Brent.KernelCheck.LowerBound
-lake build Brent.KernelCheck.MainTheorem
-lake build Brent.KernelCheck.HilbertValues
-lake build Brent.Formal.ReducedTangent
-lake build Brent.Formal.Completion
-lake build Brent.Formal.Singular
-lake build Brent.Formal.TwoBranch
-lake build Brent.Formal.OrbitDimension
-lake build Brent.Formal.SliceIndependence
-lake build Brent.Formal.SwapSymmetry
-for b in 0 1 2 3 4 5; do lake build Brent.Generated.SmoothBlocks.L$b; done
-lake build Brent.Formal.SmoothPoints
-lake build Brent.Equidim.Equidim
-lake build Brent.Formal.FamilyClosure Brent.Formal.GermQuotLower Brent.Formal.Component
-for b in 0 1 2 3 4 5; do lake build Brent.Generated.LWHBlocks.L$b; done
-lake build Brent.Generated.LWHKernelChecks
-lake build Brent.Generated.LWHSolves
-lake build Brent.LWH
-# §7 catalogue census: generate the data from the pinned DeepMind catalogue, then check it.
-curl -fLsS https://raw.githubusercontent.com/google-deepmind/alphatensor/1949163da3bef7e3eb268a3ac015fd1c2dbfc767/nonequivalence/alphatensor_14236_factorizations.npz -o /tmp/alphatensor_14236_factorizations.npz
-echo "15d27e300a68868710c2f5824f7987b10e004c6d7de6a3e65ae35caf42ed06a3  /tmp/alphatensor_14236_factorizations.npz" | shasum -a 256 -c -
-python3 -I tools/catalogue/gen_catalogue_lean.py /tmp/alphatensor_14236_factorizations.npz .
-sed '1s/^\xEF\xBB\xBF//' Brent/Catalogue/GENERATED_SHA256.txt | shasum -a 256 -c --quiet -
-lake build Brent.Catalogue.Checks
-lake build Brent.Catalogue.Main
-for b in 0 1 2 3 4 5; do lake build Brent.Generated.AlphaTensorBound$b; done
-lake build Brent.Census.AlphaTensor Brent.Census.Exclusion Brent.Census.FieldTransfer
-lake build Brent.Catalogue.AllFields
-lake build Brent.Census.Minors Brent.Census.AnchorClosure Brent.Census.CatalogueLink
-lake build Brent.Census.RankBoundLink Brent.Census.Equivalences
-lake build Brent.Theorem11 Brent.Section7
-lake env lean Audit.lean
-for file in Brent/*.lean Brent/KernelCheck/*.lean Brent/Generated/Lift{Data,Checks}.lean \
-    Brent/Generated/Augmented{Data,Checks}.lean Brent/Generated/AugmentedBlocks/*.lean Brent/Formal/*.lean \
-    Brent/Generated/SmoothL{Data,Checks}.lean Brent/Generated/SmoothBlocks/*.lean Brent/Equidim/*.lean \
-    Brent/LWH/*.lean Brent/Generated/LWH{Data,Checks,KernelChecks,Solves}.lean Brent/Generated/LWHBlocks/*.lean \
-    Brent/Census/*.lean Brent/Generated/AlphaTensorBound*.lean Brent/Catalogue/*.lean \
-    Brent/Catalogue/Check/*.lean; do
-  module=${file%.lean}
-  lake env leanchecker -v "${module//\//.}"
-done
+The earlier successful builds are historical; a full build, axiom audit and
+kernel replay of the current combined source have not yet been recorded.
+The pinned original catalogue has been independently checked, including all
+33,483,072 coordinates and 341 generated file hashes; see
+[the source replay record](Brent/Catalogue/SOURCE_REPLAY.md). This is an
+external data-integrity check, not a Lean proof of NPZ parsing or SHA-256.
+
+## Full verification from a fresh clone (any supported platform)
+
+Prerequisites: Git, [Elan](https://lean-lang.org/install/) with `lake` on PATH,
+and Python 3.10 or newer with NumPy installed in the selected Python
+environment (`python3 -m pip install numpy`). Use `python` in place of `python3`
+if that is the Python 3 command on your system. The toolchain must provide
+`leanchecker` for independent replay. Lean and Mathlib revisions are pinned by
+`lean-toolchain` and `lake-manifest.json`. From the repository root of a fresh clone:
+
+```sh
+python3 lean/tools/verify_all.py --cache
 ```
 
-The cache step is optional when building the dependencies from source. The
-branch CI runs the same commands, split into four jobs (`smooth`, `lwh`, `catalogue`,
-`verify`) so that each fits the six-hour limit.
+This command uses the relevant Mathlib cache. Omit `--cache` to build dependencies
+from source or reuse a prepared cache without fetching it again. The Python driver
+uses no platform-specific shell utilities and does not delete builds or update the
+pinned dependency revisions. Do not run `lake clean` between attempts.
+If the catalogue is not already in the repository, Downloads, `/tmp` or the
+local cache, the driver downloads the pinned file and verifies its SHA-256.
+A fresh clone needs network access for dependencies and the catalogue, unless
+these have already been supplied locally.
+Use `--npz /path/to/alphatensor_14236_factorizations.npz` to select a local copy.
+Generated files are verified against the pinned manifest and regenerated only
+if missing or changed. The driver checks every source coordinate and all
+versioned rank-exclusion witnesses before compiling.
 
-`Audit.lean` checks the transitive axioms of the listed theorems against
-Lean's standard `propext`, `Classical.choice`, and `Quot.sound`.
-`leanchecker` replays the project's declarations in Lean's kernel against
-their imported environments. Modules replay sequentially to limit memory use.
-The finite Strassen and matching identities use kernel reduction with `decide`.
-The main library uses only the three audited standard axioms.
+The driver discovers **every** `Brent/**/*.lean` source, `Brent.lean`, all
+manifest-listed generated catalogue modules, and `Audit.lean`. It builds
+modules individually in dependency order with `LEAN_NUM_THREADS=1` by default
+and runs the axiom audit last. It then invokes `leanchecker` once per module,
+including `Brent/CM`, the full LWH proof, and the audit module. Every command
+must succeed before the final `PASS` line is printed. Module builds reuse the
+Lake cache; replay is intentionally repeated. Running it again after a failure
+reuses completed builds. Sequential scheduling limits project-level concurrency
+but is not a guarantee that every individual Lean process fits available RAM.
+
+Useful options:
+
+```bash
+python3 lean/tools/verify_all.py --list       # inspect the complete inventory
+python3 lean/tools/verify_all.py --build-only # build + axiom audit; skip independent replay
+```
+
+For an optional persistent log without shell-specific pipelines, use
+`python3 lean/tools/verify_all.py --cache --log lean-build.log`.
+
+`lake build Brent` remains the lightweight library target and is **not** a
+complete verification command. The separate hosted CI retains its existing
+memory-constrained configuration. The local driver does not need the LWH
+release artifact or `tools/lwh/BUILD.txt`; those are CI-only. It compiles LWH
+from the versioned sources.
+
+`Audit.lean` checks transitive axioms of its listed theorems against the three
+standard axioms `propext`, `Classical.choice`, and `Quot.sound`. `leanchecker`
+replays the project declarations against their imported environments. A successful
+local run is evidence for the checked revision, not a claim of semantic
+completeness of every natural-language statement.
 
 ## Exact Jacobian rank
 
